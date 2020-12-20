@@ -1,0 +1,69 @@
+.login-slider{
+	margin-top: 0px;
+	// margin-bottom: 40px;
+	height: calc(100vh - 270px);
+	\deep\ svg{
+		max-width: 100%;
+	}
+	.login-slide{
+		padding: 0px;
+		img{
+			padding: 0 10px;
+			padding-bottom: 50px;
+			max-height: calc(100vh - 270px);
+		}
+	}
+}
+
+.or-text{
+	font-size: 18px;
+    line-height: 1;
+    color: #709B78;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: -20px;
+}
+.form-row-head{
+	font-size: 15px;
+	color: #709B78;
+	font-weight: 700;
+	display: block;
+	width: 100%;
+	margin: 0px;
+	letter-spacing: 0.45px;
+	&.fn{
+		font-weight: 300;
+	}
+}
+.form-row-subhead{
+	font-size: 13px;
+	color: #709B78;
+	display: block;
+	width: 100%;
+	margin: 0px;
+	letter-spacing: 0.45px;
+}
+.otp-field{
+	display: flex;
+	// margin-top: 20px;
+	margin-bottom: 20px;
+	// width: 100%;
+	// text-align: center;
+	span{
+		flex: 1;
+		border: 2px solid #FFF;
+		input{
+			width: 100%;
+		    height: 50px;
+		    flex: 1;
+		    border: none;
+		    border-bottom: 2px solid #DDD;
+		    font-size: 30px;
+		    font-weight: 700;
+		    text-align: center;
+		    &:focus{
+		    	outline: none;
+		    }
+	    }
+    }
+}

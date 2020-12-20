@@ -1,0 +1,504 @@
+<ion-content>
+	<app-loccart show="0"></app-loccart>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="search-box">
+					<span class="icon">
+						<app-svg name="search"></app-svg>
+					</span>
+					<input type="text" name="" placeholder="Search for product or ask for something different" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12" *ngIf="cat_id == 0">
+				<ion-slides scrollbar="true" [options]="slideOpts">
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/grocery.png" />
+			      			</span>
+			      			<span class="text">Grocery</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/stationary.png" />
+			      			</span>
+			      			<span class="text">Stationary</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/alcohol.png" />
+			      			</span>
+			      			<span class="text">Alcohol</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/medicine.png" />
+			      			</span>
+			      			<span class="text">Medicine</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/grocery.png" />
+			      			</span>
+			      			<span class="text">Fitness</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/grocery.png" />
+			      			</span>
+			      			<span class="text">Grocery</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/stationary.png" />
+			      			</span>
+			      			<span class="text">Stationary</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/alcohol.png" />
+			      			</span>
+			      			<span class="text">Alcohol</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/medicine.png" />
+			      			</span>
+			      			<span class="text">Medicine</span>
+			          	</div>
+			        </ion-slide>
+			        <ion-slide>
+			          	<div class="cat-thumb" (click)="selectCategory()">
+			          		<span class="img">
+			          			<img src="assets/images/grocery.png" />
+			      			</span>
+			      			<span class="text">Fitness</span>
+			          	</div>
+			        </ion-slide>
+			    </ion-slides>
+	      	</div>
+	      	<div class="col-12" *ngIf="cat_id == 1">
+				<div class="subcat-wrap">
+					<div class="cat-back-btn">
+						<div class="cat-thumb" (click)="cat_id = 0">
+			          		<span class="img">
+			          			<img src="assets/images/back1.png" />
+			      			</span>
+			      			<span class="text">Back</span>
+			          	</div>
+					</div>
+			  		<div class="cat-thumb-wrap">
+			  			<div class="cat-thumb-wrap-in">
+				  			<ion-slides scrollbar="true" [options]="subcatSlideOpts">
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/grocery.png" />
+						      			</span>
+						      			<span class="text">Grocery</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/stationary.png" />
+						      			</span>
+						      			<span class="text">Stationary</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/alcohol.png" />
+						      			</span>
+						      			<span class="text">Alcohol</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/medicine.png" />
+						      			</span>
+						      			<span class="text">Medicine</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/grocery.png" />
+						      			</span>
+						      			<span class="text">Fitness</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/grocery.png" />
+						      			</span>
+						      			<span class="text">Grocery</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/stationary.png" />
+						      			</span>
+						      			<span class="text">Stationary</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/alcohol.png" />
+						      			</span>
+						      			<span class="text">Alcohol</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/medicine.png" />
+						      			</span>
+						      			<span class="text">Medicine</span>
+						          	</div>
+						        </ion-slide>
+						        <ion-slide>
+						          	<div class="cat-thumb">
+						          		<span class="img">
+						          			<img src="assets/images/grocery.png" />
+						      			</span>
+						      			<span class="text">Fitness</span>
+						          	</div>
+						        </ion-slide>
+						    </ion-slides>
+					    </div>
+			  		</div>
+				</div>
+	      	</div>
+      	</div>
+	</div>
+	<hr>
+	<div class="container-fluid section" *ngIf="cat_id == 0">
+		<div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">Popular in your area</h5>
+			</div>
+			<div class="col-4 text-right">
+				<a class="view-all-sec-btn" href="#">View All ></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<ion-slides scrollbar="true" [options]="prodSlideOpts">
+			        <ion-slide>
+			        	<div class="product-thumb-wrap">
+			        		<div class="product-thumb">
+			        			<span class="fav-star-wrap" [class.active]="favPrd[13]" (click)="favProd(13)">
+			        				<span class="fav-star"></span>
+			        			</span>
+			        			<div class="image">
+			        				<img src="assets/images/rice.png" />
+		        				</div>
+		        				<h6 class="title">Rice</h6>
+		        				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+		        				<button *ngIf="!cartProd[13]" (click)="addProd(13)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<span class="pt-num" *ngIf="cartProd[13]">
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(13)">-</span>{{ cartProd[13] }}<span class="pt-wp-add-btn plus" (click)="addProd(13)">+</span>
+		        				</span>
+			        		</div>
+			        	</div>
+			        </ion-slide>
+			        <ion-slide>
+			        	<div class="product-thumb-wrap">
+			        		<div class="product-thumb">
+			        			<span class="fav-star-wrap" [class.active]="favPrd[14]" (click)="favProd(14)">
+			        				<span class="fav-star"></span>
+			        			</span>
+			        			<div class="image">
+			        				<img src="assets/images/cashew.png" />
+		        				</div>
+		        				<h6 class="title">Cashew</h6>
+		        				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+		        				<button *ngIf="!cartProd[14]" (click)="addProd(14)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<span class="pt-num" *ngIf="cartProd[14]">
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(14)">-</span>{{ cartProd[14] }}<span class="pt-wp-add-btn plus" (click)="addProd(14)">+</span>
+		        				</span>
+			        		</div>
+			        	</div>
+			        </ion-slide>
+			        <ion-slide>
+			        	<div class="product-thumb-wrap">
+			        		<div class="product-thumb">
+			        			<span class="fav-star-wrap" [class.active]="favPrd[15]" (click)="favProd(15)">
+			        				<span class="fav-star"></span>
+			        			</span>
+			        			<div class="image">
+			        				<img src="assets/images/sugar.png" />
+		        				</div>
+		        				<h6 class="title">Sugar</h6>
+		        				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+		        				<button *ngIf="!cartProd[15]" (click)="addProd(15)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<span class="pt-num" *ngIf="cartProd[15]">
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(15)">-</span>{{ cartProd[15] }}<span class="pt-wp-add-btn plus" (click)="addProd(15)">+</span>
+		        				</span>
+			        		</div>
+			        	</div>
+			        </ion-slide>
+			    </ion-slides>
+			</div>
+		</div>
+	</div>
+	<hr *ngIf="cat_id == 0">
+	<div class="container-fluid section" *ngIf="cat_id == 0">
+		<div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">Recommended for you</h5>
+			</div>
+			<div class="col-4 text-right">
+				<a class="view-all-sec-btn" href="#">View All ></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<ion-slides scrollbar="true" [options]="prodSlideOpts">
+			        <ion-slide>
+			        	<div class="product-thumb-wrap">
+			        		<div class="product-thumb">
+			        			<span class="fav-star-wrap" [class.active]="favPrd[1]" (click)="favProd(1)">
+			        				<span class="fav-star"></span>
+			        			</span>
+			        			<div class="image">
+			        				<img src="assets/images/rice.png" />
+		        				</div>
+		        				<h6 class="title">Rice</h6>
+		        				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+		        				<button *ngIf="!cartProd[1]" (click)="addProd(1)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<span class="pt-num" *ngIf="cartProd[1]">
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(1)">-</span>{{ cartProd[1] }}<span class="pt-wp-add-btn plus" (click)="addProd(1)">+</span>
+		        				</span>
+			        		</div>
+			        	</div>
+			        </ion-slide>
+			        <ion-slide>
+			        	<div class="product-thumb-wrap">
+			        		<div class="product-thumb">
+			        			<span class="fav-star-wrap" [class.active]="favPrd[2]" (click)="favProd(2)">
+			        				<span class="fav-star"></span>
+			        			</span>
+			        			<div class="image">
+			        				<img src="assets/images/cashew.png" />
+		        				</div>
+		        				<h6 class="title">Cashew</h6>
+		        				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+		        				<button *ngIf="!cartProd[2]" (click)="addProd(2)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<span class="pt-num" *ngIf="cartProd[2]">
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(2)">-</span>{{ cartProd[2] }}<span class="pt-wp-add-btn plus" (click)="addProd(2)">+</span>
+		        				</span>
+			        		</div>
+			        	</div>
+			        </ion-slide>
+			        <ion-slide>
+			        	<div class="product-thumb-wrap">
+			        		<div class="product-thumb">
+			        			<span class="fav-star-wrap" [class.active]="favPrd[3]" (click)="favProd(3)">
+			        				<span class="fav-star"></span>
+			        			</span>
+			        			<div class="image">
+			        				<img src="assets/images/sugar.png" />
+		        				</div>
+		        				<h6 class="title">Sugar</h6>
+		        				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+		        				<button *ngIf="!cartProd[3]" (click)="addProd(3)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<span class="pt-num" *ngIf="cartProd[3]">
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(3)">-</span>{{ cartProd[3] }}<span class="pt-wp-add-btn plus" (click)="addProd(3)">+</span>
+		        				</span>
+			        		</div>
+			        	</div>
+			        </ion-slide>
+			    </ion-slides>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid section product-wrap" *ngIf="cat_id > 0">
+		<div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">All Products</h5>
+			</div>
+			<div class="col-4 text-right">
+				<!-- <a href="#">View All ></a> -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[4]" (click)="favProd(4)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/rice.png" />
+    				</div>
+    				<h6 class="title">Rice</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[4]" (click)="addProd(4)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[4]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(4)">-</span>{{ cartProd[4] }}<span class="pt-wp-add-btn plus" (click)="addProd(4)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[5]" (click)="favProd(5)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/cashew.png" />
+    				</div>
+    				<h6 class="title">Cashew</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[5]" (click)="addProd(5)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[5]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(5)">-</span>{{ cartProd[5] }}<span class="pt-wp-add-btn plus" (click)="addProd(5)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[6]" (click)="favProd(6)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/sugar.png" />
+    				</div>
+    				<h6 class="title">Sugar</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[6]" (click)="addProd(6)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[6]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(6)">-</span>{{ cartProd[6] }}<span class="pt-wp-add-btn plus" (click)="addProd(6)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[7]" (click)="favProd(7)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/rice.png" />
+    				</div>
+    				<h6 class="title">Rice</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[7]" (click)="addProd(7)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[7]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(7)">-</span>{{ cartProd[7] }}<span class="pt-wp-add-btn plus" (click)="addProd(7)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[8]" (click)="favProd(8)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/cashew.png" />
+    				</div>
+    				<h6 class="title">Cashew</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[8]" (click)="addProd(8)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[8]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(8)">-</span>{{ cartProd[8] }}<span class="pt-wp-add-btn plus" (click)="addProd(8)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[9]" (click)="favProd(9)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/sugar.png" />
+    				</div>
+    				<h6 class="title">Sugar</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[9]" (click)="addProd(9)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[9]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(9)">-</span>{{ cartProd[9] }}<span class="pt-wp-add-btn plus" (click)="addProd(9)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[10]" (click)="favProd(10)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/rice.png" />
+    				</div>
+    				<h6 class="title">Rice</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[10]" (click)="addProd(10)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[10]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(10)">-</span>{{ cartProd[10] }}<span class="pt-wp-add-btn plus" (click)="addProd(10)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[11]" (click)="favProd(11)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/cashew.png" />
+    				</div>
+    				<h6 class="title">Cashew</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[11]" (click)="addProd(11)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[11]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(11)">-</span>{{ cartProd[11] }}<span class="pt-wp-add-btn plus" (click)="addProd(11)">+</span>
+    				</span>
+        		</div>
+			</div>
+			<div class="col-4 product-thumb-wrap">
+				<div class="product-thumb">
+					<span class="fav-star-wrap" [class.active]="favPrd[12]" (click)="favProd(12)">
+						<span class="fav-star"></span>
+					</span>
+        			<div class="image">
+        				<img src="assets/images/sugar.png" />
+    				</div>
+    				<h6 class="title">Sugar</h6>
+    				<p class="subtitle">Estimated <span class="price">&#8364; 7.70</span></p>
+    				<button *ngIf="!cartProd[12]" (click)="addProd(12)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[12]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(12)">-</span>{{ cartProd[12] }}<span class="pt-wp-add-btn plus" (click)="addProd(12)">+</span>
+    				</span>
+        		</div>
+			</div>
+		</div>
+	</div>
+</ion-content>
+<div class="home-cart-popup" [class.active]="cartLength">
+	<span class="icon"><app-svg name="cart"></app-svg></span>
+	<span class="text">{{ this.cartLength }} Item<span *ngIf="cartLength > 1">s</span><span class="sep-dot"></span><span class="value">&#8364; <span class="x2">7.70</span></span></span>
+	<a routerLink="/shopper/cart" class="view-cart-btn">View Cart</a>
+</div>

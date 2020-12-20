@@ -1,0 +1,145 @@
+<ion-content>
+	<app-loccart show="2"></app-loccart>
+	<div class="page-title">FavR</div>
+	<div class="container-fluid section">
+		<!-- <div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">Favr</h5>
+			</div>
+			<div class="col-4 text-right"></div>
+		</div> -->
+		<div class="row">
+			<div class="col-8 offset-2">
+				<div class="favr-total">
+					<div class="row align-center">
+						<div class="col-4">
+							<span class="icon">
+								<app-svg name="wallet"></app-svg>
+							</span>
+						</div>
+						<div class="col-8">
+							<span class="text">Your Current</span>
+							<span class="text"> FavR is</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<h1 class="text-center">10</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12">
+				<p class="text-center">You need atleast 1 FavR to place an Order</p>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="rev-section">
+		<div class="title" (click)="buyFavrPop = (buyFavrPop == 1)?0:1">
+			Buy Some FavR
+			<span class="down" [class.active]="buyFavrPop == 1">
+				<app-svg name="down1"></app-svg>
+			</span>
+		</div>
+		<div class="content" *ngIf="buyFavrPop == 1">
+			<p>Choose one from below</p>
+			<ion-slides scrollbar="true" [options]="priceSlideOpts">
+		        <ion-slide>
+		          	<div class="favr-cost-thumb">
+		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="1" id="plan1" />
+		          		<label for="plan1" class="in">1 FavR = &#8364; 1</label>
+		          	</div>
+		        </ion-slide>
+		        <ion-slide>
+		          	<div class="favr-cost-thumb">
+		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="2" id="plan2" />
+		          		<label for="plan2" class="in">5 FavR = &#8364; 5.66</label>
+		          	</div>
+		        </ion-slide>
+		        <ion-slide>
+		          	<div class="favr-cost-thumb">
+		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="3" id="plan3" />
+		          		<label for="plan3" class="in">7 FavR = &#8364; 7.66</label>
+		          	</div>
+		        </ion-slide>
+		        <ion-slide>
+		          	<div class="favr-cost-thumb">
+		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="4" id="plan4" />
+		          		<label for="plan4" class="in">10 FavR = &#8364; 10.66</label>
+		          	</div>
+		        </ion-slide>
+		        <ion-slide>
+		          	<div class="favr-cost-thumb">
+		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="5" id="plan5" />
+		          		<label for="plan5" class="in">15 FavR = &#8364; 15.66</label>
+		          	</div>
+		        </ion-slide>
+	        </ion-slides>
+	        <hr class="thin neg-mar mb-20" />
+	        <p>You are recharging: <span class="favr-selected-thumb">1 FavR = &#8364; 1</span></p>
+	        <hr class="thin neg-mar mb-20" />
+	        <div class="row">
+	        	<div class="col-10 offset-1">
+	        		<button class="btn btn-primary btn-full">Buy FavR</button>
+        		</div>
+    		</div>
+		</div>
+	</div>
+	<div class="rev-section">
+		<div class="title" (click)="favrHistPop = (favrHistPop == 1)?0:1">
+			FavR History
+			<span class="down" [class.active]="favrHistPop == 1">
+				<app-svg name="down1"></app-svg>
+			</span>
+		</div>
+		<div class="content" *ngIf="favrHistPop == 1">
+			<p>October 2020</p>
+			<div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="check"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title">Got 10 FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+	        <div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="wallet"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title used">Used 10 FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+			<div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="check"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title">Got 10 FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+	        <div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="cross"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title failed">DIDN’T GET FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+		</div>
+	</div>
+	<div class="section"></div>
+</ion-content>

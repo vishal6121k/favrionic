@@ -1,0 +1,78 @@
+.favr-total{
+	padding: 20px 30px;
+	box-shadow: 0px 0px 10px #DDD;
+	border-radius: 46px;
+	margin-bottom: 20px;
+	.text{
+		font-weight: 700;
+		display: block;
+		font-size: 14px;
+		color: #6D7278;
+		line-height: 1.2;
+		margin-left: -15px;
+		letter-spacing: 0.34px;
+	}
+	h1{
+		font-size: 44px;
+		color: #6D7278;
+	}
+}
+
+
+.favr-selected-thumb{
+	display: inline-block;
+	text-align: center;
+	line-height: 30px;
+	padding: 0px 15px;
+	border: 1px solid #709B78;
+	font-size: 12px;
+	letter-spacing: 0.3px;
+	border-radius: 12.5px;
+	color: #FFF;
+	vertical-align: middle;
+	background-color: #709B78;
+}
+
+.favr-history-item{
+	display: flex;
+	position: relative;
+	padding: 10px 5px;
+	padding-left: 40px;
+	align-items: center;
+	.icon{
+		display: inline-block;
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 30px;
+		padding: 5px;
+		padding-left: 0px;
+		height: auto;
+		transform: translateY(-50%);
+	}
+	.dets{
+		flex: 7;
+		.title{
+			font-size: 16px;
+			color: rgba(0,0,0,0.85);
+			letter-spacing: 0.4px;
+			margin-bottom: 0px;
+			font-weight: 700;
+			&.used{
+				color: #709B78;
+			}
+			&.failed{
+				color: #F00;
+			}
+		}
+		.date{
+			font-size: 12px;
+			color: #6D7278;
+			letter-spacing: 0.3px;
+		}
+	}
+	.time{
+		flex: 3;
+		text-align: right;
+	}
+}

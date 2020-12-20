@@ -1,0 +1,150 @@
+<ion-content>
+	<div class="page-title with-back col-pm">
+		<span class="back">
+			<img src="assets/images/back.png" />
+		</span>
+		Your dropper for today is
+		<span class="page-title-btn red" (click)="cancPop = 1;">Cancel</span>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="dropper-thumb">
+					<div class="img">
+						<div class="img-in">
+							<img src="assets/images/dp.jpg" />
+						</div>
+					</div>
+					<div class="dets">
+						<span class="title">Dropper 1</span>
+					</div>
+					<div class="rating">
+						<span class="rate-full"></span>
+						<span class="rate-full"></span>
+						<span class="rate-full"></span>
+						<span class="rate-full"></span>
+						<span class="rate-empty"></span>
+					</div>
+					<div class="call">
+						<span class="call-icon">
+							<app-svg name="call"></app-svg>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="neg-mar">
+					<img src="assets/images/map1.png" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<h5 class="norm-title">Dropper updates</h5>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<ul class="drop-activity">
+					<li class="completed">
+						<span class="title">On my way to do you FavR</span>
+					</li>
+					<li class="ongoing">
+						<span class="title">Purchasing your items</span>
+						<span class="link">View items purchased</span>
+					</li>
+					<li>
+						<span class="title">Purchased your items</span>
+					</li>
+					<li>
+						<span class="title">On my way to deliver your items</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row mb-20">
+			<div class="col-10 offset-1">
+				<button class="btn btn-full brdr" (click)="chatOpen = 1">Chat with me</button>
+			</div>
+		</div>
+	</div>
+</ion-content>
+<div class="chat-window" [class.active]="chatOpen == 1">
+	<div class="title">
+		<span class="img">
+			<span class="img-in">
+				<img src="assets/images/dp.jpg" />
+			</span>
+		</span>
+		<span class="name">
+			Dropper1
+			<span class="call">
+				<span class="call-icon">
+					<app-svg name="call"></app-svg>
+				</span>
+			</span>
+		</span>
+		<span class="close" (click)="chatOpen = 0">&times;</span>
+	</div>
+	<div class="content">
+		<div class="chat-text to">
+			<span class="bubble to">Hey there!!</span>
+		</div>
+		<div class="chat-text from">
+			<span class="bubble from">Hii..</span>
+		</div>
+	</div>
+	<div class="chat-inp">
+		<div class="field">
+			<textarea></textarea>
+		</div>
+		<div class="att-btn">
+			<span class="icon">
+				<app-svg name="att"></app-svg>
+			</span>
+		</div>
+		<div class="send-btn-wrap">
+			<button>Send</button>
+		</div>
+	</div>
+</div>
+<div class="overlay" [class.active]="cancPop == 1 || chatOpen == 1" (click)="cancPop = 0; cancPopCont = 0;chatOpen = 0;"></div>
+<div class="cancel-popup" [class.active]="cancPop == 1">
+	<span class="close" (click)="cancPop = 0; cancPopCont = 0;">&times;</span>
+	<h4 class="popup-title" *ngIf="cancPopCont == 0">Why are you cancelling?</h4>
+	<p class="norm-sub col-sec" *ngIf="cancPopCont == 0">Please choose the correct reason for Cancel. This information can improve our services</p>
+
+	<h4 class="popup-title" *ngIf="cancPopCont == 1">Block User</h4>
+	<p class="norm-sub col-sec" *ngIf="cancPopCont == 1">Please tell us the reason for Blocking User. This information can improve our services</p>
+	<p *ngIf="cancPopCont == 1">Reason</p>
+	<div class="radio-item" *ngIf="cancPopCont == 0">
+		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc1" value="1" />
+		<label for="radcanc1">Item(s) not available</label>
+	</div>
+	<div class="radio-item" *ngIf="cancPopCont == 0">
+		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc2" value="2" />
+		<label for="radcanc2">Accepted by mistake</label>
+	</div>
+	<div class="radio-item" *ngIf="cancPopCont == 0">
+		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc3" value="3" />
+		<label for="radcanc3">Not able to complete</label>
+	</div>
+	<div class="radio-item" *ngIf="cancPopCont == 0">
+		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc4" value="4" />
+		<label for="radcanc4">Other</label>
+	</div>
+	<div class="form-row mb-20" *ngIf="cancRes == 4 || cancPopCont == 1 ">
+		<input type="text" class="form-control" name="" value="" />
+		<label>Tell us the reason..</label>
+		<span class="line"></span>
+	</div>
+	<div class="row">
+		<div class="col-10 offset-1">
+			<button class="btn btn-full btn-primary" *ngIf="cancPopCont == 0">Cancel Order</button>
+			<button class="btn btn-full btn-primary mb-20" *ngIf="cancPopCont == 1">Block User</button>
+			<button class="btn btn-full mb-20" *ngIf="cancPopCont == 0" (click)="cancPopCont = 1">Block User?</button>
+		</div>
+	</div>
+</div>

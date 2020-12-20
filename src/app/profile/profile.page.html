@@ -1,0 +1,82 @@
+<ion-content>
+	<app-loccart show="2"></app-loccart>
+	<div class="profile-head align-center">
+		<div class="dets">
+			<h1>Nishant Kumar</h1>
+			<p>nishant6639@gmail.com</p>
+			<p>+91-9439416692</p>
+		</div>
+		<div class="img">
+			<span class="img-in">
+				<img src="assets/images/dp.jpg" />
+				<div class="type">Shopper</div>
+			</span>
+		</div>
+	</div>
+	<ul class="profile-menu">
+		<li>
+			<a href="#">
+				<span class="icon">
+					<app-svg name="star"></app-svg>
+				</span>
+				<span class="text">Saved Items</span>
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<span class="icon">
+					<app-svg name="orders"></app-svg>
+				</span>
+				<span class="text">Order History</span>
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<span class="icon">
+					<app-svg name="info"></app-svg>
+				</span>
+				<span class="text">About</span>
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<span class="icon">
+					<app-svg name="help"></app-svg>
+				</span>
+				<span class="text">Help &amp; Support</span>
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<span class="icon">
+					<app-svg name="faq"></app-svg>
+				</span>
+				<span class="text">FAQs</span>
+			</a>
+		</li>
+		<li>
+			<span href="#">
+				<span class="icon">
+					<app-svg name="profile"></app-svg>
+				</span>
+				<span class="text">
+					Switch profile
+					<span class="profile-switcher" (click)="user_type = (user_type==1)?2:1">
+						<span class="switch-btn" [class.drop]="user_type == 2">
+							<span *ngIf="user_type==1">Shopper</span>
+							<span *ngIf="user_type==2">Dropper</span>
+						</span>
+					</span>
+				</span>
+			</span>
+		</li>
+		<li>
+			<a href="#">
+				<span class="icon">
+					<app-svg name="logout"></app-svg>
+				</span>
+				<span class="text">Logout</span>
+			</a>
+		</li>
+	</ul>
+</ion-content>

@@ -1,0 +1,12 @@
+node_modules
+www
+__MACOSX
+.idea
+.tmp
+.sass-cache
+.vscode
+platforms
+*.swp
+*.swo
+*.log
+*.DS_Store

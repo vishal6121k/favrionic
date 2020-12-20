@@ -1,0 +1,27 @@
+
+
+.drop-req-popup{
+	position: fixed;
+	left: 15px;
+	right: 15px;
+	top: 50%;
+	max-height: 90%;
+	overflow: auto;
+	transform: translateY(-50%);
+	background-color: #FFF;
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
+	z-index: 1234;
+	text-align: center;
+	border-radius: 40px;
+	margin-top: 50px;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s linear;
+	padding: 30px 15px;
+	&.active{
+		visibility: visible;
+		opacity: 1;
+		margin-top: 0px;
+	}
+}
+

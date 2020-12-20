@@ -1,0 +1,220 @@
+<ion-content>
+	<div class="page-title with-back col-pm">
+		<span class="back">
+			<img src="assets/images/back.png" />
+		</span>
+		Your shopper for today is
+		<span class="page-title-btn">Cancel</span>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="dropper-thumb">
+					<div class="img">
+						<div class="img-in">
+							<img src="assets/images/dp.jpg" />
+						</div>
+					</div>
+					<div class="dets">
+						<span class="title">Dropper 1</span>
+					</div>
+					<div class="rating">
+						<span class="rate-full"></span>
+						<span class="rate-full"></span>
+						<span class="rate-full"></span>
+						<span class="rate-full"></span>
+						<span class="rate-empty"></span>
+					</div>
+					<div class="call">
+						<span class="call-icon">
+							<app-svg name="call"></app-svg>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="neg-mar">
+					<img src="assets/images/map1.png" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<h5 class="norm-title">Shopper List</h5>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="drop-list-items">
+					<div class="drop-list-item">
+						<span class="title">Total Items: </span>
+						<!-- <span class="dots"></span> -->
+						<span class="value">4</span>
+					</div>
+				</div>
+				<div class="cart-content">
+					<div class="row item align-center">
+						<div class="col-3">
+							<div class="img">
+								<img src="assets/images/rice.png" />
+							</div>
+						</div>
+						<div class="col-5">
+							<h5>Rice</h5>
+							<div class="row">
+								<div class="col-10">
+									<p>Qty: 1</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-4">
+							<span class="price">&#8364; <span class="x2">7.75</span></span>
+						</div>
+						<div class="col-12">
+							<hr class="thin item-sep" />
+						</div>
+					</div>
+					<div class="row item align-center">
+						<div class="col-3">
+							<div class="img">
+								<img src="assets/images/sugar.png" />
+							</div>
+						</div>
+						<div class="col-5">
+							<h5>Sugar</h5>
+							<div class="row">
+								<div class="col-10">
+									<p>Qty: 1</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-4">
+							<span class="price">&#8364; <span class="x2">7.75</span></span>
+						</div>
+						<div class="col-12">
+							<hr class="thin item-sep" />
+						</div>
+					</div>
+					<div class="row item align-center">
+						<div class="col-3">
+							<div class="img">
+								<img src="assets/images/cashew.png" />
+							</div>
+						</div>
+						<div class="col-5">
+							<h5>Cashew</h5>
+							<div class="row">
+								<div class="col-10">
+									<p>Qty: 1</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-4">
+							<span class="price">&#8364; <span class="x2">7.75</span></span>
+						</div>
+						<div class="col-12">
+							<hr class="thin item-sep" />
+						</div>
+					</div>
+					<div class="row item align-center">
+						<div class="col-3">
+							<div class="img">
+								<img src="assets/images/rice.png" />
+							</div>
+						</div>
+						<div class="col-5">
+							<h5>Rice</h5>
+							<div class="row">
+								<div class="col-10">
+									<p>Qty: 1</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-4">
+							<span class="price">&#8364; <span class="x2">7.75</span></span>
+						</div>
+						<div class="col-12">
+							<hr class="thin item-sep" />
+						</div>
+					</div>
+				</div>
+				<div class="drop-list-items">
+					<div class="drop-list-item">
+						<span class="title">Estimated cost of items</span>
+						<span class="dots" style="border-color: transparent;"></span>
+						<span class="value">10</span>
+					</div>
+					<div class="drop-list-item bold">
+						<span class="title">Shopper's total offer</span>
+						<span class="dots" style="border-color: transparent;"></span>
+						<span class="value">15</span>
+					</div>
+					<div class="drop-list-item">
+						<span class="title">You Earn</span>
+						<span class="dots" style="border-color: transparent;"></span>
+						<span class="value">5</span>
+					</div>
+					<div class="drop-list-item bold">
+						<span class="title">Mode of payment</span>
+						<span class="dots" style="border-color: transparent;"></span>
+						<span class="value">Cash</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row mb-20">
+			<div class="col-10 offset-1">
+				<button (click)="reqPop = 1" class="btn btn-full btn-primary">Start the Request</button>
+			</div>
+		</div>
+	</div>
+</ion-content>
+<div class="chat-window" [class.active]="chatOpen == 1">
+	<div class="title">
+		<span class="img">
+			<span class="img-in">
+				<img src="assets/images/dp.jpg" />
+			</span>
+		</span>
+		<span class="name">
+			Dropper1
+			<span class="call">
+				<span class="call-icon">
+					<app-svg name="call"></app-svg>
+				</span>
+			</span>
+		</span>
+		<span class="close" (click)="chatOpen = 0">&times;</span>
+	</div>
+	<div class="content">
+		<div class="chat-text to">
+			<span class="bubble to">Hey there!!</span>
+		</div>
+		<div class="chat-text from">
+			<span class="bubble from">Hii..</span>
+		</div>
+	</div>
+	<div class="chat-inp">
+		<div class="field">
+			<textarea></textarea>
+		</div>
+		<div class="att-btn">
+			<span class="icon">
+				<app-svg name="att"></app-svg>
+			</span>
+		</div>
+		<div class="send-btn-wrap">
+			<button>Send</button>
+		</div>
+	</div>
+</div>
+<div class="overlay" [class.active]="reqPop == 1"></div>
+<div class="notify-popup" [class.active]="reqPop==1">
+	<span class="icon" routerLink="/dropper/track">
+		<img src="assets/images/check.png" />
+	</span>
+	<p class="flow-text">Request Send <span class="blck small">to</span><span class="blck small bold">Xyz Abc</span></p>
+	<p class="flow-text"><span class="blck small">Please wait while the shopper accepts your request in</span> 05:59 </p>
+</div>

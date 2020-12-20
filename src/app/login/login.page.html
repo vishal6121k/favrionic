@@ -1,0 +1,103 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+    <div class="page-title with-back mb-m50" *ngIf="otpsent == 1">
+        <span class="back" (click)="otpsent = 0">
+            <img src="assets/images/back.png" />
+        </span>
+        <!-- Confirm Order -->
+        <!-- <span class="page-title-btn">+ Add More</span> -->
+    </div>
+	<div class="login-slider">
+		<!-- <div class="row"> -->
+			<!-- <div class="col-md-12"> -->
+				<ion-slides pager="true" [options]="slideOpts">
+			        <ion-slide>
+                        <div class="login-slide">
+                            <img src="assets/svgs/shop.svg" />
+                            <!-- <app-svg name="slide1"></app-svg> -->
+                        </div>
+			        </ion-slide>
+			        <ion-slide>
+                        <div class="login-slide">
+			                <img src="assets/svgs/drop.svg" />
+			                 <!-- <app-svg name="slide2"></app-svg> -->
+                        </div>
+			        </ion-slide>
+			        <ion-slide>
+                        <div class="login-slide">
+                            <img src="assets/svgs/ask-favr.svg" />
+			                 <!-- <app-svg name="slide3"></app-svg> -->
+                        </div>
+			        </ion-slide>
+			    </ion-slides>
+		    <!-- </div> -->
+	    <!-- </div> -->
+    </div>
+    <div class="container-fluid login-form-phone" *ngIf="otpsent == 0">
+    	<div class="row">
+
+    		<div class="col-md-12">
+
+    			<div class="form-row">
+    				<input type="text" class="form-control" name="" value="" />
+    				<label>Enter your phone number or email</label>
+    				<span class="line"></span>
+    			</div>
+    		
+    		</div>
+
+    		<div class="col-10 offset-1">
+    			<div class="form-row">
+    				<button class="btn btn-full btn-primary" (click)="otpsent=1">Get Started</button>
+    			</div>
+    			<div class="or-text">OR</div>
+    			<div class="form-row mb-20">
+    				<button class="btn btn-full">Guest Login</button>
+    			</div>
+    		</div>
+
+    	</div>
+
+    </div>
+    <div class="container-fluid login-form-otp" *ngIf="otpsent == 1">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-row">
+                    <p class="form-row-head">Enter your 6-Digit OTP</p>
+                    <p class="form-row-subhead">Sent to 9090909012</p>
+                </div>
+                <div class="otp-field">
+                    <span>
+                        <input id="otp1" type="number" name="" (keyup)="otpKeyUp($event, 0, 'otp2')" maxlength="1" />
+                    </span>
+                    <span>
+                        <input id="otp2" type="number" name="" (keyup)="otpKeyUp($event, 'otp1', 'otp3')" maxlength="1" />
+                    </span>
+                    <span>
+                        <input id="otp3" type="number" name="" (keyup)="otpKeyUp($event, 'otp2', 'otp4')" maxlength="1" />
+                    </span>
+                    <span>
+                        <input id="otp4" type="number" name="" (keyup)="otpKeyUp($event, 'otp3', 'otp5')" maxlength="1" />
+                    </span>
+                    <span>
+                        <input id="otp5" type="number" name="" (keyup)="otpKeyUp($event, 'otp4', 'otp6')" maxlength="1" />
+                    </span>
+                    <span>
+                        <input id="otp6" type="number" name="" (keyup)="otpKeyUp($event, 'otp5', 0)" maxlength="1" />
+                    </span>
+                </div>
+                <a class="form-row-head text-right fn">Resend?</a>
+            </div>
+            <div class="col-10 offset-1">
+                <div class="form-row">
+                    <button routerLink="/choose" class="btn btn-full btn-primary mb-20">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

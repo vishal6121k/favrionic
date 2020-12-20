@@ -1,0 +1,22 @@
+.splash{
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 1;
+	visibility: visible;
+	transition: all 0.3s linear;
+	&.splashHide{
+		opacity: 0;
+		visibility: hidden;
+	}
+	img{
+		position: absolute;
+	    bottom: 0;
+	    /* transform: translateY(-50%); */
+	    left: 0;
+	    width: 100%;
+	}
+}

@@ -1,0 +1,94 @@
+<ion-content>
+	<app-loccart show="2"></app-loccart>
+	<div class="page-title">FavR</div>
+	<div class="container-fluid section">
+		<!-- <div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">Favr</h5>
+			</div>
+			<div class="col-4 text-right"></div>
+		</div> -->
+		<div class="row">
+			<div class="col-8 offset-2">
+				<div class="favr-total">
+					<div class="row align-center">
+						<div class="col-4">
+							<span class="icon">
+								<app-svg name="wallet"></app-svg>
+							</span>
+						</div>
+						<div class="col-8">
+							<span class="text">Your Current</span>
+							<span class="text"> FavR is</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<h1 class="text-center">10</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12">
+				<p class="text-center">You get 1 FavR every time you do FavR</p>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="rev-section">
+		<div class="title" (click)="favrHistPop = (favrHistPop == 1)?0:1">
+			FavR History
+			<span class="down" [class.active]="favrHistPop == 1">
+				<app-svg name="down1"></app-svg>
+			</span>
+		</div>
+		<div class="content" *ngIf="favrHistPop == 1">
+			<p>October 2020</p>
+			<div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="check"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title">Got 10 FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+	        <div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="wallet"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title used">Used 10 FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+			<div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="check"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title">Got 10 FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+	        <div class="favr-history-item">
+	        	<span class="icon">
+	        		<app-svg name="cross"></app-svg>
+	        	</span>
+				<div class="dets">
+					<p class="title failed">DIDN’T GET FavRs</p>
+					<span class="date">10/10/2020</span>
+				</div>
+				<div class="time">02:20 AM</div>
+			</div>
+	        <hr class="thin neg-mar mb-20" />
+		</div>
+	</div>
+	<div class="section"></div>
+</ion-content>
