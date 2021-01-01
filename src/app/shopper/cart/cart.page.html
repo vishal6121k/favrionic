@@ -1,11 +1,11 @@
 <ion-content>
 	<app-loccart show="2"></app-loccart>
 	<div class="page-title with-back">
-		<span class="back">
+		<span routerLink="/shopper/home" class="back">
 			<img src="assets/images/back.png" />
 		</span>
 		Confirm Order
-		<span class="page-title-btn">+ Add More</span>
+		<span routerLink="/shopper/home" class="page-title-btn">+ Add More</span>
 	</div>
 	<div class="cart-content">
 		<div class="row item-title">
@@ -16,30 +16,33 @@
 				<p class="text-right">Estimated Price</p>
 			</div>
 		</div>
-		<div class="row item align-center">
+		<div class="row item align-end" *ngFor="let item of cartProd | keyvalue">
 			<div class="col-3">
 				<div class="img">
 					<img src="assets/images/rice.png" />
 				</div>
 			</div>
 			<div class="col-5">
-				<h5>Rice</h5>
+				<h5>{{ item.value.name }}</h5>
 				<div class="row">
 					<div class="col-12">
 						<span class="pt-num">
-							<span class="pt-wp-add-btn minus">-</span>1<span class="pt-wp-add-btn plus">+</span>
+							<span class="pt-wp-add-btn minus" (click)="subProd(item.value.product_id)">-</span>{{ item.value.quantity }}<span class="pt-wp-add-btn plus" (click)="addProd(item.value.product_id, item.value.unit_amount, item.value.name)">+</span>
 						</span>
 					</div>
 				</div>
 			</div>
 			<div class="col-4">
-				<span class="price">&#8364; <span class="x2">7.75</span></span>
+				<span class="price">&#8364; 
+					<span *ngIf="item.value.unit_amount > 0" class="x2">{{ item.value.total_amount }}</span>
+					<span *ngIf="item.value.unit_amount == 0" class="inp"><input type="number" [(ngModel)]="cartProd[item.key].total_amount" (input)="cartTotal()" /></span>
+				</span>
 			</div>
 			<div class="col-12">
 				<hr class="thin item-sep" />
 			</div>
 		</div>
-		<div class="row item align-center">
+		<!-- <div class="row item align-center">
 			<div class="col-3">
 				<div class="img">
 					<img src="assets/images/sugar.png" />
@@ -61,8 +64,8 @@
 			<div class="col-12">
 				<hr class="thin item-sep" />
 			</div>
-		</div>
-		<div class="row item align-center">
+		</div> -->
+		<!-- <div class="row item align-center">
 			<div class="col-3">
 				<div class="img">
 					<img src="assets/images/cashew.png" />
@@ -107,7 +110,7 @@
 			<div class="col-12">
 				<hr class="thin item-sep" />
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<hr />
 	<div class="container-fluid">
@@ -118,7 +121,7 @@
 						<p>Item Estimated Price</p>
 					</div>
 					<div class="col-4">
-						<span class="price">&#8364; <span class="x2">30.8</span></span>
+						<span class="price">&#8364; <span class="x2">{{ cartTotalAmount }}</span></span>
 					</div>
 				</div>
 				<div class="row est-price align-center">
@@ -127,7 +130,7 @@
 						<span class="red-sm">**A higher offer will get more Dropper</span>
 					</div>
 					<div class="col-4">
-						<span class="price"><span class="inp"><input type="number" /></span></span>
+						<span class="price"><span class="inp"><input type="number" name="del_amnt" [(ngModel)]="delAmnt" /></span></span>
 					</div>
 				</div>
 				<div class="row est-price align-center">
@@ -135,7 +138,7 @@
 						<h5>Total Price</h5>
 					</div>
 					<div class="col-4">
-						<span class="price big">&#8364;  <span class="x2">40.8</span></span>
+						<span class="price big">&#8364;  <span class="x2">{{ cartTotalAmount + delAmnt }}</span></span>
 					</div>
 				</div>
 			</div>
@@ -157,12 +160,12 @@
 								<app-svg name="clock"></app-svg>
 							</span>
 							<span class="title">Delivery Time</span>
-							<span class="subtitle">Select delivery slot</span>
+							<span class="subtitle">{{ showDate }}</span>
 						</div>
 					</div>
 					<div class="col-4 text-right">
-						<span class="cart-label-btn">
-							Today
+						<span class="cart-label-btn" (click)="showDatePicker()">
+							{{ showTime }}
 							<span class="down">
 								<app-svg name="down1"></app-svg>
 							</span>
@@ -170,7 +173,7 @@
 					</div>
 				</div>
 				<div class="row cart-label-wrap">
-					<div class="col-8">
+					<div class="col-6">
 						<div class="cart-label">
 							<span class="icon">
 								<img src="assets/images/payment.png" />
@@ -179,11 +182,33 @@
 							<!-- <span class="subtitle">Select delivery slot</span> -->
 						</div>
 					</div>
-					<div class="col-4 text-right">
+					<div class="col-6 text-right">
 						<span class="cart-label-btn">
-							Select
-							<span class="down">
-								<app-svg name="down1"></app-svg>
+							<span class="cart-label-btn" (click)="payDrop = 1">
+								<span *ngIf="payType == 0">Select</span>
+								<span *ngIf="payType == 1">Cash</span>
+								<span *ngIf="payType == 2">Google Pay</span>
+								<span *ngIf="payType == 3">Apple Pay</span>
+								<span class="down">
+									<app-svg name="down1"></app-svg>
+								</span>
+							</span>
+							<span *ngIf="payDrop == 1" class="cart-label-dropdown">
+								<ul>
+									<li (click)="payType=1; payDrop = 0;">Cash</li>
+									<li (click)="payType=2; payDrop = 0;">
+										<span class="icon">
+											<img src="assets/icon/gpay.png" />
+										</span>
+										Google Pay
+									</li>
+									<li (click)="payType=3; payDrop = 0;">
+										<span class="icon">
+											<img src="assets/icon/apay.png" />
+										</span>
+										Apple Pay
+									</li>
+								</ul>
 							</span>
 						</span>
 					</div>
@@ -207,11 +232,16 @@
 								<app-svg name="loc"></app-svg>
 							</span>
 							<span class="title">Add your Address</span>
-							<!-- <span class="subtitle">Select delivery slot</span> -->
+							<span class="subtitle" *ngIf="address1 != ''">
+								<span *ngIf="selectedLoc == 1">Home - </span>
+								<span *ngIf="selectedLoc == 2">Office - </span>
+								<span *ngIf="selectedLoc == 3">Other - </span>
+								{{ address1 }}
+							</span>
 						</div>
 					</div>
 					<div class="col-4 text-right">
-						<span class="cart-label-btn" (click)="locPop = 1">
+						<span class="cart-label-btn" (click)="getUserPosition()">
 							Change
 							<!-- <span class="down">
 								<app-svg name=""></app-svg>
@@ -226,7 +256,7 @@
 								<app-svg name="profile"></app-svg>
 							</span>
 							<span class="title">Ordered by</span>
-							<!-- <span class="subtitle">Select delivery slot</span> -->
+							<span class="subtitle" *ngIf="shopper_name != ''">{{ shopper_name }}</span>
 						</div>
 					</div>
 					<div class="col-4 text-right">
@@ -240,7 +270,8 @@
 				</div>
 				<div class="row">
 					<div class="col-10 offset-1">
-						<button routerLink="/shopper/seldrop" class="btn btn-full brdr">Place Order</button>
+						<button (click)="placeOrder()" class="btn btn-full brdr">Place Order</button>
+						<!-- <button routerLink="/shopper/seldrop" class="btn btn-full brdr">Place Order</button> -->
 					</div>
 				</div>
 			</div>
@@ -258,54 +289,72 @@
 		<!-- <span class="page-title-btn">+ Add More</span> -->
 	</div>
 	<div class="content">
-		<div class="row">
-			<div class="col-12 mb-20">
-				<div class="form-row">
-    				<input type="text" class="form-control" name="" value="" onchange="this.setAttribute('value', this.value);" />
-    				<label>Location</label>
-    				<span class="line"></span>
-    			</div>
-			</div>
-			<div class="col-12">
-				<div class="map">
-					<img src="assets/images/map.png" />
+		<div class="address-wrap">
+			<ion-slides scrollbar="true" [options]="slideOpts">
+		        <ion-slide>
+		        	<div class="address-thumb" [class.active]="selectedAddress == address.id" *ngFor="let address of addresses" (click)="setAddress(address)">
+		        		<div class="address-title">Home</div>
+		        		<div class="address-content">
+		        			<p>{{ address.address1 }}</p>
+		        			<p>{{ address.address2 }}</p>
+		        			<p><b>Landmark - </b> {{ address.landmark }}</p>
+		        		</div>
+		        	</div>
+		        </ion-slide>
+	        </ion-slides>
+		</div>
+		<form (submit)="addAddress()">
+			<div class="row">
+				<div class="col-12 mb-20">
+					<div class="form-row">
+	    				<input type="text" placeholder=" " class="form-control" name="address2" [(ngModel)]="address2" />
+	    				<label>Location</label>
+	    				<span class="line"></span>
+	    			</div>
 				</div>
-			</div>
-			<div class="col-12">
-				<div class="form-row">
-    				<input type="text" class="form-control" name="" value="" onchange="this.setAttribute('value', this.value);" />
-    				<label>House/Apartment/Eircode Number</label>
-    				<span class="line"></span>
-    			</div>
-				<div class="form-row">
-    				<input type="text" class="form-control" name="" value="" onchange="this.setAttribute('value', this.value);" />
-    				<label>Landmark (optional)</label>
-    				<span class="line"></span>
-    			</div>
-    			<div class="form-row">
-    				<span class="lab">Save As:</span>
-    				<div class="favr-cost-thumb">
-		          		<input type="radio" name="selectedLoc" [(ngModel)]="selectedLoc" value="1" id="loc1" />
-		          		<label for="loc1" class="in">Home</label>
-		          	</div>
-		          	<div class="favr-cost-thumb">
-		          		<input type="radio" name="selectedLoc" [(ngModel)]="selectedLoc" value="2" id="loc2" />
-		          		<label for="loc2" class="in">Office</label>
-		          	</div>
-		          	<div class="favr-cost-thumb">
-		          		<input type="radio" name="selectedLoc" [(ngModel)]="selectedLoc" value="3" id="loc3" />
-		          		<label for="loc3" class="in">Other</label>
-		          	</div>
-    			</div>
-			</div>
-			<div class="col-md-12">
-				<div class="row">
-					<div class="col-10 offset-1">
-						<button class="btn btn-full brdr">Add Location</button>
+				<div class="col-12">
+					<div class="map">
+						<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom" (centerChange)="centerChange($event)">
+						  	<agm-marker [latitude]="markLat" [longitude]="markLng" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+						</agm-map>
+					</div>
+				</div>
+				<div class="col-12">
+					<div class="form-row">
+	    				<input type="text" placeholder=" " class="form-control" name="address1" value="" [(ngModel)]="address1" />
+	    				<label>House/Apartment/Eircode Number</label>
+	    				<span class="line"></span>
+	    			</div>
+					<div class="form-row">
+	    				<input type="text" placeholder=" " class="form-control" name="landmark" [(ngModel)]="landmark" onchange="this.setAttribute('value', this.value);" />
+	    				<label>Landmark (optional)</label>
+	    				<span class="line"></span>
+	    			</div>
+	    			<div class="form-row">
+	    				<span class="lab">Save As:</span>
+	    				<div class="favr-cost-thumb">
+			          		<input type="radio" name="selectedLoc" [(ngModel)]="selectedLoc" (checked)="selectedLoc == 1" value="1" id="loc1" />
+			          		<label for="loc1" class="in">Home</label>
+			          	</div>
+			          	<div class="favr-cost-thumb">
+			          		<input type="radio" name="selectedLoc" [(ngModel)]="selectedLoc" (checked)="selectedLoc == 2" value="2" id="loc2" />
+			          		<label for="loc2" class="in">Office</label>
+			          	</div>
+			          	<div class="favr-cost-thumb">
+			          		<input type="radio" name="selectedLoc" [(ngModel)]="selectedLoc" (checked)="selectedLoc == 3" value="3" id="loc3" />
+			          		<label for="loc3" class="in">Other</label>
+			          	</div>
+	    			</div>
+				</div>
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-10 offset-1">
+							<button type="submit" class="btn btn-full brdr">Add Location</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>
 <div class="add-info-pop" [class.active]="infoPop == 1">
@@ -321,7 +370,7 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="form-row">
-    				<input type="text" class="form-control" name="" value="" onchange="this.setAttribute('value', this.value);" />
+    				<input type="text" placeholder=" " class="form-control" name="" [(ngModel)]="shopper_name" value="" onchange="this.setAttribute('value', this.value);" />
     				<label>Name</label>
     				<span class="line"></span>
     			</div>
@@ -337,7 +386,7 @@
 				<div class="row">
 					<div class="col-10 offset-1">
 						<div class="form-row">
-							<button class="btn btn-full brdr">Save Details</button>
+							<button (click)="infoPop = 0" class="btn btn-full brdr">Save Details</button>
 						</div>
 					</div>
 				</div>

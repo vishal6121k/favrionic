@@ -19,7 +19,7 @@
   ],
   "_resolved": "git+https://github.com/apache/cordova-plugin-network-information.git#eb6e88d0bb249d0fe51640a5867492e400dffc61",
   "_spec": "https://github.com/apache/cordova-plugin-network-information.git",
-  "_where": "/private/var/www/html/favrApp",
+  "_where": "/private/var/www/html/favrionic",
   "author": {
     "name": "Apache Software Foundation"
   },

@@ -1,12 +1,12 @@
 <ion-content>
-	<div class="page-title with-back col-pm">
+	<div *ngIf="showPage == 1" class="page-title with-back col-pm">
 		<span class="back">
 			<img src="assets/images/back.png" />
 		</span>
 		Your shopper for today is
-		<span class="page-title-btn red" (click)="cancPop = 1;">Cancel</span>
+		<span class="page-title-btn red" *ngIf="orderDets.status <= 3" (click)="cancPop = 1;">Cancel</span>
 	</div>
-	<div class="container-fluid">
+	<div *ngIf="showPage == 1" class="container-fluid">
 		<div class="row">
 			<div class="col-12">
 				<div class="dropper-thumb">
@@ -16,7 +16,7 @@
 						</div>
 					</div>
 					<div class="dets">
-						<span class="title">Dropper 1</span>
+						<span class="title">{{ orderDets.caller_name }}</span>
 					</div>
 					<div class="rating">
 						<span class="rate-full"></span>
@@ -36,7 +36,12 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="neg-mar">
-					<img src="assets/images/map1.png" />
+					<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+					  	<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+					  	<agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker>
+					  	<agm-direction [origin]="origin" [destination]="destination"></agm-direction>
+					  	<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
+					</agm-map>
 				</div>
 			</div>
 		</div>
@@ -48,45 +53,79 @@
 		<div class="row">
 			<div class="col-12">
 				<ul class="drop-activity">
-					<li class="completed">
+					<li [class.completed]="orderDets.status > 2" [class.ongoing]="orderDets.status == 2">
 						<span class="title">On my way to do you FavR</span>
 					</li>
-					<li class="ongoing">
+					<li [class.completed]="orderDets.status > 3" [class.ongoing]="orderDets.status == 3">
 						<span class="title">
-							Purchasing your items
+							<span (click)="updateOrderStatus(3)">Purchasing your items</span>
 							<div class="check-items-list">
-								<div class="check-item">
-									<input type="checkbox" name="itemPur" [(ngModel)]="itemPur" id="itemPur1" value="1" />
-									<label for="itemPur1">Rice <span class="check-item-light">Qty - <b>2</b></span></label>
+								<div *ngFor="let item of orderDets.orderDetails" class="check-item">
+									<input type="checkbox" name="itemPur{{ item.id }}" [checked]="item.status==2" (change)="setOrderItemStatus(item.id)" id="itemPur{{ item.id }}" />
+									<label for="itemPur{{ item.id }}">{{ item.product_name }} <span class="check-item-light">Qty - <b>{{ item.quantity }}</b></span></label>
 								</div>
-								<div class="check-item">
+								<!-- <div class="check-item">
 									<input type="checkbox" name="itemPur" [(ngModel)]="itemPur" id="itemPur2" value="2" />
 									<label for="itemPur2">Sugar <span class="check-item-light">Qty - <b>2</b></span></label>
 								</div>
 								<div class="check-item">
 									<input type="checkbox" name="itemPur" [(ngModel)]="itemPur" id="itemPur3" value="3" />
 									<label for="itemPur3">Oil <span class="check-item-light">Qty - <b>2</b></span></label>
-								</div>
+								</div> -->
 							</div>
 						</span>
 					</li>
-					<li>
-						<span class="title">On my way to deliver your items</span>
+					<li [class.completed]="orderDets.status > 4" [class.ongoing]="orderDets.status == 4">
+						<span (click)="updateOrderStatus(4)" class="title">On my way to deliver your items</span>
 					</li>
-					<li>
-						<span class="title">FavR Done</span>
+					<li [class.completed]="orderDets.status > 5" [class.ongoing]="orderDets.status == 5">
+						<span (click)="updateOrderStatus(5)" class="title">FavR Done</span>
 					</li>
 				</ul>
 			</div>
 		</div>
 		<div class="row mb-20">
 			<div class="col-10 offset-1">
-				<button class="btn btn-full brdr mb-20" (click)="chatOpen = 1">Chat with me</button>
-				<button class="btn btn-full brdr">Confirm delivery</button>
+				<button *ngIf="orderDets.status < 5" class="btn btn-full brdr mb-20" (click)="chatOpen = 1">Chat with me</button>
+				<button *ngIf="orderDets.status >= 5" (click)="updateOrderStatus(6)" class="btn btn-full brdr">Confirm delivery</button>
 			</div>
 		</div>
 	</div>
 </ion-content>
+<div class="notify-popup rate-popup" *ngIf="showPage == 1" [class.active]="ratePop==1">
+	<p class="flow-text">Thank you for choosing me!</p>
+	<span class="icon">
+		<img src="assets/images/rice.png" />
+	</span>
+	<span class="person-name">
+		{{ orderDets.caller_name }}
+	</span>
+	<form (submit)="saveRating()">
+		<p class="flow-text"><span class="blck small bold">Please rate</span></p>
+		<div class="rating-form-wrap">
+			<div class="rating-inp">
+	            <input id="star5" name="star" type="radio" [(ngModel)]="rateModel.rating" value="5" class="radio-btn hide" />
+	            <label for="star5">☆</label>
+	            <input id="star4" name="star" type="radio" [(ngModel)]="rateModel.rating" value="4" class="radio-btn hide" />
+	            <label for="star4">☆</label>
+	            <input id="star3" name="star" type="radio" [(ngModel)]="rateModel.rating" value="3" class="radio-btn hide" />
+	            <label for="star3">☆</label>
+	            <input id="star2" name="star" type="radio" [(ngModel)]="rateModel.rating" value="2" class="radio-btn hide" />
+	            <label for="star2">☆</label>
+	            <input id="star1" name="star" type="radio" [(ngModel)]="rateModel.rating" value="1" class="radio-btn hide" />
+	            <label for="star1">☆</label>
+	            <div class="clear"></div>
+	        </div>
+		</div>
+		<p class="flow-text"><span class="small">Add a comment</span></p>
+		<div class="rating-input">
+			<textarea name="rating_text" [(ngModel)]="rateModel.comment"></textarea>
+		</div>
+		<div class="rating-button">
+			<button type="submit" class="btn btn-primary btn-full">Submit</button>
+		</div>
+	</form>
+</div>
 <div class="chat-window" [class.active]="chatOpen == 1">
 	<div class="title">
 		<span class="img">
@@ -129,39 +168,55 @@
 
 <div class="cancel-popup" [class.active]="cancPop == 1">
 	<span class="close" (click)="cancPop = 0; cancPopCont = 0;">&times;</span>
-	<h4 class="popup-title" *ngIf="cancPopCont == 0">Why are you cancelling?</h4>
-	<p class="norm-sub col-sec" *ngIf="cancPopCont == 0">Please choose the correct reason for Cancel. This information can improve our services</p>
-
-	<h4 class="popup-title" *ngIf="cancPopCont == 1">Block User</h4>
-	<p class="norm-sub col-sec" *ngIf="cancPopCont == 1">Please tell us the reason for Blocking User. This information can improve our services</p>
-	<p *ngIf="cancPopCont == 1">Reason</p>
-	<div class="radio-item" *ngIf="cancPopCont == 0">
-		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc1" value="1" />
-		<label for="radcanc1">Item(s) not available</label>
+	<div *ngIf="cancPopCont == 0">
+		<form (submit)="cancelOrder()">
+			<h4 class="popup-title" *ngIf="cancPopCont == 0">Why are you cancelling?</h4>
+			<p class="norm-sub col-sec" *ngIf="cancPopCont == 0">Please choose the correct reason for Cancel. This information can improve our services</p>
+			<div class="radio-item" *ngIf="cancPopCont == 0">
+				<input type="radio" name="cancel_type" [(ngModel)]="cancModel.cancel_type" id="radcanc1" value="1" />
+				<label for="radcanc1">Item(s) not available</label>
+			</div>
+			<div class="radio-item" *ngIf="cancPopCont == 0">
+				<input type="radio" name="cancel_type" [(ngModel)]="cancModel.cancel_type" id="radcanc2" value="2" />
+				<label for="radcanc2">Accepted by mistake</label>
+			</div>
+			<div class="radio-item" *ngIf="cancPopCont == 0">
+				<input type="radio" name="cancel_type" [(ngModel)]="cancModel.cancel_type" id="radcanc3" value="3" />
+				<label for="radcanc3">Not able to complete</label>
+			</div>
+			<div class="radio-item" *ngIf="cancPopCont == 0">
+				<input type="radio" name="cancel_type" [(ngModel)]="cancModel.cancel_type" id="radcanc4" value="4" />
+				<label for="radcanc4">Other</label>
+			</div>
+			<div class="form-row mb-20" *ngIf="cancModel.cancel_type == 4">
+				<input type="text" class="form-control" [(ngModel)]="cancModel.cancel_reason" name="cancel_reason" value="" placeholder=" " />
+				<label>Tell us the reason..</label>
+				<span class="line"></span>
+			</div>
+			<div class="row">
+				<div class="col-10 offset-1">
+					<button type="submit" class="btn btn-full btn-primary" *ngIf="cancPopCont == 0">Cancel Order</button>
+					<button class="btn btn-full mb-20" *ngIf="cancPopCont == 0" (click)="cancPopCont = 1">Block User?</button>
+				</div>
+			</div>
+		</form>
 	</div>
-	<div class="radio-item" *ngIf="cancPopCont == 0">
-		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc2" value="2" />
-		<label for="radcanc2">Accepted by mistake</label>
-	</div>
-	<div class="radio-item" *ngIf="cancPopCont == 0">
-		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc3" value="3" />
-		<label for="radcanc3">Not able to complete</label>
-	</div>
-	<div class="radio-item" *ngIf="cancPopCont == 0">
-		<input type="radio" name="cancRes" [(ngModel)]="cancRes" id="radcanc4" value="4" />
-		<label for="radcanc4">Other</label>
-	</div>
-	<div class="form-row mb-20" *ngIf="cancRes == 4 || cancPopCont == 1 ">
-		<input type="text" class="form-control" name="" value="" />
-		<label>Tell us the reason..</label>
-		<span class="line"></span>
-	</div>
-	<div class="row">
-		<div class="col-10 offset-1">
-			<button class="btn btn-full btn-primary" *ngIf="cancPopCont == 0">Cancel Order</button>
-			<button class="btn btn-full btn-primary mb-20" *ngIf="cancPopCont == 1">Block User</button>
-			<button class="btn btn-full mb-20" *ngIf="cancPopCont == 0" (click)="cancPopCont = 1">Block User?</button>
-		</div>
+	<div *ngIf="cancPopCont == 1">
+		<form (submit)="blockUser()">
+			<h4 class="popup-title" *ngIf="cancPopCont == 1">Block User</h4>
+			<p class="norm-sub col-sec" *ngIf="cancPopCont == 1">Please tell us the reason for Blocking User. This information can improve our services</p>
+			<p *ngIf="cancPopCont == 1">Reason</p>
+			<div class="form-row mb-20" *ngIf="cancRes == 4 || cancPopCont == 1 ">
+				<input type="text" class="form-control" [(ngModel)]="blockModel.reason" name="reason" value="" placeholder=" " />
+				<label>Tell us the reason..</label>
+				<span class="line"></span>
+			</div>
+			<div class="row">
+				<div class="col-10 offset-1">
+					<button class="btn btn-full btn-primary mb-20" *ngIf="cancPopCont == 1">Block User</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
 <div class="overlay" [class.active]="cancPop == 1" (click)="cancPop = 0; cancPopCont = 0;"></div>

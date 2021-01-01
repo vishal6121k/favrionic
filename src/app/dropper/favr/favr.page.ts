@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-favr',
@@ -14,8 +15,42 @@ export class FavrPage implements OnInit {
 	    freeMode: true
   	};
   	favrHistPop:any = 0;
-  	constructor() { }
+    userDets:any;
+    showPage:any = 0;
+    favTrans:any;
+    config:any;
+  	constructor(private api:ApiService) { }
 
-  	ngOnInit() { }
+  	ngOnInit() {
+      this.config = JSON.parse(window.localStorage.getItem('config'));
+      this.getUserDetails();
+      this.getFavrTransacList();
+    }
+
+    getUserDetails(){
+      this.api.getUserDetails()
+      .then(resp => {
+        this.userDets = resp;
+        this.showPage = 1;
+      })
+      .catch(err => {
+
+      });
+    }
+
+    getFavrTransacList(){
+      // getFavrTransacList
+      var data = {
+        offset: 0,
+        limit: 1000
+      };
+      this.api.getFavrTransacList(data)
+      .then(resp => {
+        this.favTrans = resp;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
 
 }

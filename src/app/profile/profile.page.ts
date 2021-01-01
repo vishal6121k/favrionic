@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -8,13 +9,16 @@ import { Component, OnInit } from '@angular/core';
 export class ProfilePage implements OnInit {
 
 	user_type:any = 1;
-  constructor() { }
+  	constructor(private router: Router) { }
 
-  ngOnInit() {
-  }
+  	ngOnInit() { }
 
-  segmentChanged(event){
+  	segmentChanged(event){ }
 
-  }
+  	logoutUser(){
+  		window.localStorage.removeItem('user_type');
+  		window.localStorage.removeItem('token');
+  		this.router.navigate(['/']);
+  	}
 
 }

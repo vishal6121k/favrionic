@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -25,32 +26,168 @@ export class HomePage implements OnInit {
 	    freeMode: true
   	};
   	cat_id:any = 0;
-
+    subcat_id:any = 0;
+    cats:any;
   	cartProd:any = {};
     favPrd:any = {};
 	  cartLength:any = 0;
-  constructor() { }
+    showLoad:any = 1;
+    popProds:any;
+    reccProds:any;
+    allProds:any;
+    subcats:any;
+    ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
+  constructor(private api: ApiService) { }
 
-  ngOnInit() {
+  ngOnInit(){
+    console.log('HomePage: ngOnInit')
+    this.getAllCategories();
+    this.getPopularProds();
+    if(window.localStorage.getItem('cart')){
+      this.cartProd = JSON.parse(window.localStorage.getItem('cart'));
+      this.cartTotal();
+    }
   }
 
-  selectCategory(){
-  	this.cat_id = 1;
+
+  getAllCategories(){
+    var data = {
+      offset: 0,
+      limit: 100
+    };
+    this.api.getAllCats(data)
+    .then( resp => {
+       this.cats = resp;
+    })
+    .catch( err => {
+
+    });
   }
 
-  addProd(id){
+  getPopularProds(){
+    var data = {
+      offset: 0,
+      limit: 100
+    };
+    this.api.getPopularProds(data)
+    .then( resp => {
+       this.popProds = resp;
+       this.getReccProds();
+    })
+    .catch( err => {
+
+    });
+  }
+
+  getReccProds(){
+    var data = {
+      offset: 0,
+      limit: 100
+    };
+    this.api.getReccProds(data)
+    .then( resp => {
+        this.showLoad = 0
+        this.reccProds = resp;
+    })
+    .catch( err => {
+
+    });
+  }
+
+  saveUserProduct(product_id){
+    var data = {
+      'product_id': product_id
+    };
+    this.api.saveUserProduct(data)
+    .then( resp => {
+       // this.subcats = resp;
+       // this.showLoad = 0;
+       // console.log(resp);
+    })
+    .catch( err => {
+
+    });
+  }
+
+  selectCategory(cat_id){
+  	this.cat_id = cat_id;
+    this.subcat_id = 0;
+    var data = {
+      categoryId: this.cat_id,
+      offset: 0,
+      limit: 100
+    };
+
+    this.allProds = [];
+    this.subcats = [];
+    this.showLoad = 1;
+
+    this.api.getSubcatByCat(data)
+    .then( resp => {
+       this.subcats = resp;
+       // this.showLoad = 0;
+       // console.log(resp);
+    })
+    .catch( err => {
+
+    });
+
+    this.api.getAllProductByCategory(data)
+    .then( resp => {
+       this.allProds = resp;
+       this.showLoad = 0;
+    })
+    .catch( err => {
+
+    });
+  }
+
+
+  selectSubcategory(subcat_id){
+    this.subcat_id = subcat_id;
+    var data = {
+      subcategoryId: this.subcat_id,
+      offset: 0,
+      limit: 100
+    };
+
+    this.allProds = [];
+    this.showLoad = 1;
+
+    this.api.getProdBySubcat(data)
+    .then( resp => {
+       this.allProds = resp;
+       this.showLoad = 0;
+    })
+    .catch( err => {
+
+    });
+  }
+
+
+
+  addProd(id, price, name){
   	if(this.cartProd[id]){
-  		this.cartProd[id] = this.cartProd[id] + 1;
+      this.cartProd[id]['quantity'] = this.cartProd[id]['quantity'] + 1;
+      this.cartProd[id]['unit_amount'] = price;
+      this.cartProd[id]['total_amount'] = price * this.cartProd[id]['quantity'];
+      this.cartProd[id]['name'] = name;
+  		this.cartProd[id]['product_id'] = id;
   	}
   	else{
-  		this.cartProd[id] = 1;
+      this.cartProd[id] = {};
+  		this.cartProd[id]['quantity'] = 1;
+      this.cartProd[id]['unit_amount'] = price;
+      this.cartProd[id]['total_amount'] = price * this.cartProd[id]['quantity'];
+      this.cartProd[id]['name'] = name;
+      this.cartProd[id]['product_id'] = id;
   	}
   	console.log(this.cartProd);
   	this.cartTotal();
   }
   subProd(id){
-  	if(this.cartProd[id] > 1){
-  		this.cartProd[id] = this.cartProd[id] - 1;
+  	if(this.cartProd[id]['quantity'] > 1){
+  		this.cartProd[id]['quantity'] = this.cartProd[id]['quantity'] - 1;
   	}
   	else{
   		delete this.cartProd[id];
@@ -71,10 +208,11 @@ export class HomePage implements OnInit {
 
 
   cartTotal(){
+    window.localStorage.setItem('cart', JSON.stringify(this.cartProd));
   	this.cartLength = 0;
   	for( var el in this.cartProd ) {
 	    if( this.cartProd.hasOwnProperty( el ) ) {
-	      this.cartLength += parseFloat( this.cartProd[el] );
+	      this.cartLength += parseFloat( this.cartProd[el]['quantity'] );
 	    }
   	}
   }

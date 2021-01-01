@@ -10,8 +10,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12">
-				<div class="neg-mar">
-					<img src="assets/images/map.png" />
+				<div class="neg-mar" *ngIf="loadMap == 1">
+					<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+				  		<agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle>
+					</agm-map>
 				</div>
 			</div>
 		</div>
@@ -28,7 +30,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div *ngIf="!droppers.length" class="row">
+			<div class="col-12">
+				No Droppers till now
+			</div>
+		</div>
+		<div class="row" *ngIf="droppers.length">
 			<div class="col-12">
 				<h5 class="norm-title">Available Droppers</h5>
 				<p class="norm-sub">Choose one from below</p>
@@ -36,14 +43,14 @@
 			<div class="col-12">
 				<div class="row">
 					<div class="col-12">
-						<div class="dropper-thumb">
+						<div *ngFor="let dropper of droppers" class="dropper-thumb" (click)="selDropper = dropper.id" [class.active]="selDropper == dropper.id">
 							<div class="img">
 								<div class="img-in">
 									<img src="assets/images/dp.jpg" />
 								</div>
 							</div>
 							<div class="dets">
-								<span class="title">Dropper 1</span>
+								<span class="title">{{ dropper.first_name+' '+dropper.last_name }}</span>
 								<span class="sub">
 									Very professional and hard..
 									<span class="see-more">See More</span>
@@ -55,69 +62,6 @@
 								<span class="rate-full"></span>
 								<span class="rate-full"></span>
 								<span class="rate-empty"></span>
-							</div>
-						</div>
-						<div class="dropper-thumb">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Dropper 2</span>
-								<span class="sub">
-									Very professional and hard..
-									<span class="see-more">See More</span>
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
-								<span class="rate-empty"></span>
-							</div>
-						</div>
-						<div class="dropper-thumb">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Dropper 3</span>
-								<span class="sub">
-									Forgot most of the it..
-									<span class="see-more">See More</span>
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
-								<span class="rate-empty"></span>
-								<span class="rate-empty"></span>
-								<span class="rate-empty"></span>
-							</div>
-						</div>
-						<div class="dropper-thumb">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Dropper 4</span>
-								<span class="sub">
-									Very professional and hard..
-									<span class="see-more">See More</span>
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
 							</div>
 						</div>
 					</div>
@@ -125,7 +69,8 @@
 						<div class="row mb-20">
 							<div class="col-10 offset-1">
 								<div class="form-row">
-									<button routerLink="/shopper/track" class="btn btn-primary btn-full">Accept Dropper</button>
+									<button (click)="acceptDropper()" class="btn btn-primary btn-full">Accept Dropper</button>
+									<!-- <button routerLink="/shopper/track" class="btn btn-primary btn-full">Accept Dropper</button> -->
 								</div>
 							</div>
 						</div>

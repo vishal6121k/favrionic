@@ -2,7 +2,7 @@
 .cart-section{
 	padding-top: 15px;
 	.cart-label-wrap{
-		align-items: center;
+		// align-items: center;
 		padding-bottom: 15px;
 		.cart-label{
 			position: relative;
@@ -35,8 +35,36 @@
 			font-size: 15px;
 			font-weight: 600;
 			color: #709B78;
+			position: relative;
 			line-height: 40px;
 			letter-spacing: 0.34px;
+			.cart-label-dropdown{
+			    position: absolute;
+			    right: 0;
+			    top: 100%;
+			    width: 150px;
+			    background: #FFF;
+			    box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
+			    padding: 15px;
+			    z-index: 2;
+			    ul{
+			    	padding: 0px;
+			    	margin: 0px;
+			    	list-style-type: none;
+			    	li{
+			    		display: block;
+			    		padding-left: 30px;
+			    		position: relative;
+			    		.icon{
+			    			position: absolute;
+			    			width: 20px;
+			    			left: 0;
+			    			top: 50%;
+			    			transform: translateY(-50%);
+			    		}
+			    	}
+			    }
+			}
 			.down{
 				font-size: 30px;
 			    display: inline-block;

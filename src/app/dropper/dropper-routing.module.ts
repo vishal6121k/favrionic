@@ -36,11 +36,11 @@ const routes: Routes = [
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   },
   {
-    path: 'start',
+    path: 'start/:id',
     loadChildren: () => import('./start/start.module').then( m => m.StartPageModule)
   },
   {
-    path: 'track',
+    path: 'track/:id',
     loadChildren: () => import('./track/track.module').then( m => m.TrackPageModule)
   }
 ];

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ApiService } from '../../services/api.service';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -7,9 +7,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrdersPage implements OnInit {
 
-  constructor() { }
+	orders:any;
+  constructor(private api:ApiService) { }
 
   ngOnInit() {
+  	this.getAllOrder();
   }
+
+  getAllOrder(){
+      // getFavrTransacList
+      var data = {
+        offset: 0,
+        limit: 1000
+      };
+      this.api.getAllOrder(data)
+      .then(resp => {
+      	this.orders = resp;
+        console.log(resp);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
 
 }

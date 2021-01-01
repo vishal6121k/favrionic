@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-
+import { AuthGuardService } from "./services/auth-guard.service";
+import { RoleGuardService } from "./services/role-guard.service";
 const routes: Routes = [
   {
     path: 'home',
@@ -13,11 +14,13 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'choose',
-    loadChildren: () => import('./choose/choose.module').then( m => m.ChoosePageModule)
+    loadChildren: () => import('./choose/choose.module').then( m => m.ChoosePageModule),
+    canActivate: [RoleGuardService]
   },
   {
     path: 'shopper',

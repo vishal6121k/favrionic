@@ -9,6 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import { LoccartComponent } from '../loccart/loccart.component';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   imports: [
@@ -16,6 +17,9 @@ import { LoccartComponent } from '../loccart/loccart.component';
     FormsModule,
     IonicModule,
     IconModule,
+    AgmCoreModule.forRoot({
+        apiKey: "AIzaSyC7RAT2MhwmKUqs2kEWuQjmka65lv6dYxY" + '&libraries=visualization'
+    }),
     HomePageRoutingModule
   ],
   declarations: [HomePage, LoccartComponent]

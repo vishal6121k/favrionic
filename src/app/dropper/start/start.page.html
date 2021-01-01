@@ -6,7 +6,7 @@
 		Your shopper for today is
 		<span class="page-title-btn">Cancel</span>
 	</div>
-	<div class="container-fluid">
+	<div *ngIf="showPage == 1" class="container-fluid">
 		<div class="row">
 			<div class="col-12">
 				<div class="dropper-thumb">
@@ -16,7 +16,7 @@
 						</div>
 					</div>
 					<div class="dets">
-						<span class="title">Dropper 1</span>
+						<span class="title">{{ orderDets.caller_name }}</span>
 					</div>
 					<div class="rating">
 						<span class="rate-full"></span>
@@ -51,32 +51,32 @@
 					<div class="drop-list-item">
 						<span class="title">Total Items: </span>
 						<!-- <span class="dots"></span> -->
-						<span class="value">4</span>
+						<span class="value">{{ orderDets.total_items }}</span>
 					</div>
 				</div>
 				<div class="cart-content">
-					<div class="row item align-center">
+					<div *ngFor="let item of orderDets.orderDetails" class="row item align-center">
 						<div class="col-3">
 							<div class="img">
 								<img src="assets/images/rice.png" />
 							</div>
 						</div>
 						<div class="col-5">
-							<h5>Rice</h5>
+							<h5>{{ item.product_name }}</h5>
 							<div class="row">
 								<div class="col-10">
-									<p>Qty: 1</p>
+									<p>Qty: {{ item.quantity }}</p>
 								</div>
 							</div>
 						</div>
 						<div class="col-4">
-							<span class="price">&#8364; <span class="x2">7.75</span></span>
+							<span class="price">&#8364; <span class="x2">{{ item.total_amount }}</span></span>
 						</div>
 						<div class="col-12">
 							<hr class="thin item-sep" />
 						</div>
 					</div>
-					<div class="row item align-center">
+					<!-- <div class="row item align-center">
 						<div class="col-3">
 							<div class="img">
 								<img src="assets/images/sugar.png" />
@@ -139,34 +139,38 @@
 							<hr class="thin item-sep" />
 						</div>
 					</div>
-				</div>
+ -->				</div>
 				<div class="drop-list-items">
 					<div class="drop-list-item">
 						<span class="title">Estimated cost of items</span>
 						<span class="dots" style="border-color: transparent;"></span>
-						<span class="value">10</span>
+						<span class="value">&#8364; {{ orderDets.total_amount }}</span>
 					</div>
 					<div class="drop-list-item bold">
 						<span class="title">Shopper's total offer</span>
 						<span class="dots" style="border-color: transparent;"></span>
-						<span class="value">15</span>
+						<span class="value">&#8364; {{ addDels(orderDets.delivery_charge, orderDets.total_amount) }}</span>
 					</div>
 					<div class="drop-list-item">
 						<span class="title">You Earn</span>
 						<span class="dots" style="border-color: transparent;"></span>
-						<span class="value">5</span>
+						<span class="value">&#8364; {{ orderDets.delivery_charge }}</span>
 					</div>
 					<div class="drop-list-item bold">
 						<span class="title">Mode of payment</span>
 						<span class="dots" style="border-color: transparent;"></span>
-						<span class="value">Cash</span>
+						<span class="value">
+							<span *ngIf="orderDets.payment_type == 1">Cash</span>
+							<span *ngIf="orderDets.payment_type == 2">Google Pay</span>
+							<span *ngIf="orderDets.payment_type == 3">Apple Pay</span>
+						</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row mb-20">
 			<div class="col-10 offset-1">
-				<button (click)="reqPop = 1" class="btn btn-full btn-primary">Start the Request</button>
+				<button (click)="waitForAccept()" class="btn btn-full btn-primary">Start the Request</button>
 			</div>
 		</div>
 	</div>

@@ -1,7 +1,7 @@
 <ion-content>
 	<app-loccart show="2"></app-loccart>
 	<div class="page-title">FavR</div>
-	<div class="container-fluid section">
+	<div class="container-fluid section" *ngIf="showPage == 1">
 		<!-- <div class="row align-center">
 			<div class="col-8">
 				<h5 class="section-title">Favr</h5>
@@ -24,18 +24,18 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<h1 class="text-center">10</h1>
+							<h1 class="text-center">{{ userDets.current_credit }}</h1>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-12">
-				<p class="text-center">You need atleast 1 FavR to place an Order</p>
+				<p class="text-center">You need atleast {{ config.credit_per_order }} FavR to place an Order</p>
 			</div>
 		</div>
 	</div>
 	<hr>
-	<div class="rev-section">
+	<div class="rev-section" *ngIf="showPage == 1">
 		<div class="title" (click)="buyFavrPop = (buyFavrPop == 1)?0:1">
 			Buy Some FavR
 			<span class="down" [class.active]="buyFavrPop == 1">
@@ -45,13 +45,13 @@
 		<div class="content" *ngIf="buyFavrPop == 1">
 			<p>Choose one from below</p>
 			<ion-slides scrollbar="true" [options]="priceSlideOpts">
-		        <ion-slide>
+		        <ion-slide *ngFor="let plan of plans">
 		          	<div class="favr-cost-thumb">
-		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="1" id="plan1" />
-		          		<label for="plan1" class="in">1 FavR = &#8364; 1</label>
+		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" (change)="setPlan(plan.credit_qty, plan.price)" value="{{ plan.id }}" id="plan{{ plan.id }}" />
+		          		<label for="plan{{ plan.id }}" class="in">{{ plan.credit_qty }} FavR = &#8364; {{ plan.price }}</label>
 		          	</div>
 		        </ion-slide>
-		        <ion-slide>
+		        <!-- <ion-slide>
 		          	<div class="favr-cost-thumb">
 		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="2" id="plan2" />
 		          		<label for="plan2" class="in">5 FavR = &#8364; 5.66</label>
@@ -74,19 +74,53 @@
 		          		<input type="radio" name="selectedPlan" [(ngModel)]="selectedPlan" value="5" id="plan5" />
 		          		<label for="plan5" class="in">15 FavR = &#8364; 15.66</label>
 		          	</div>
-		        </ion-slide>
+		        </ion-slide> -->
 	        </ion-slides>
-	        <hr class="thin neg-mar mb-20" />
-	        <p>You are recharging: <span class="favr-selected-thumb">1 FavR = &#8364; 1</span></p>
-	        <hr class="thin neg-mar mb-20" />
-	        <div class="row">
+	        <hr *ngIf="selectedPlan > 0" class="thin neg-mar mb-20" />
+	        <p *ngIf="selectedPlan > 0">You are recharging: <span class="favr-selected-thumb">{{ selectedPlanCredit }} FavR = &#8364; {{ selectedPlanPrice }}</span></p>
+	        <hr *ngIf="selectedPlan > 0" class="thin neg-mar mb-20" />
+	        <div *ngIf="selectedPlan > 0" class="row">
+	        	<div class="col-12">
+	        		<div class="form-row">
+                        <input type="text" class="form-control" [(ngModel)]="cardModel.number" name="number" value="" placeholder=" " />
+                        <label>Card Number</label>
+                        <span class="line"></span>
+                    </div>
+	        	</div>
+	        	<div class="col-6">
+	        		<div class="row">
+			        	<div class="col-6">
+			        		<div class="form-row mb-20">
+		                        <input type="text" class="form-control" [(ngModel)]="cardModel.expMonth" name="expMonth" value="" placeholder=" " />
+		                        <label>MM</label>
+		                        <span class="line"></span>
+		                    </div>
+			        	</div>
+			        	<div class="col-6">
+			        		<div class="form-row mb-20">
+		                        <input type="text" class="form-control" [(ngModel)]="cardModel.expYear" name="expYear" value="" placeholder=" " />
+		                        <label>YYYY</label>
+		                        <span class="line"></span>
+		                    </div>
+			        	</div>
+	        		</div>
+	        	</div>
+	        	<div class="col-6">
+	        		<div class="form-row mb-20">
+                        <input type="text" class="form-control" [(ngModel)]="cardModel.cvc" name="cvc" value="" placeholder=" " />
+                        <label>CVC/CVV</label>
+                        <span class="line"></span>
+                    </div>
+	        	</div>
+	        </div>
+	        <div *ngIf="selectedPlan > 0" class="row">
 	        	<div class="col-10 offset-1">
-	        		<button class="btn btn-primary btn-full">Buy FavR</button>
+	        		<button (click)="initPayment()" class="btn btn-primary btn-full">Buy FavR</button>
         		</div>
     		</div>
 		</div>
 	</div>
-	<div class="rev-section">
+	<div class="rev-section" *ngIf="showPage == 1">
 		<div class="title" (click)="favrHistPop = (favrHistPop == 1)?0:1">
 			FavR History
 			<span class="down" [class.active]="favrHistPop == 1">
@@ -94,18 +128,22 @@
 			</span>
 		</div>
 		<div class="content" *ngIf="favrHistPop == 1">
-			<p>October 2020</p>
-			<div class="favr-history-item">
-	        	<span class="icon">
-	        		<app-svg name="check"></app-svg>
-	        	</span>
-				<div class="dets">
-					<p class="title">Got 10 FavRs</p>
-					<span class="date">10/10/2020</span>
+			<div *ngFor="let month of favTrans | keyvalue">
+				<p>{{ month.key | date:'MMMM y' }}</p>
+				<div class="favr-history-item" *ngFor="let trans of month.value">
+		        	<span class="icon">
+		        		<app-svg *ngIf="trans.transaction_type == 'Purchased'" name="check"></app-svg>
+		        		<app-svg *ngIf="trans.transaction_type == 'Debit'" name="wallet"></app-svg>
+		        	</span>
+					<div class="dets">
+						<p *ngIf="trans.transaction_type == 'Purchased'" class="title">Got {{ trans.credit_qty }} FavRs</p>
+						<p *ngIf="trans.transaction_type == 'Debit'" class="title">Used {{ trans.credit_qty }} FavRs</p>
+						<span class="date">{{ trans.created_at | date:'d/M/yy' }}</span>
+					</div>
+					<div class="time">{{ trans.created_at | date:'h:mm a' }}</div>
 				</div>
-				<div class="time">02:20 AM</div>
 			</div>
-	        <hr class="thin neg-mar mb-20" />
+	        <!-- <hr class="thin neg-mar mb-20" />
 	        <div class="favr-history-item">
 	        	<span class="icon">
 	        		<app-svg name="wallet"></app-svg>
@@ -138,8 +176,17 @@
 				</div>
 				<div class="time">02:20 AM</div>
 			</div>
-	        <hr class="thin neg-mar mb-20" />
+	        <hr class="thin neg-mar mb-20" /> -->
 		</div>
 	</div>
 	<div class="section"></div>
 </ion-content>
+
+<div class="buying-favr-popup" *ngIf="payPopOpen == 1">
+	<div class="buy-pop-in">
+		<div class="pay-load-wrap">
+			<img src="assets/loaders/payment.png" class="block center" />
+		</div>
+		<h4>{{ payMsg }}</h4>
+	</div>
+</div>

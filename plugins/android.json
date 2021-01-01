@@ -7,7 +7,14 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-datepicker": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
     "cordova-plugin-device": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-geolocation": {
+      "GPS_REQUIRED": "true",
       "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-ionic-keyboard": {
@@ -26,7 +33,35 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.ionic.starter"
     },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
     "phonegap-plugin-mobile-accessibility": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-stripe": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-request-location-accuracy": {
+      "PLAY_SERVICES_LOCATION_VERSION": "16.+",
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-background-geolocation": {
+      "GOOGLE_PLAY_SERVICES_VERSION": "11+",
+      "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
+      "ICON": "@mipmap/icon",
+      "SMALL_ICON": "@mipmap/icon",
+      "ACCOUNT_NAME": "@string/app_name",
+      "ACCOUNT_LABEL": "@string/app_name",
+      "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
+      "CONTENT_AUTHORITY": "$PACKAGE_NAME",
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-android-support-gradle-release": {
+      "ANDROID_SUPPORT_VERSION": "27.+",
       "PACKAGE_NAME": "io.ionic.starter"
     }
   },

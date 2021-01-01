@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MobileAccessibility } from '@ionic-native/mobile-accessibility/ngx';
+import { ApiService } from './services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,11 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private mobileAccessibility: MobileAccessibility
+    private mobileAccessibility: MobileAccessibility,
+    private api:ApiService
   ) {
     this.initializeApp();
+    this.getConfig();
   }
 
   initializeApp() {
@@ -32,6 +35,15 @@ export class AppComponent {
         this.splashEnd = 1;
       }, 6000);
       this.splashScreen.hide();
+    });
+  }
+  getConfig(){
+    this.api.getAppConfig()
+    .then(resp => {
+      window.localStorage.setItem('config', JSON.stringify(resp));
+    })
+    .catch(err => {
+
     });
   }
 }

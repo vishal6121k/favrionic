@@ -13,32 +13,34 @@
         <!-- <span class="page-title-btn">+ Add More</span> -->
     </div>
 	<div class="container-fluid choose-section">
-		<div class="row">
-			<div class="col-md-12">
-				<input type="radio" id="shopperCh" name="choose" [(ngModel)]="choose" value="1" class="hidden" />
-				<label for="shopperCh" class="choose-box">
-					<img src="assets/svgs/start-shopping.svg" />
-					<!-- <app-svg name="shopperCh"></app-svg> -->
-				</label>
+		<form (submit)="chooseRole()">
+			<div class="row">
+				<div class="col-md-12">
+					<input type="radio" id="shopperCh" name="choose" [(ngModel)]="choose" value="2" class="hidden" />
+					<label for="shopperCh" class="choose-box">
+						<img src="assets/svgs/start-shopping.svg" />
+						<!-- <app-svg name="shopperCh"></app-svg> -->
+					</label>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<input type="radio" id="dropperCh" name="choose" [(ngModel)]="choose" value="2" class="hidden" />
-				<label for="dropperCh" class="choose-box">
-					<!-- <app-svg name="dropperCh"></app-svg> -->
-					<img src="assets/svgs/start-dropping.svg" />
-				</label>
+			<div class="row">
+				<div class="col-md-12">
+					<input type="radio" id="dropperCh" name="choose" [(ngModel)]="choose" value="3" class="hidden" />
+					<label for="dropperCh" class="choose-box">
+						<!-- <app-svg name="dropperCh"></app-svg> -->
+						<img src="assets/svgs/start-dropping.svg" />
+					</label>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-10 offset-1">
-				<div class="form-row mb-20">
-    				<button class="btn btn-full brdr" *ngIf="choose == 0">Select an option</button>
-    				<button routerLink="/shopper" class="btn btn-primary btn-full" *ngIf="choose == 1">Start Shopping</button>
-    				<button routerLink="/dropper" class="btn btn-primary btn-full" *ngIf="choose == 2">Start Dropping</button>
-    			</div>
+			<div class="row">
+				<div class="col-10 offset-1">
+					<div class="form-row mb-20">
+	    				<button class="btn btn-full brdr" *ngIf="choose == 0">Select an option</button>
+	    				<button type="submit" class="btn btn-primary btn-full" *ngIf="choose == 2">Start Shopping</button>
+	    				<button type="submit" class="btn btn-primary btn-full" *ngIf="choose == 3">Start Dropping</button>
+	    			</div>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </ion-content>

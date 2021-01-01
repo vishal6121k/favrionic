@@ -39,30 +39,112 @@
 	    <!-- </div> -->
     </div>
     <div class="container-fluid login-form-phone" *ngIf="otpsent == 0">
-    	<div class="row">
+        <form (submit)="loginUser()">
+        	<div class="row">
+        		<div class="col-md-12">
 
-    		<div class="col-md-12">
+        			<div class="form-row" [class.mb-20]="signOtp == 1" [class.with-predrop]="signOtp == 1">
+                        
+                        <label *ngIf="signOtp == 1" for="abc1" class="predrop-disp">{{ countryCode }}</label>
+                        <select *ngIf="signOtp == 1" id="abc1" [(ngModel)]="loginModel.countryCode" name="countryCode" class="predrop">
+                            <option [value]="country.dial_code" *ngFor="let country of countries">{{ country.dial_code }} - {{ country.name }}</option>
+                        </select>
 
-    			<div class="form-row">
-    				<input type="text" class="form-control" name="" value="" />
-    				<label>Enter your phone number or email</label>
-    				<span class="line"></span>
-    			</div>
-    		
-    		</div>
+                        <input *ngIf="signOtp == 0" type="text" placeholder=" " class="form-control" [(ngModel)]="loginModel.email" name="email" value="" />
+        				<input *ngIf="signOtp == 1" type="tel" placeholder=" " class="form-control" [(ngModel)]="loginModel.email" name="email" value="" />
+                        <label *ngIf="signOtp == 0">Enter your email</label>
+        				<label *ngIf="signOtp == 1">Enter your phone number</label>
+        				<span class="line"></span>
+        			</div>
+                    <div class="form-row mb-20" *ngIf="signOtp == 0">
+                        <input type="password" placeholder=" " class="form-control" [(ngModel)]="loginModel.password" name="password" value="" />
+                        <label>Enter your Password</label>
+                        <span class="line"></span>
+                    </div>
+                  <a class="form-row-head text-right fn" *ngIf="signOtp == 0" (click)="signOtp = 1">Sign up with otp</a>
+    		      <a class="form-row-head text-right fn" *ngIf="signOtp == 1" (click)="signOtp = 0">Sign up with passsword</a>
+        		</div>
 
-    		<div class="col-10 offset-1">
-    			<div class="form-row">
-    				<button class="btn btn-full btn-primary" (click)="otpsent=1">Get Started</button>
-    			</div>
-    			<div class="or-text">OR</div>
-    			<div class="form-row mb-20">
-    				<button class="btn btn-full">Guest Login</button>
-    			</div>
-    		</div>
-
-    	</div>
-
+        		<div class="col-10 offset-1">
+        			<div class="form-row">
+        				<button type="submit" class="btn btn-full btn-primary">Get Started</button>
+        			</div>
+        			<!-- <div class="or-text">OR</div> -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-row mb-20">
+                                <button type="button" class="btn btn-full brdr" (click)="signupPop = 1">Sign Up</button>
+                            </div>
+                        </div>
+                        <div *ngIf="redLogin == 0" class="col-6">
+                            <div class="form-row mb-20">
+                                <a (click)="guestLogin()" class="btn btn-full brdr">Guest Login</a>
+                            </div>
+                        </div>
+                    </div>
+        		</div>
+                <div class="col-12">
+                </div>
+        	</div>
+        </form>
+    </div>
+    <div class="overlay" [class.active]="signupPop == 1" (click)="signupPop = 0"></div>
+    <div class="signup-popup" [class.active]="signupPop == 1">
+        <form (submit)="signupUser()">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-row">
+                        <input type="text" placeholder=" " class="form-control" [(ngModel)]="signupModel.first_name" name="first_name" value="" />
+                        <label>First Name</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-row">
+                        <input type="text" placeholder=" " class="form-control" [(ngModel)]="signupModel.last_name" name="last_name" value="" />
+                        <label>Last Name</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-row">
+                        <input type="text" placeholder=" " class="form-control" [(ngModel)]="signupModel.email" name="email" value="" />
+                        <label>Email</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-row with-predrop">
+                        <label for="abc1" class="predrop-disp">{{ countryCode }}</label>
+                        <select id="abc1" [(ngModel)]="signupModel.countryCode" name="countryCode" class="predrop">
+                            <option [value]="country.dial_code" *ngFor="let country of countries">{{ country.dial_code }} - {{ country.name }}</option>
+                        </select>
+                        <input type="text" placeholder=" " class="form-control" [(ngModel)]="signupModel.phone_no" name="phone_no" value="" />
+                        <label>Phone number</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-row">
+                        <input type="password" placeholder=" " class="form-control" [(ngModel)]="signupModel.password" name="password" value="" />
+                        <label>Password</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-row">
+                        <input type="password" placeholder=" " class="form-control" [(ngModel)]="conf_password" name="conf_password" value="" />
+                        <label>Confirm Password</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-10 offset-1">
+                    <div class="form-row">
+                        <button type="submit" class="btn btn-full btn-primary">Get Started</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <div class="container-fluid login-form-otp" *ngIf="otpsent == 1">
         <div class="row">
@@ -73,29 +155,29 @@
                 </div>
                 <div class="otp-field">
                     <span>
-                        <input id="otp1" type="number" name="" (keyup)="otpKeyUp($event, 0, 'otp2')" maxlength="1" />
+                        <input id="otp1" type="number" name="" [(ngModel)]="otp[0]" (keyup)="otpKeyUp($event, 0, 'otp2')" maxlength="1" />
                     </span>
                     <span>
-                        <input id="otp2" type="number" name="" (keyup)="otpKeyUp($event, 'otp1', 'otp3')" maxlength="1" />
+                        <input id="otp2" type="number" name="" [(ngModel)]="otp[1]" (keyup)="otpKeyUp($event, 'otp1', 'otp3')" maxlength="1" />
                     </span>
                     <span>
-                        <input id="otp3" type="number" name="" (keyup)="otpKeyUp($event, 'otp2', 'otp4')" maxlength="1" />
+                        <input id="otp3" type="number" name="" [(ngModel)]="otp[2]" (keyup)="otpKeyUp($event, 'otp2', 'otp4')" maxlength="1" />
                     </span>
                     <span>
-                        <input id="otp4" type="number" name="" (keyup)="otpKeyUp($event, 'otp3', 'otp5')" maxlength="1" />
+                        <input id="otp4" type="number" name="" [(ngModel)]="otp[3]" (keyup)="otpKeyUp($event, 'otp3', 'otp5')" maxlength="1" />
                     </span>
                     <span>
-                        <input id="otp5" type="number" name="" (keyup)="otpKeyUp($event, 'otp4', 'otp6')" maxlength="1" />
+                        <input id="otp5" type="number" name="" [(ngModel)]="otp[4]" (keyup)="otpKeyUp($event, 'otp4', 'otp6')" maxlength="1" />
                     </span>
                     <span>
-                        <input id="otp6" type="number" name="" (keyup)="otpKeyUp($event, 'otp5', 0)" maxlength="1" />
+                        <input id="otp6" type="number" name="" [(ngModel)]="otp[5]" (keyup)="otpKeyUp($event, 'otp5', 0)" maxlength="1" />
                     </span>
                 </div>
                 <a class="form-row-head text-right fn">Resend?</a>
             </div>
             <div class="col-10 offset-1">
                 <div class="form-row">
-                    <button routerLink="/choose" class="btn btn-full btn-primary mb-20">Get Started</button>
+                    <button (click)="verifyOtp()" class="btn btn-full btn-primary mb-20">Get Started</button>
                 </div>
             </div>
         </div>

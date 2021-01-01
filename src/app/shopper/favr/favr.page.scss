@@ -76,3 +76,30 @@
 		text-align: right;
 	}
 }
+
+
+
+.buying-favr-popup{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items:center;
+	z-index: 12345;
+	background-color: rgba(255, 255, 255, 0.8);
+	.buy-pop-in{
+		flex: 1;
+		.pay-load-wrap{
+			height: 240px;
+		}
+		h4{
+			// margin-top: 30px;
+			text-align: center;
+			color: #6D7278;
+			font-weight: 400;
+		}
+	}
+}
+

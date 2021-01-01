@@ -32,11 +32,11 @@ const routes: Routes = [
     loadChildren: () => import('./cart/cart.module').then( m => m.CartPageModule)
   },
   {
-    path: 'seldrop',
+    path: 'seldrop/:id',
     loadChildren: () => import('./seldrop/seldrop.module').then( m => m.SeldropPageModule)
   },
   {
-    path: 'track',
+    path: 'track/:id',
     loadChildren: () => import('./track/track.module').then( m => m.TrackPageModule)
   },
   {
