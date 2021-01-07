@@ -1,13 +1,25 @@
 <ion-content>
-	<app-loccart show="0"></app-loccart>
+	<app-loccartt show="0"></app-loccartt>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12">
-				<div class="neg-mar" *ngIf="showMap == 1">
-					<agm-map (mapReady)="mapReady()" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom" [disableDefaultUI]="true">
-					  	<agm-marker [animation]="shopperAnimation" [latitude]="lat" [longitude]="lng" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+				<div class="map-wrap neg-mar">
+					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady()" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom">
+					  	
+					  	<agm-marker [animation]="shopperAnimation" [latitude]="lat" [longitude]="lng"></agm-marker>
+					  	
+					  	<agm-marker *ngFor="let shopper of shopperReq" [latitude]="shopper.order_lat" [longitude]="shopper.order_lon" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+
 					  	<agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle>
+					  	
 					</agm-map>
+					<span class="map-btn-wrap" (click)="setCenter()">
+						<button class="map-btn">
+							<span class="icon">
+								<app-svg name="gps"></app-svg>
+							</span>
+						</button>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -25,7 +37,7 @@
 			</div>
 		</div>
 		 <!-- *ngIf="!shopperReq.length -->
-		<div class="row">
+		<div class="row" *ngIf="!(shopperReq.length)">
 			<div class="col-12">
 				<img src="assets/loaders/searching.png" class="block center" />
 				No shopper requests

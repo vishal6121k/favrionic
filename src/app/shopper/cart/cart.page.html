@@ -19,7 +19,8 @@
 		<div class="row item align-end" *ngFor="let item of cartProd | keyvalue">
 			<div class="col-3">
 				<div class="img">
-					<img src="assets/images/rice.png" />
+					<img *ngIf="item.value.image_url" [src]="ProdImgUrl+'products/'+item.value.image_url" />
+					<img *ngIf="!item.value.image_url" src="assets/images/none.jpg" />
 				</div>
 			</div>
 			<div class="col-5">
@@ -291,9 +292,13 @@
 	<div class="content">
 		<div class="address-wrap">
 			<ion-slides scrollbar="true" [options]="slideOpts">
-		        <ion-slide>
-		        	<div class="address-thumb" [class.active]="selectedAddress == address.id" *ngFor="let address of addresses" (click)="setAddress(address)">
-		        		<div class="address-title">Home</div>
+		        <ion-slide *ngFor="let address of addresses">
+		        	<div class="address-thumb" [class.active]="selectedAddress == address.id" (click)="setAddress(address)">
+		        		<div class="address-title">
+		        			<span *ngIf="address.loc_type == 1">Home</span>
+		        			<span *ngIf="address.loc_type == 2">Office</span>
+		        			<span *ngIf="address.loc_type == 3">Others</span>
+		        		</div>
 		        		<div class="address-content">
 		        			<p>{{ address.address1 }}</p>
 		        			<p>{{ address.address2 }}</p>
@@ -313,10 +318,19 @@
 	    			</div>
 				</div>
 				<div class="col-12">
-					<div class="map">
-						<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom" (centerChange)="centerChange($event)">
-						  	<agm-marker [latitude]="markLat" [longitude]="markLng" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
-						</agm-map>
+					<div class="map-wrap">
+						<div class="map">
+							<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom" (centerChange)="centerChange($event)" [disableDefaultUI]="true">
+							  	<agm-marker [latitude]="markLat" [longitude]="markLng" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+							</agm-map>
+						</div>
+						<span class="map-btn-wrap" (click)="getUserPosition()">
+							<button type="button" class="map-btn">
+								<span class="icon">
+									<app-svg name="gps"></app-svg>
+								</span>
+							</button>
+						</span>
 					</div>
 				</div>
 				<div class="col-12">

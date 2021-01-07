@@ -1,5 +1,5 @@
 <ion-content>
-	<app-loccart show="2"></app-loccart>
+	<app-loccartt show="2"></app-loccartt>
 	<div class="page-title">Orders</div>
 	<div class="container-fluid">
 		<div class="row">
@@ -9,7 +9,37 @@
 					<div class="content">
 						<div class="row">
 							<div class="col-md-12">
-								<div class="order-thumb">
+								<div *ngFor="let order of orders">
+									<div *ngIf="order.status> 1" class="order-thumb">
+										<span class="icon"></span>
+										<div class="dets">
+											<span class="title">{{ order.caller_name }} has asked for a FavR</span>
+											<div class="stats">
+												<span class="item"><span class="x2">{{ order.total_items }}</span> Items</span>
+												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
+											</div>
+											<div class="btn-wrap">
+												<button routerLink="/dropper/track/{{ order.id }}" class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="gps"></app-svg></span>
+													Order Window
+												</button>
+												<!-- <button class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="share"></app-svg></span>
+													Share
+												</button> -->
+											</div>
+										</div>
+										<div class="time">
+											<p>02:20 AM</p>
+											<p>
+												<span *ngIf="order.payment_type == 1">Cash</span>
+												<span *ngIf="order.payment_type == 2">Google Pay</span>
+												<span *ngIf="order.payment_type == 3">Apple Pay</span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="order-thumb">
 									<span class="icon"></span>
 									<div class="dets">
 										<span class="title">XYZ has asked for a FavR</span>
@@ -18,21 +48,21 @@
 											<span class="item">Estimated: <span class="x2">&#8364; 20</span></span>
 										</div>
 										<div class="btn-wrap">
-											<button class="btn brdr btn-sm mb-0">
-												<!-- <span class="icon"><app-svg name="gps"></app-svg></span> -->
+											<button routerLink="/dropper/track/{{ order.id }}" class="btn brdr btn-sm mb-0">
+												 <span class="icon"><app-svg name="gps"></app-svg></span> 
 												Order Window
 											</button>
-											<!-- <button class="btn with-icon brdr btn-sm mb-0">
+											 <button class="btn with-icon brdr btn-sm mb-0">
 												<span class="icon"><app-svg name="share"></app-svg></span>
 												Share
-											</button> -->
+											</button>
 										</div>
 									</div>
 									<div class="time">
 										<p>02:20 AM</p>
 										<p>Cash</p>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -44,7 +74,35 @@
 					<div class="content">
 						<div class="row">
 							<div class="col-md-12">
-								<div class="order-thumb">
+								<div *ngFor="let order of orders">
+									<div *ngIf="order.status> 5" class="order-thumb">
+										<span class="icon"></span>
+										<div class="dets">
+											<span class="title">{{ order.caller_name }} has asked for a FavR</span>
+											<div class="stats">
+												<span class="item"><span class="x2">{{ order.total_items }}</span> Items</span>
+												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
+											</div>
+											<div class="btn-wrap">
+												<!-- <button class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="re"></app-svg></span>
+													Reorder
+												</button> -->
+												<!-- <button class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="share"></app-svg></span>
+													Share
+												</button> -->
+											</div>
+										</div>
+										<div class="time">
+											<!-- <p>02:20 AM</p>
+											<p>Cash</p> -->
+											<p class="delv">Delivered</p>
+										</div>
+									</div>
+								</div>
+
+								<!-- <div class="order-thumb">
 									<span class="icon"></span>
 									<div class="dets">
 										<span class="title">XYZ has asked for a FavR</span>
@@ -93,8 +151,8 @@
 									<div class="time">
 										<p class="delv">Delivered</p>
 									</div>
-								</div>
-	        					<hr class="thin neg-mar mb-20" />
+								</div> -->
+	        					<!-- <hr class="thin neg-mar mb-20" /> -->
 							</div>
 						</div>
 					</div>

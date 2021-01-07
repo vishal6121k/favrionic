@@ -8,7 +8,7 @@ import { IconModule } from '../../icon/icon.module';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import { LoccartComponent } from '../loccart/loccart.component';
+import { LoccarttComponent } from '../loccartt/loccartt.component';
 import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
@@ -22,6 +22,6 @@ import { AgmCoreModule } from '@agm/core';
     }),
     HomePageRoutingModule
   ],
-  declarations: [HomePage, LoccartComponent]
+  declarations: [HomePage, LoccarttComponent]
 })
 export class HomePageModule {}

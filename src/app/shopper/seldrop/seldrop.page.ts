@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { RangeValue } from '@ionic/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
-
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 @Component({
   selector: 'app-seldrop',
   templateUrl: './seldrop.page.html',
@@ -12,24 +12,42 @@ export class SeldropPage implements OnInit {
 
 	defDist:any = 5;
   orderId:any;
+  orderDets:any;
   lat:any;
   lng:any;
   radius:RangeValue = 5000;
-  zoom:any = 12;
+  zoom:any = 15;
   loadMap:any = 0;
   radChangEvent:any;
   droppers:any = [];
+  showDroppers:any = 0;
   selDropper:any;
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService) {}
+  dropperPopInfo:any = {};
+  infoPop:any = 0;
+  showCircle:any = 0;
+  constructor(private router: Router, private route: ActivatedRoute, 
+    private api: ApiService,private firebase: FirebaseX, private _ngZone: NgZone) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
         this.orderId = params['id'];
         console.log(this.orderId);
         this.getOrderDets();
-        setInterval(()=>{
-          this.getDroppersList();
-        }, 10000)
+        this.getDroppersList();
+        this.firebase.onMessageReceived()
+          .subscribe(data => {
+            var messagebody = JSON.parse(data.message);
+            console.log(messagebody);
+            if(messagebody.type == 'offer_update'){
+              console.log('dropperList update');
+              this._ngZone.run(() => {
+                  this.getDroppersList();
+              })
+            }
+        });
+        // setInterval(()=>{
+        //   this.getDroppersList();
+        // }, 10000)
         // this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -41,6 +59,7 @@ export class SeldropPage implements OnInit {
     this.api.getOrderById(data)
     .then( resp => {
        console.log(resp);
+       this.orderDets = resp[0];
        this.lat = parseFloat(resp[0].delivery_lat);
        this.lng = parseFloat(resp[0].delivery_lon);
        this.radius = resp[0].radius * 1000;
@@ -49,6 +68,11 @@ export class SeldropPage implements OnInit {
     .catch( err => {
 
     });
+  }
+
+  centerMap(){
+    this.lat = parseFloat(this.orderDets.delivery_lat);
+   this.lng = parseFloat(this.orderDets.delivery_lon);
   }
 
   changeDist(event){
@@ -62,6 +86,10 @@ export class SeldropPage implements OnInit {
         this.updateRadius(); 
     }, 5000);
 
+  }
+
+  mapReady(){
+    this.showCircle = 1;
   }
 
   updateRadius(){
@@ -89,6 +117,13 @@ export class SeldropPage implements OnInit {
     this.api.getAcceptedDroppers(data)
     .then( resp => {
       this.droppers = resp;
+      if(resp.length ){
+        console.log(this.droppers);
+        this.showDroppers = 1;
+      }
+      else{
+        this.showDroppers = 0
+      }
     })
     .catch( err => {
 
@@ -110,5 +145,17 @@ export class SeldropPage implements OnInit {
 
     });
   }
+
+  showDropperInfo(dropper){
+    this.dropperPopInfo = {
+      'avg_rating': dropper.all_reviews.original[0].avg_rating,
+      'all_ratings': dropper.all_reviews.original[0].all_ratings,
+      'first_name': dropper.first_name,
+      'last_name': dropper.last_name
+    };
+    this.infoPop = 1;
+  }
+
+
 
 }

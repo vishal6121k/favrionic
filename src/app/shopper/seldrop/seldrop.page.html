@@ -1,6 +1,6 @@
 <ion-content>
 	<div class="page-title with-back col-pm">
-		<span class="back">
+		<span routerLink="/shopper/home" class="back">
 			<img src="assets/images/back.png" />
 		</span>
 		You've asked for a FavR
@@ -10,10 +10,21 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12">
-				<div class="neg-mar" *ngIf="loadMap == 1">
-					<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-				  		<agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle>
+				<div class="neg-mar map-wrap">
+					<agm-map *ngIf="loadMap == 1" (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true">
+						<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+				  		<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
+						<span *ngIf="showDroppers == 1">
+							<agm-marker [latitude]="dropper.lat" [longitude]="dropper.lon" *ngFor="let dropper of droppers" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+						</span>
 					</agm-map>
+					<span class="map-btn-wrap" (click)="centerMap()">
+						<button class="map-btn">
+							<span class="icon">
+								<app-svg name="gps"></app-svg>
+							</span>
+						</button>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -31,8 +42,14 @@
 			</div>
 		</div>
 		<div *ngIf="!droppers.length" class="row">
-			<div class="col-12">
-				No Droppers till now
+			<div class="dot-loader">
+			  	<div class='dot'></div>
+			  	<div class='dot'></div>
+			  	<div class='dot'></div>
+			  	<div class='dot'></div>
+			</div>
+			<div class="col-12 text-center">
+				Looking for droppers
 			</div>
 		</div>
 		<div class="row" *ngIf="droppers.length">
@@ -43,7 +60,7 @@
 			<div class="col-12">
 				<div class="row">
 					<div class="col-12">
-						<div *ngFor="let dropper of droppers" class="dropper-thumb" (click)="selDropper = dropper.id" [class.active]="selDropper == dropper.id">
+						<div *ngFor="let dropper of droppers" class="dropper-thumb" (click)="selDropper = dropper.id;" [class.active]="selDropper == dropper.id" ion-long-press [interval]="400" (pressed)="showDropperInfo(dropper)">
 							<div class="img">
 								<div class="img-in">
 									<img src="assets/images/dp.jpg" />
@@ -57,11 +74,11 @@
 								</span>
 							</div>
 							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
+								<span [class.rate-full]="dropper.all_reviews.original[0].avg_rating >= 1" [class.rate-empty]="dropper.all_reviews.original[0].avg_rating < 1"></span>
+								<span [class.rate-full]="dropper.all_reviews.original[0].avg_rating >= 2" [class.rate-empty]="dropper.all_reviews.original[0].avg_rating < 2"></span>
+								<span [class.rate-full]="dropper.all_reviews.original[0].avg_rating >= 3" [class.rate-empty]="dropper.all_reviews.original[0].avg_rating < 3"></span>
+								<span [class.rate-full]="dropper.all_reviews.original[0].avg_rating >= 4" [class.rate-empty]="dropper.all_reviews.original[0].avg_rating < 4"></span>
+								<span [class.rate-full]="dropper.all_reviews.original[0].avg_rating >= 5" [class.rate-empty]="dropper.all_reviews.original[0].avg_rating < 5"></span>
 							</div>
 						</div>
 					</div>
@@ -82,3 +99,43 @@
 </ion-content>
 
 <div class="overlay" [class.active]="infoPop == 1" (click)="infoPop = 0"></div>
+<div class="reviewPopup" *ngIf="infoPop == 1">
+	<div>
+		<span class="close" (click)="infoPop = 0;">&times;</span>
+	</div>
+	<div class="dropper-thumb">
+		<div class="img">
+			<div class="img-in">
+				<img src="assets/images/dp.jpg" />
+			</div>
+		</div>
+		<div class="dets">
+			<span class="title">{{ dropperPopInfo.first_name+' '+dropperPopInfo.last_name }}</span>
+			<!-- <span class="sub">
+				Very professional and hard..
+				<span class="see-more">See More</span>
+			</span> -->
+		</div>
+		<div class="rating">
+			<span [class.rate-full]="dropperPopInfo.avg_rating >= 1" [class.rate-empty]="dropperPopInfo.avg_rating < 1"></span>
+			<span [class.rate-full]="dropperPopInfo.avg_rating >= 2" [class.rate-empty]="dropperPopInfo.avg_rating < 2"></span>
+			<span [class.rate-full]="dropperPopInfo.avg_rating >= 3" [class.rate-empty]="dropperPopInfo.avg_rating < 3"></span>
+			<span [class.rate-full]="dropperPopInfo.avg_rating >= 4" [class.rate-empty]="dropperPopInfo.avg_rating < 4"></span>
+			<span [class.rate-full]="dropperPopInfo.avg_rating >= 5" [class.rate-empty]="dropperPopInfo.avg_rating < 5"></span>
+		</div>
+	</div>
+	<div class="review-wrap">
+		<div class="review-item" *ngFor="let rating of dropperPopInfo.all_ratings">
+			<div class="dets">
+				<span class="sub">{{ rating.comment }}</span>
+				<div class="name-wrap">
+					<span class="name">{{ rating.shopper_info.first_name }} {{ rating.shopper_info.last_name }}</span>
+					<span class="date">{{ rating.created_at | amTimeAgo }}</span>
+				</div>
+			</div>
+			<div class="rating">
+				<span class="rate-full"></span> <b>{{ rating.rating }}</b>
+			</div>
+		</div>
+	</div>
+</div>

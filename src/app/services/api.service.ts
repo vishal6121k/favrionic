@@ -363,6 +363,17 @@ export class ApiService {
       });
     }
 
+    getAllDropperOrder(data){
+      return axios.post(apiUrl+'order/get/by/dropper', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
 
     saveDropperRating(data){
       return axios.post(apiUrl+'add/rating/to/dropper', data)
@@ -421,6 +432,61 @@ export class ApiService {
 
     getAddress(data){
       return axios.post(apiUrl+'user/location', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
+    sendMessage(data){
+      return axios.post(apiUrl+'send/messages', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
+    getMessages(data){
+      return axios.post(apiUrl+'get/messages', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
+    sendMessageToAdmin(data){
+      return axios.post(apiUrl+'send/messages/to/admin', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
+    getMessagesFromAdmin(data){
+      return axios.post(apiUrl+'get/messages/from/admin', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
+    setUserFbToken(data){
+      return axios.post(apiUrl+'user/set/fb/token', data)
       .then(function(response){
         return response.data;
       })

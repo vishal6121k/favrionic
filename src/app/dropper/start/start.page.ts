@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 @Component({
   selector: 'app-start',
   templateUrl: './start.page.html',
@@ -13,7 +13,8 @@ export class StartPage implements OnInit {
 	orderDets:any;
 	showPage:any = 0;
 	ordDetsInt:any;
-  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router) { }
+  ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
+  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router, private firebase: FirebaseX) { }
   ngOnInit() {
   	this.route.params.subscribe(params => {
         this.orderId = params['id'];
@@ -45,6 +46,17 @@ export class StartPage implements OnInit {
   }
   	waitForAccept(){
   		this.reqPop = 1;
+
+      this.firebase.onMessageReceived()
+      .subscribe(data => {
+          var messagebody = JSON.parse(data.message);
+          console.log(messagebody);
+          if(messagebody.type == 'order_update'){
+            this.getOrderDetails();
+          }
+          // if(messagebody.type == )
+          // this.getShopperRequests();
+      });
   		this.ordDetsInt = setInterval(()=>{
   			if(this.orderDets.dropper_id != null){
   				clearInterval(this.ordDetsInt);
@@ -56,8 +68,8 @@ export class StartPage implements OnInit {
 	  				alert('Order assigned to Other Dropper');
 	  			}
   			}
-          	this.getOrderDetails();
-        }, 10000);
+          	// this.getOrderDetails();
+        }, 2000);
   	}
 
 }

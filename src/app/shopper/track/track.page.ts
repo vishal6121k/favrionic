@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { WebrtcService } from '../../providers/webrtc.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 @Component({
   selector: 'app-track',
   templateUrl: './track.page.html',
@@ -23,22 +25,60 @@ export class TrackPage implements OnInit {
   zoom:any = 16;
   origin:any;
   ordInt:any;
+  public renderOptions = {
+      suppressMarkers: true,
+  }
+  public markerOptions = {
+      origin: {
+          icon: 'assets/icon/rec1.png',
+          // draggable: true,
+      },
+      destination: {
+          icon: 'assets/icon/pin.png',
+          // label: 'MARKER LABEL',
+          // opacity: 0.8,
+      },
+  };
   destination:any;
   ratePop:any = 0;
   purchasedPopup:any = 0;
   rateModel:any = {};
   cancModel:any = {};
   blockModel:any = {};
-  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router) {}
+  userId: any;
+  partnerId: any;
+  myEl: HTMLMediaElement;
+  partnerEl: HTMLMediaElement;
+  webrtc_enb:any = 0;
+  chatModel:any = {};
+  messages:any = [];
+  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router, public webRTC: WebrtcService,
+    public elRef: ElementRef, private androidPermissions: AndroidPermissions, private firebase: FirebaseX, private _ngZone: NgZone) {}
   
   ngOnInit() {
     this.route.params.subscribe(params => {
         this.orderId = params['id'];
         console.log(this.orderId);
         this.getOrderDetails();
-        this.ordInt = setInterval(() => {
-          this.getOrderDetails();
-        }, 10000);
+        this.getMessages();
+        // this.ordInt = setInterval(() => {
+        //   this.getOrderDetails();
+        // }, 20000);
+        this.firebase.onMessageReceived()
+        .subscribe(data => {
+            var messagebody = JSON.parse(data.message);
+            console.log(messagebody);
+            if(messagebody.type == 'order_update'){
+              this._ngZone.run(() => {
+                this.getOrderDetails();
+              });
+            }
+            if(messagebody.type == 'received_message'){
+              this._ngZone.run(() => {
+                this.getMessages();
+              });
+            }
+        });
         // this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -58,16 +98,26 @@ export class TrackPage implements OnInit {
         this.delLng = parseFloat(resp[0].delivery_lon);
         this.origin = { lat: this.lat, lng: this.lng };
         this.destination = { lat: this.delLat, lng: this.delLng };
+        if(this.webrtc_enb == 0){
+          this.userId = resp[0].user_id;
+          this.partnerId = resp[0].dropper_id;
+          // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA);
+          // this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
+          //   result => console.log('Has permission?',result.hasPermission),
+          //   err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
+          // );
+          // this.webRTC.init(this.userId, this.myEl, this.partnerEl);
+          this.webrtc_enb = 1;
+        }
+        this.showPage = 1;
         if(this.orderDets.status == 6){
           this.ratePop = 1;
-          clearInterval(this.ordInt);
+          // clearInterval(this.ordInt);
         }
         if((this.orderDets.status >= 6 && this.orderDets.dropper_rated == 1) || (this.orderDets.status == 7)) {
           clearInterval(this.ordInt);
           this.router.navigate(['/shopper/home']);
         }
-        console.log(this.lat);
-        this.showPage = 1;
         // this.shopperReq = resp.shopperlist;
       })
       .catch(err => {
@@ -122,6 +172,45 @@ export class TrackPage implements OnInit {
     this.api.saveDropperRating(data)
     .then(resp => {
       this.router.navigate(['/shopper/home']);
+    })
+    .catch(err => {
+
+    });
+  }
+
+
+  init() {
+    this.myEl = this.elRef.nativeElement.querySelector('#my-video');
+    this.partnerEl = this.elRef.nativeElement.querySelector('#partner-video');
+
+    // this.webRTC.init(this.userId, this.myEl, this.partnerEl);
+  }
+
+  call() {
+    this.webRTC.call(this.partnerId);
+    console.log('callTo'+this.partnerId);
+    // this.swapVideo('my-video');
+  }
+
+  sendMessage(){
+    var data = this.chatModel;
+    data['to'] = 'dropper';
+    data['order_id'] = this.orderId;
+    this.api.sendMessage(data)
+    .then(resp =>{
+      this.getMessages();
+    })
+    .catch(err => {
+
+    });
+  }
+
+  getMessages(){
+    var data = {};
+    data['order_id'] = this.orderId;
+    this.api.getMessages(data)
+    .then(resp =>{
+      this.messages = resp.messages;
     })
     .catch(err => {
 

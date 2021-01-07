@@ -32,10 +32,13 @@ export class HomePage implements OnInit {
     favPrd:any = {};
 	  cartLength:any = 0;
     showLoad:any = 1;
+    userSaved:any = "";
     popProds:any;
     reccProds:any;
     allProds:any;
     subcats:any;
+    userDets:any;
+    showSearch:any = 0;
     ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
   constructor(private api: ApiService) { }
 
@@ -43,11 +46,14 @@ export class HomePage implements OnInit {
     console.log('HomePage: ngOnInit')
     this.getAllCategories();
     this.getPopularProds();
+    this.getUserDetails();
     if(window.localStorage.getItem('cart')){
       this.cartProd = JSON.parse(window.localStorage.getItem('cart'));
       this.cartTotal();
     }
   }
+
+
 
 
   getAllCategories(){
@@ -79,6 +85,27 @@ export class HomePage implements OnInit {
     });
   }
 
+  clearCart(){
+    this.cartProd = {};
+    this.cartTotal();
+  }
+
+  showAllProds(){
+    var data = {
+      offset: 0,
+      limit: 100,
+      showAll: 1
+    };
+    this.api.getPopularProds(data)
+    .then( resp => {
+       this.allProds = resp;
+       this.cat_id = -1;
+    })
+    .catch( err => {
+
+    });
+  }
+
   getReccProds(){
     var data = {
       offset: 0,
@@ -100,6 +127,9 @@ export class HomePage implements OnInit {
     };
     this.api.saveUserProduct(data)
     .then( resp => {
+
+      this.userSaved = resp.user_saved_prod.split(',');
+
        // this.subcats = resp;
        // this.showLoad = 0;
        // console.log(resp);
@@ -166,12 +196,13 @@ export class HomePage implements OnInit {
 
 
 
-  addProd(id, price, name){
+  addProd(id, price, name, image_url){
   	if(this.cartProd[id]){
       this.cartProd[id]['quantity'] = this.cartProd[id]['quantity'] + 1;
       this.cartProd[id]['unit_amount'] = price;
       this.cartProd[id]['total_amount'] = price * this.cartProd[id]['quantity'];
       this.cartProd[id]['name'] = name;
+      this.cartProd[id]['image_url'] = image_url;
   		this.cartProd[id]['product_id'] = id;
   	}
   	else{
@@ -180,6 +211,7 @@ export class HomePage implements OnInit {
       this.cartProd[id]['unit_amount'] = price;
       this.cartProd[id]['total_amount'] = price * this.cartProd[id]['quantity'];
       this.cartProd[id]['name'] = name;
+      this.cartProd[id]['image_url'] = image_url;
       this.cartProd[id]['product_id'] = id;
   	}
   	console.log(this.cartProd);
@@ -215,6 +247,25 @@ export class HomePage implements OnInit {
 	      this.cartLength += parseFloat( this.cartProd[el]['quantity'] );
 	    }
   	}
+  }
+
+  getUserDetails() {
+      this.api.getUserDetails()
+          .then(resp => {
+          this.userDets = resp;
+          this.userSaved = resp.saved_items.split(',');
+      })
+          .catch(err => {
+      });
+  }
+
+  showSearchBlock(event){
+    this.showSearch = 1;
+  }
+
+
+  getFavStat(product_id){
+    
   }
 
 }

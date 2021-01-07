@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -19,6 +21,7 @@ export class HomePage implements OnInit {
   lng:any = 7.809007;
   deflat:any = 51.678418;
   deflng:any = 7.809007;
+  shopInt:any;
   zoom = 12;
   radius:any;
   shopperReq:any = [];
@@ -37,12 +40,19 @@ export class HomePage implements OnInit {
             debug: true, //  enable this hear sounds for background-geolocation life-cycle.
             stopOnTerminate: false, // enable this to clear background location settings when the app terminates
     };
-  constructor(private androidPermissions: AndroidPermissions, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private api: ApiService, private router: Router, private backgroundGeolocation: BackgroundGeolocation) {
+  constructor(private androidPermissions: AndroidPermissions, private geolocation: Geolocation,
+  private locationAccuracy: LocationAccuracy, private api: ApiService, 
+  private router: Router, private backgroundGeolocation: BackgroundGeolocation, 
+  private firebase: FirebaseX) {
     
   }
 
   ngOnInit() {
     this.checkGPSPermission();
+  }
+
+  centerChange(){
+
   }
 
   getShopperRequests(){
@@ -124,13 +134,22 @@ export class HomePage implements OnInit {
       error => alert('Error requesting location permissions ' + JSON.stringify(error))
     );
   }
+  setCenter(){
+    this.geolocation.getCurrentPosition(this.options).then((resp) => {
+      this.deflat = resp.coords.latitude;
+      this.deflng = resp.coords.longitude;
+    })
+    .catch((error) => {
+      console.log('Error getting location', error);
+    });;
+  }
   getLocation(){
     console.log("getting location");
     this.options = {
         enableHighAccuracy : true
     };
 
-    var lastUpdateTime, minFrequency = 10*1000;
+    var lastUpdateTime, minFrequency = 20*1000;
 
     this.geolocation.getCurrentPosition(this.options).then((resp) => {
       this.lat = resp.coords.latitude;
@@ -138,6 +157,7 @@ export class HomePage implements OnInit {
       this.deflat = resp.coords.latitude;
       this.deflng = resp.coords.longitude;
       this.shopperAnimation = "BOUNCE";
+      console.log('abc');
       this.showMap = 1;
       setTimeout(()=>{
         this.shopperAnimation = null;
@@ -175,9 +195,16 @@ export class HomePage implements OnInit {
           // console.log('abc');
           this.saveLocation = false;
           this.getShopperRequests();
-          setInterval(()=>{
-            this.getShopperRequests();
-          }, 60000);
+          // this.firebase.onMessageReceived()
+          // .subscribe(data => {
+          //   console.log(data)
+          //   var messagebody = data.body;
+          //   if(messagebody.type == )
+          //   this.getShopperRequests();
+          // });
+          // this.shopInt = setInterval(()=>{
+          //   this.getShopperRequests();
+          // }, 60000);
         })
         .catch(err => {
 
@@ -232,8 +259,9 @@ export class HomePage implements OnInit {
   }
 
   ngOnDestroy(){
-    alert('unsub');
+    // alert('unsub');
     this.subscription.unsubscribe();
+    // clearInterval(this.shopInt);
   }
 
   changeDist(event){

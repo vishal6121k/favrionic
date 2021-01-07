@@ -5,10 +5,17 @@
 		</span>
 		<span class="text">User's Location</span>
 	</div>
-	<span class="cart-wrap">
+	<span *ngIf="cart > 0" routerLink="/shopper/cart" class="cart-wrap">
 		<span class="icon">
 			<app-svg name="cart"></app-svg>
 		</span>
+		<span class="num">{{ cart }}</span>
+	</span>
+	<span *ngIf="cart == 0" class="cart-wrap">
+		<span class="icon">
+			<app-svg name="cart"></app-svg>
+		</span>
+		<!-- <span class="num">{{ cart }}</span> -->
 	</span>
 </div>
 
@@ -101,7 +108,7 @@
 		</span>
 		<span class="text">FavR</span>
 	</a>
-	<a routerLink="/shopper" class="item">
+	<a (click)="searchClicked()" class="item">
 		<span class="icon">
 			<app-svg name="search"></app-svg>
 		</span>

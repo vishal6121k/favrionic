@@ -1,82 +1,157 @@
 <ion-content>
-	<app-loccart show="2"></app-loccart>
-	<div class="profile-head align-center">
+	<app-loccart *ngIf="user_type == 2" show="2"></app-loccart>
+	<app-loccartt *ngIf="user_type == 3" show="2"></app-loccartt>
+	<div *ngIf="showPage == 1" class="profile-head align-center">
 		<div class="dets">
-			<h1>Nishant Kumar</h1>
-			<p>nishant6639@gmail.com</p>
-			<p>+91-9439416692</p>
+			<h1>{{ userDets.first_name }} {{ userDets.last_name }}</h1>
+			<p>{{ userDets.email }}</p>
+			<p>{{ userDets.phone_no }}</p>
 		</div>
 		<div class="img">
 			<span class="img-in">
 				<img src="assets/images/dp.jpg" />
-				<div class="type">Shopper</div>
+				<div *ngIf="user_type == 2" class="type">Shopper</div>
+				<div *ngIf="user_type == 3" class="type">Dropper</div>
 			</span>
 		</div>
 	</div>
-	<ul class="profile-menu">
-		<li>
+	<ul *ngIf="showPage == 1" class="profile-menu">
+		<li *ngIf="user_type == 2">
 			<a href="#">
-				<span class="icon">
-					<app-svg name="star"></app-svg>
-				</span>
-				<span class="text">Saved Items</span>
+				<div class="head">
+					<span class="icon">
+						<app-svg name="star"></app-svg>
+					</span>
+					<span class="text">Saved Items</span>
+				</div>
+				<div class="extra">10 Products</div>
+			</a>
+		</li>
+		<li *ngIf="user_type == 2">
+			<a routerLink="/shopper/orders">
+				<div class="head">
+					<span class="icon">
+						<app-svg name="orders"></app-svg>
+					</span>
+					<span class="text">Order History</span>
+				</div>
+				<div class="extra">10 orders</div>
+			</a>
+		</li>
+		<li *ngIf="user_type == 3">
+			<a routerLink="/dropper/orders">
+				<div class="head">
+					<span class="icon">
+						<app-svg name="orders"></app-svg>
+					</span>
+					<span class="text">Order History</span>
+				</div>
+				<div class="extra">10 orders</div>
 			</a>
 		</li>
 		<li>
 			<a href="#">
-				<span class="icon">
-					<app-svg name="orders"></app-svg>
-				</span>
-				<span class="text">Order History</span>
+				<div class="head">
+					<span class="icon">
+						<app-svg name="info"></app-svg>
+					</span>
+					<span class="text">About</span>
+				</div>
+			</a>
+		</li>
+		<li>
+			<a (click)="chatOpen = 1">
+				<div class="head">
+					<span class="icon">
+						<app-svg name="help"></app-svg>
+					</span>
+					<span class="text">Help &amp; Support</span>
+				</div>
 			</a>
 		</li>
 		<li>
 			<a href="#">
-				<span class="icon">
-					<app-svg name="info"></app-svg>
-				</span>
-				<span class="text">About</span>
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<span class="icon">
-					<app-svg name="help"></app-svg>
-				</span>
-				<span class="text">Help &amp; Support</span>
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<span class="icon">
-					<app-svg name="faq"></app-svg>
-				</span>
-				<span class="text">FAQs</span>
+				<div class="head">
+					<span class="icon">
+						<app-svg name="faq"></app-svg>
+					</span>
+					<span class="text">FAQs</span>
+				</div>
 			</a>
 		</li>
 		<li>
 			<span href="#">
-				<span class="icon">
-					<app-svg name="profile"></app-svg>
-				</span>
-				<span class="text">
-					Switch profile
-					<span class="profile-switcher" (click)="user_type = (user_type==1)?2:1">
-						<span class="switch-btn" [class.drop]="user_type == 2">
-							<span *ngIf="user_type==1">Shopper</span>
-							<span *ngIf="user_type==2">Dropper</span>
+				<div class="head">
+					<span class="icon">
+						<app-svg name="profile"></app-svg>
+					</span>
+					<span class="text">
+						Switch profile
+						<span class="profile-switcher" (click)="changeUserRole()">
+							<span class="switch-btn" [class.drop]="user_type == 3">
+								<span *ngIf="user_type==2">Shopper</span>
+								<span *ngIf="user_type==3">Dropper</span>
+							</span>
 						</span>
 					</span>
-				</span>
+				</div>
 			</span>
 		</li>
 		<li>
 			<a (click)="logoutUser()">
-				<span class="icon">
-					<app-svg name="logout"></app-svg>
-				</span>
-				<span class="text">Logout</span>
+				<div class="head">
+					<span class="icon">
+						<app-svg name="logout"></app-svg>
+					</span>
+					<span class="text">Logout</span>
+				</div>
 			</a>
 		</li>
 	</ul>
 </ion-content>
+<div class="chat-window" [class.active]="chatOpen == 1">
+	<div class="title">
+		<span class="img">
+			<span class="img-in">
+				<img src="assets/images/dp.jpg" />
+			</span>
+		</span>
+		<span class="name">
+			Admin
+			<!-- <span class="call">
+				<span class="call-icon">
+					<app-svg name="call"></app-svg>
+				</span>
+			</span> -->
+		</span>
+		<span class="close" (click)="chatOpen = 0">&times;</span>
+	</div>
+	<div class="content" *ngIf="messages">
+		<div *ngFor="let message of messages | keyvalue">
+			<div class="chat-text" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">
+				<span class="bubble" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">{{ message.value.message }}</span>
+			</div>
+		</div>
+		<!-- <div class="chat-text from">
+			<span class="bubble from">Hii..</span>
+		</div> -->
+	</div>
+	<div class="content" *ngIf="!messages">
+		No messages
+	</div>
+	<form (submit)="sendMessage()">
+		<div class="chat-inp">
+			<div class="field">
+				<textarea name="message" [(ngModel)]="chatModel.message"></textarea>
+			</div>
+			<div class="att-btn">
+				<span class="icon">
+					<app-svg name="att"></app-svg>
+				</span>
+			</div>
+			<div class="send-btn-wrap">
+				<button type="submit">Send</button>
+			</div>
+		</div>
+	</form>
+</div>

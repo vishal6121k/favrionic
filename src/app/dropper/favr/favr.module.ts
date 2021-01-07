@@ -7,7 +7,7 @@ import { IconModule } from '../../icon/icon.module';
 
 import { FavrPageRoutingModule } from './favr-routing.module';
 
-import { LoccartComponent } from '../loccart/loccart.component';
+import { LoccarttComponent } from '../loccartt/loccartt.component';
 
 import { FavrPage } from './favr.page';
 
@@ -19,6 +19,6 @@ import { FavrPage } from './favr.page';
     IconModule,
     FavrPageRoutingModule
   ],
-  declarations: [FavrPage, LoccartComponent]
+  declarations: [FavrPage, LoccarttComponent]
 })
 export class FavrPageModule {}

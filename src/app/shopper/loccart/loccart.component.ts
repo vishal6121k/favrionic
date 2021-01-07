@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-loccart',
@@ -7,9 +7,17 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LoccartComponent implements OnInit {
 	@Input() show:any;
+	@Input() cart:any = 0;
+	@Output() searchBtnClicked:EventEmitter<string> = new EventEmitter<string>();
+
 	locpop:any = 0;
   	constructor() { }
 
-  	ngOnInit() {}
+  	ngOnInit() {
+  	}
+
+  	searchClicked(){
+  		this.searchBtnClicked.emit('1');
+  	}
 
 }

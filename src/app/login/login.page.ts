@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Router } from '@angular/router';
-
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 
 declare var require: any;
 const axios = require('axios').default;
@@ -16,8 +16,12 @@ export class LoginPage implements OnInit {
     speed: 400
   };
   otpsent:any =0;
-  signupModel:any = {};
-  loginModel:any = {};
+  signupModel:any = {
+    countryCode: "+353"
+  };
+  loginModel:any = {
+    countryCode: "+353"
+  };
   conf_password:any = "";
   signOtp:any = 0;
   otp:any = [];
@@ -26,7 +30,7 @@ export class LoginPage implements OnInit {
   redUrl:any = '/choose';
   redData:any = "";
   countryCode:any = "+353";
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private api: ApiService, private router: Router, private firebase: FirebaseX) {
     if(this.router.getCurrentNavigation().extras.state){
       if(this.router.getCurrentNavigation().extras.state.redirectAfterLogin){
         this.redLogin = 1;
@@ -86,10 +90,11 @@ export class LoginPage implements OnInit {
       .then( resp => {
         console.log(resp.token);
         window.localStorage.setItem('token', resp.token);
-        if(resp.token){
+        if(resp.token != undefined){
           axios.defaults.headers.common['Authorization'] = 'Bearer '+ resp.token;
+          this.firebaseTokenSet();
         }
-        this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
+        // this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
       })
       .catch( err => {
 
@@ -112,7 +117,7 @@ export class LoginPage implements OnInit {
         if(resp.token != undefined){
           axios.defaults.headers.common['Authorization'] = 'Bearer '+ resp.token;
           window.localStorage.setItem('token', resp.token);
-          this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
+          this.firebaseTokenSet();
         }
         else{
           alert('Invalid Credentials');
@@ -122,6 +127,26 @@ export class LoginPage implements OnInit {
 
       });
     }
+  }
+
+  firebaseTokenSet(){
+    this.firebase.getToken()
+    .then(token => {
+        var data = {
+          'fbs_token': token
+        }
+       this.api.setUserFbToken(data)
+       .then( resp => {
+         console.log(resp);
+         this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
+       })
+       .catch( err =>{
+
+       });
+    })
+    .catch( err => {
+
+    });
   }
 
   sendOtp(){
@@ -152,7 +177,8 @@ export class LoginPage implements OnInit {
       if(resp.token != undefined){
         axios.defaults.headers.common['Authorization'] = 'Bearer '+ resp.token;
         window.localStorage.setItem('token', resp.token);
-        this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
+        this.firebaseTokenSet();
+        // this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
       }
       else{
         alert('Invalid Credentials');
@@ -164,8 +190,12 @@ export class LoginPage implements OnInit {
   }
 
   guestLogin(){
+
     window.localStorage.setItem('user_role', '2');
     this.router.navigate(['shopper']);
+  
   }
+
+
 
 }

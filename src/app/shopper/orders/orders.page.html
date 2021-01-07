@@ -10,7 +10,35 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div *ngFor="let order of orders">
-									<div *ngIf="order.status> 1" class="order-thumb">
+									<div *ngIf="order.status == 1" class="order-thumb">
+										<span class="icon"></span>
+										<div class="dets">
+											<span class="title">Waiting for dropper to do you a FavR</span>
+											<div class="stats">
+												<span class="item"><span class="x2">{{ order.total_items }}</span> Items</span>
+												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
+											</div>
+											<div class="btn-wrap">
+												<button routerLink="/shopper/seldrop/{{ order.id }}" class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="gps"></app-svg></span>
+													Select dropper
+												</button>
+												<!-- <button class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="share"></app-svg></span>
+													Share
+												</button> -->
+											</div>
+										</div>
+										<div class="time">
+											<p>02:20 AM</p>
+											<p>
+												<span *ngIf="order.payment_type == 1">Cash</span>
+												<span *ngIf="order.payment_type == 2">Google Pay</span>
+												<span *ngIf="order.payment_type == 3">Apple Pay</span>
+											</p>
+										</div>
+									</div>
+									<div *ngIf="order.status > 1 && order.status < 6" class="order-thumb">
 										<span class="icon"></span>
 										<div class="dets">
 											<span class="title">{{ order.dropper.first_name }} is doing you a FavR</span>
@@ -51,7 +79,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div *ngFor="let order of orders">
-									<div *ngIf="order.status> 5" class="order-thumb">
+									<div *ngIf="order.status > 5" class="order-thumb">
 										<span class="icon"></span>
 										<div class="dets">
 											<span class="title">{{ order.dropper.first_name }} has done you a FavR</span>

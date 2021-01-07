@@ -1,5 +1,5 @@
 <ion-content>
-	<app-loccart show="0"></app-loccart>
+	<app-loccart show="0" [cart]="cartLength" (searchBtnClicked)="showSearchBlock($event)"></app-loccart>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
@@ -7,7 +7,7 @@
 					<span class="icon">
 						<app-svg name="search"></app-svg>
 					</span>
-					<input type="text" name="" placeholder="Search for product or ask for something different" />
+					<input type="text" name="" (focus)="showSearch = 1" placeholder="Search for product or ask for something different" />
 				</div>
 			</div>
 		</div>
@@ -19,7 +19,8 @@
 			        <ion-slide *ngFor="let cat of cats">
 			          	<div class="cat-thumb" (click)="selectCategory(cat.id)">
 			          		<span class="img">
-			          			<img [src]="ProdImgUrl+'categories/'+cat.image_url" />
+			          			<img [src]="ProdImgUrl+'categories/'+cat.image_url" *ngIf="cat.image_url" />
+			          			<img src="assets/images/none.jpg" *ngIf="!cat.image_url" />
 			      			</span>
 			      			<span class="text">{{ cat.name }}</span>
 			          	</div>
@@ -114,7 +115,8 @@
 						        <ion-slide *ngFor="let subcat of subcats">
 						          	<div class="cat-thumb" (click)="selectSubcategory(subcat.id)" [class.active]="subcat.id == subcat_id">
 						          		<span class="img">
-						          			<img src="assets/images/grocery.png" />
+						          			<img [src]="ProdImgUrl+'categories/'+subcat.image_url" *ngIf="subcat.image_url" />
+						          			<img src="assets/images/none.jpg" *ngIf="!subcat.image_url" />
 						      			</span>
 						      			<span class="text">{{ subcat.name }}</span>
 						          	</div>
@@ -199,18 +201,24 @@
       	</div>
 	</div>
 	<hr>
-	<div class="loader text-center" *ngIf="showLoad == 1">
+	<div class="dot-loader" *ngIf="showLoad == 1">
+	  	<div class='dot'></div>
+	  	<div class='dot'></div>
+	  	<div class='dot'></div>
+	  	<div class='dot'></div>
+	</div>
+	<!-- <div class="loader text-center" *ngIf="showLoad == 1">
 		<div class="loader-in">
 			<img src="/assets/images/loader.gif" />
 		</div>
-	</div>
+	</div> -->
 	<div class="container-fluid section" *ngIf="cat_id == 0 && showLoad == 0">
 		<div class="row align-center">
 			<div class="col-8">
 				<h5 class="section-title">Popular in your area</h5>
 			</div>
 			<div class="col-4 text-right">
-				<a class="view-all-sec-btn" href="#">View All ></a>
+				<a class="view-all-sec-btn" (click)="showAllProds()">View All ></a>
 			</div>
 		</div>
 		<div class="row">
@@ -219,18 +227,19 @@
 			        <ion-slide *ngFor="let pop of popProds">
 			        	<div class="product-thumb-wrap">
 			        		<div class="product-thumb">
-			        			<span class="fav-star-wrap" [class.active]="favPrd[pop.id]" (click)="saveUserProduct(pop.id)">
+			        			<span class="fav-star-wrap" [class.active]="userSaved.indexOf(pop.id.toString()) > -1" (click)="saveUserProduct(pop.id)">
 			        				<span class="fav-star"></span>
 			        			</span>
 			        			<div class="image">
-			        				<img [src]="ProdImgUrl+'products/'+pop.image_url" />
+			        				<img [src]="ProdImgUrl+'products/'+pop.image_url" *ngIf="pop.image_url" />
+			        				<img src="assets/images/none.jpg" *ngIf="!pop.image_url" />
 		        				</div>
 		        				<h6 class="title">{{ pop.name }}</h6>
 		        				<p class="subtitle" *ngIf="pop.pricing > 0">Estimated <span class="price">&#8364; {{ pop.pricing }}</span></p>
 		        				<p class="subtitle" *ngIf="pop.pricing == 0">&nbsp;</p>
-		        				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)" class="pt-add-btn">Add<span class="plus">+</span></button>
 		        				<span class="pt-num" *ngIf="cartProd[pop.id]">
-		        					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name)">+</span>
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)">+</span>
 		        				</span>
 			        		</div>
 			        	</div>
@@ -282,7 +291,7 @@
 				<h5 class="section-title">Recommended for you</h5>
 			</div>
 			<div class="col-4 text-right">
-				<a class="view-all-sec-btn" href="#">View All ></a>
+				<a class="view-all-sec-btn" (click)="showAllProds()">View All ></a>
 			</div>
 		</div>
 		<div class="row">
@@ -295,14 +304,15 @@
 			        				<span class="fav-star"></span>
 			        			</span>
 			        			<div class="image">
-			        				<img [src]="ProdImgUrl+'products/'+pop.image_url" />
+			        				<img [src]="ProdImgUrl+'products/'+pop.image_url" *ngIf="pop.image_url" />
+			        				<img src="assets/images/none.jpg" *ngIf="!pop.image_url" />
 		        				</div>
 		        				<h6 class="title">{{ pop.name }}</h6>
 		        				<p class="subtitle" *ngIf="pop.pricing > 0">Estimated <span class="price">&#8364; {{ pop.pricing }}</span></p>
 		        				<p class="subtitle" *ngIf="pop.pricing == 0">&nbsp;</p>
-		        				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name)" class="pt-add-btn">Add<span class="plus">+</span></button>
+		        				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)" class="pt-add-btn">Add<span class="plus">+</span></button>
 		        				<span class="pt-num" *ngIf="cartProd[pop.id]">
-		        					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name)">+</span>
+		        					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)">+</span>
 		        				</span>
 			        		</div>
 			        	</div>
@@ -381,22 +391,57 @@
         				<span class="fav-star"></span>
         			</span>
         			<div class="image">
-        				<img [src]="ProdImgUrl+'products/'+pop.image_url" />
+        				<img [src]="ProdImgUrl+'products/'+pop.image_url" *ngIf="pop.image_url" />
+        				<img src="assets/images/none.jpg" *ngIf="!pop.image_url" />
     				</div>
     				<h6 class="title">{{ pop.name }}</h6>
     				<p class="subtitle" *ngIf="pop.pricing > 0">Estimated <span class="price">&#8364; {{ pop.pricing }}</span></p>
     				<p class="subtitle" *ngIf="pop.pricing == 0">&nbsp;</p>
-    				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)" class="pt-add-btn">Add<span class="plus">+</span></button>
     				<span class="pt-num" *ngIf="cartProd[pop.id]">
-    					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name)">+</span>
+    					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)">+</span>
     				</span>
         		</div>
 			</div>
 		</div>
 	</div>
+	<div class="container-fluid section product-wrap" *ngIf="cat_id == -1 && showLoad == 0">
+		<div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">All Products</h5>
+			</div>
+			<div class="col-4 text-right">
+				<!-- <a href="#">View All ></a> -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4 product-thumb-wrap" *ngFor="let pop of allProds">
+				<div class="product-thumb">
+        			<span class="fav-star-wrap" [class.active]="favPrd[pop.id]" (click)="saveUserProduct(pop.id)">
+        				<span class="fav-star"></span>
+        			</span>
+        			<div class="image">
+        				<img [src]="ProdImgUrl+'products/'+pop.image_url" *ngIf="pop.image_url" />
+        				<img src="assets/images/none.jpg" *ngIf="!pop.image_url" />
+    				</div>
+    				<h6 class="title">{{ pop.name }}</h6>
+    				<p class="subtitle" *ngIf="pop.pricing > 0">Estimated <span class="price">&#8364; {{ pop.pricing }}</span></p>
+    				<p class="subtitle" *ngIf="pop.pricing == 0">&nbsp;</p>
+    				<button *ngIf="!cartProd[pop.id]" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)" class="pt-add-btn">Add<span class="plus">+</span></button>
+    				<span class="pt-num" *ngIf="cartProd[pop.id]">
+    					<span class="pt-wp-add-btn minus" (click)="subProd(pop.id)">-</span>{{ cartProd[pop.id]['quantity'] }}<span class="pt-wp-add-btn plus" (click)="addProd(pop.id, pop.pricing, pop.name, pop.image_url)">+</span>
+    				</span>
+        		</div>
+			</div>
+		</div>
+	</div>
+	<div class="spacer" *ngIf="cartLength"></div>
 </ion-content>
 <div class="home-cart-popup" [class.active]="cartLength">
 	<span class="icon"><app-svg name="cart"></app-svg></span>
-	<span class="text">{{ this.cartLength }} Item<span *ngIf="cartLength > 1">s</span><!-- <span class="sep-dot"></span><span class="value">&#8364; <span class="x2">7.70</span></span> --></span>
+	<span class="text">{{ this.cartLength }} Item<span *ngIf="cartLength > 1">s</span><span class="sep-dot"></span><span class="value" (click)="clearCart()">(Clear)</span></span>
 	<a routerLink="/shopper/cart" class="view-cart-btn">View Cart</a>
+</div>
+<div class="search-popup" [class.active]="showSearch == 1">
+	
 </div>

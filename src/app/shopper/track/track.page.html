@@ -1,6 +1,6 @@
 <ion-content>
 	<div *ngIf="showPage == 1" class="page-title with-back col-pm">
-		<span class="back">
+		<span routerLink="/shopper/home" class="back">
 			<img src="assets/images/back.png" />
 		</span>
 		Your dropper for today is
@@ -19,11 +19,16 @@
 						<span class="title">{{ orderDets.dropper.first_name }} {{ orderDets.dropper.last_name }}</span>
 					</div>
 					<div class="rating">
-						<span class="rate-full"></span>
-						<span class="rate-full"></span>
-						<span class="rate-full"></span>
-						<span class="rate-full"></span>
-						<span class="rate-empty"></span>
+						<!-- <span [class.rate-full]="orderDets.drop_reviews.original[0].avg_rating >= 1" [class.rate-empty]="orderDets.drop_reviews.original[0].avg_rating < 1"></span>
+						<span [class.rate-full]="orderDets.drop_reviews.original[0].avg_rating >= 2" [class.rate-empty]="orderDets.drop_reviews.original[0].avg_rating < 2"></span>
+						<span [class.rate-full]="orderDets.drop_reviews.original[0].avg_rating >= 3" [class.rate-empty]="orderDets.drop_reviews.original[0].avg_rating < 3"></span>
+						<span [class.rate-full]="orderDets.drop_reviews.original[0].avg_rating >= 4" [class.rate-empty]="orderDets.drop_reviews.original[0].avg_rating < 4"></span>
+						<span [class.rate-full]="orderDets.drop_reviews.original[0].avg_rating >= 5" [class.rate-empty]="orderDets.drop_reviews.original[0].avg_rating < 5"></span> -->
+						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 0" class="rate-full"></span>
+						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 1" class="rate-full"></span>
+						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 2" class="rate-full"></span>
+						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 3" class="rate-full"></span>
+						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 4" class="rate-full"></span>
 					</div>
 					<div class="call">
 						<span class="call-icon">
@@ -37,9 +42,9 @@
 			<div class="col-12">
 				<div class="neg-mar">
 					<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-					  	<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-					  	<agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker>
-					  	<agm-direction [origin]="origin" [destination]="destination"></agm-direction>
+					  	<!-- <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+					  	<agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker> -->
+					  	<agm-direction [renderOptions]="renderOptions" [markerOptions]="markerOptions" [origin]="origin" [destination]="destination"></agm-direction>
 					  	<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
 					</agm-map>
 				</div>
@@ -119,7 +124,7 @@
 		</div>
 	</form>
 </div>
-<div class="chat-window" [class.active]="chatOpen == 1">
+<div *ngIf="showPage == 1" class="chat-window" [class.active]="chatOpen == 1">
 	<div class="title">
 		<span class="img">
 			<span class="img-in">
@@ -127,7 +132,7 @@
 			</span>
 		</span>
 		<span class="name">
-			Dropper1
+			{{ orderDets.dropper.first_name }} {{ orderDets.dropper.last_name }}
 			<span class="call">
 				<span class="call-icon">
 					<app-svg name="call"></app-svg>
@@ -136,27 +141,32 @@
 		</span>
 		<span class="close" (click)="chatOpen = 0">&times;</span>
 	</div>
-	<div class="content">
-		<div class="chat-text to">
-			<span class="bubble to">Hey there!!</span>
+	<div class="content" *ngIf="!(messages==null)">
+		<div *ngFor="let message of messages | keyvalue">
+			<div class="chat-text" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">
+				<span class="bubble" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">{{ message.value.message }}</span>
+			</div>
 		</div>
-		<div class="chat-text from">
+		<!-- <div class="chat-text from">
 			<span class="bubble from">Hii..</span>
-		</div>
+		</div> -->
 	</div>
-	<div class="chat-inp">
-		<div class="field">
-			<textarea></textarea>
+	<div class="content" *ngIf="(messages==null)"></div>
+	<form (submit)="sendMessage()">
+		<div class="chat-inp">
+			<div class="field">
+				<textarea name="message" [(ngModel)]="chatModel.message"></textarea>
+			</div>
+			<div class="att-btn">
+				<span class="icon">
+					<app-svg name="att"></app-svg>
+				</span>
+			</div>
+			<div class="send-btn-wrap">
+				<button type="submit">Send</button>
+			</div>
 		</div>
-		<div class="att-btn">
-			<span class="icon">
-				<app-svg name="att"></app-svg>
-			</span>
-		</div>
-		<div class="send-btn-wrap">
-			<button>Send</button>
-		</div>
-	</div>
+	</form>
 </div>
 <div class="overlay" [class.active]="cancPop == 1 || purchasedPopup == 1 || chatOpen == 1" (click)="cancPop = 0; cancPopCont = 0;chatOpen = 0; purchasedPopup = 0;"></div>
 <div class="cancel-popup" [class.active]="cancPop == 1">

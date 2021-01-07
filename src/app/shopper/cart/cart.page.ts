@@ -46,6 +46,7 @@ export class CartPage implements OnInit {
     speed: 400,
     freeMode: true
   };
+  ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
   constructor(private datePicker: DatePicker, private geolocation : Geolocation, private api: ApiService, private router: Router) {
     if(this.router.getCurrentNavigation().extras.state){
       if(this.router.getCurrentNavigation().extras.state.formVal != undefined){
@@ -109,8 +110,9 @@ export class CartPage implements OnInit {
   showDatePicker(){
   	this.datePicker.show({
 	  	date: new Date(),
-	  	mode: 'datetime',
+	  	mode: 'time',
       minDate: new Date(),
+      maxDate: new Date(),
 	  	androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
 	}).then( date => {
         // console.log(date);

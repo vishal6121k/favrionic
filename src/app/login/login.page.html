@@ -45,7 +45,7 @@
 
         			<div class="form-row" [class.mb-20]="signOtp == 1" [class.with-predrop]="signOtp == 1">
                         
-                        <label *ngIf="signOtp == 1" for="abc1" class="predrop-disp">{{ countryCode }}</label>
+                        <label *ngIf="signOtp == 1" for="abc1" class="predrop-disp">{{ loginModel.countryCode }}</label>
                         <select *ngIf="signOtp == 1" id="abc1" [(ngModel)]="loginModel.countryCode" name="countryCode" class="predrop">
                             <option [value]="country.dial_code" *ngFor="let country of countries">{{ country.dial_code }} - {{ country.name }}</option>
                         </select>
@@ -61,8 +61,15 @@
                         <label>Enter your Password</label>
                         <span class="line"></span>
                     </div>
-                  <a class="form-row-head text-right fn" *ngIf="signOtp == 0" (click)="signOtp = 1">Sign up with otp</a>
-    		      <a class="form-row-head text-right fn" *ngIf="signOtp == 1" (click)="signOtp = 0">Sign up with passsword</a>
+                    <div class="row">
+                        <div class="col-6">
+                            <a class="form-row-head text-left fn">Forgot password?</a>
+                        </div>
+                        <div class="col-6">
+                            <a class="form-row-head text-right fn" *ngIf="signOtp == 0" (click)="signOtp = 1">Sign In with otp</a>
+                            <a class="form-row-head text-right fn" *ngIf="signOtp == 1" (click)="signOtp = 0">Sign In with passsword</a>
+                        </div>
+                    </div>
         		</div>
 
         		<div class="col-10 offset-1">
@@ -115,7 +122,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-row with-predrop">
-                        <label for="abc1" class="predrop-disp">{{ countryCode }}</label>
+                        <label for="abc1" class="predrop-disp">{{ signupModel.countryCode }}</label>
                         <select id="abc1" [(ngModel)]="signupModel.countryCode" name="countryCode" class="predrop">
                             <option [value]="country.dial_code" *ngFor="let country of countries">{{ country.dial_code }} - {{ country.name }}</option>
                         </select>

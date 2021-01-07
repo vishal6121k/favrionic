@@ -30,12 +30,27 @@
 		}
 	}
 	.cart-wrap{
+		position: relative;
 		flex: 2;
 		padding: 15px;
 		text-align: right;
 		.icon{
 			display: inline-block;
 			width: 30px;
+		}
+		.num{
+			position: absolute;
+			display: block;
+			background-color: #709B78;
+			line-height: 24px;
+			width: 24px;
+			font-size: 13px;
+			z-index: 2;
+			color: #FFF;
+			text-align: center;
+			border-radius: 20px;
+			top: 5px;
+			right: 5px;
 		}
 	}
 }

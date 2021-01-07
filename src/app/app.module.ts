@@ -14,8 +14,11 @@ import { Stripe } from '@ionic-native/stripe/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
+import { IonicGestureConfig } from '../utils/IonicGestureConfig'
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 
 @Injectable()
 export class HammerConfig extends HammerGestureConfig {
@@ -44,15 +47,14 @@ export class HammerConfig extends HammerGestureConfig {
     Stripe,
     AndroidPermissions,
     LocationAccuracy,
+    Diagnostic,
+    FirebaseX,
     BackgroundGeolocation,
     // { 
     //   provide: RouteReuseStrategy, 
     //   useClass: IonicRouteStrategy
     // },
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: HammerConfig
-    }
+    {provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig}
   ],
   bootstrap: [AppComponent]
 })

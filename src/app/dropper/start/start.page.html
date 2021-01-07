@@ -1,6 +1,6 @@
 <ion-content>
 	<div class="page-title with-back col-pm">
-		<span class="back">
+		<span routerLink="/dropper/home" class="back">
 			<img src="assets/images/back.png" />
 		</span>
 		Your shopper for today is
@@ -59,6 +59,8 @@
 						<div class="col-3">
 							<div class="img">
 								<img src="assets/images/rice.png" />
+								<img *ngIf="item.image_url" [src]="ProdImgUrl+'products/'+item.image_url" />
+								<img *ngIf="!item.image_url" src="assets/images/none.jpg" />
 							</div>
 						</div>
 						<div class="col-5">

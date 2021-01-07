@@ -1,6 +1,6 @@
 <ion-content>
 	<div *ngIf="showPage == 1" class="page-title with-back col-pm">
-		<span class="back">
+		<span routerLink="/dropper/home" class="back">
 			<img src="assets/images/back.png" />
 		</span>
 		Your shopper for today is
@@ -26,7 +26,7 @@
 						<span class="rate-empty"></span>
 					</div>
 					<div class="call">
-						<span class="call-icon">
+						<span class="call-icon" (click)="call()">
 							<app-svg name="call"></app-svg>
 						</span>
 					</div>
@@ -37,8 +37,8 @@
 			<div class="col-12">
 				<div class="neg-mar">
 					<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-					  	<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-					  	<agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker>
+					  	<!-- <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker> -->
+					  	<!-- <agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker> -->
 					  	<agm-direction [origin]="origin" [destination]="destination"></agm-direction>
 					  	<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
 					</agm-map>
@@ -126,7 +126,7 @@
 		</div>
 	</form>
 </div>
-<div class="chat-window" [class.active]="chatOpen == 1">
+<div *ngIf="showPage == 1" class="chat-window" [class.active]="chatOpen == 1">
 	<div class="title">
 		<span class="img">
 			<span class="img-in">
@@ -134,7 +134,7 @@
 			</span>
 		</span>
 		<span class="name">
-			Dropper1
+			{{ orderDets.caller_name }}
 			<span class="call">
 				<span class="call-icon">
 					<app-svg name="call"></app-svg>
@@ -144,29 +144,33 @@
 		<span class="close" (click)="chatOpen = 0">&times;</span>
 	</div>
 	<div class="content">
-		<div class="chat-text to">
-			<span class="bubble to">Hey there!!</span>
+		<div *ngFor="let message of messages | keyvalue">
+			<div class="chat-text" [class.to]="message.value.to == userId" [class.from]="!(message.value.to == partnerId)">
+				<span class="bubble" [class.to]="message.value.to == userId" [class.from]="!(message.value.to == partnerId)">{{ message.value.message }}</span>
+			</div>
 		</div>
-		<div class="chat-text from">
+		<!-- <div class="chat-text from">
 			<span class="bubble from">Hii..</span>
-		</div>
+		</div> -->
 	</div>
-	<div class="chat-inp">
-		<div class="field">
-			<textarea></textarea>
+	<form (submit)="sendMessage()">
+		<div class="chat-inp">
+			<div class="field">
+				<textarea name="message" [(ngModel)]="chatModel.message"></textarea>
+			</div>
+			<div class="att-btn">
+				<span class="icon">
+					<app-svg name="att"></app-svg>
+				</span>
+			</div>
+			<div class="send-btn-wrap">
+				<button type="submit">Send</button>
+			</div>
 		</div>
-		<div class="att-btn">
-			<span class="icon">
-				<app-svg name="att"></app-svg>
-			</span>
-		</div>
-		<div class="send-btn-wrap">
-			<button>Send</button>
-		</div>
-	</div>
+	</form>
 </div>
 
-<div class="cancel-popup" [class.active]="cancPop == 1">
+<div *ngIf="showPage == 1" class="cancel-popup" [class.active]="cancPop == 1">
 	<span class="close" (click)="cancPop = 0; cancPopCont = 0;">&times;</span>
 	<div *ngIf="cancPopCont == 0">
 		<form (submit)="cancelOrder()">
@@ -220,3 +224,26 @@
 	</div>
 </div>
 <div class="overlay" [class.active]="cancPop == 1" (click)="cancPop = 0; cancPopCont = 0;"></div>
+<div *ngIf="showPage == 1" class="call-screen" [class.hidden]="!(showCallScreen == 1)">
+	<div class="call-details">
+		<div class="dp">
+			<img src="assets/images/dp.jpg" />
+		</div>
+		<div class="caller-name">{{ orderDets.caller_name }}</div>
+		<div class="call-time">{{ callSeconds }}:{{ callMinutes }}</div>
+	</div>
+	<div class="call-btns-wrap">
+		<div class="disc-btn">
+			<button>
+				<i class="fas fa-phone"></i>
+			</button>
+		</div>
+	</div>
+	<!-- <div #videoContainer></div> -->
+	<div id="errorMsg"></div>
+	<div class=""></div>
+</div>
+<div class="temp-holder">
+	<video id="partnerVideo" #partnerVideo autoplay playsinline></video>
+	<video id="myVideo" #myVideo autoplay playsinline></video>
+</div>

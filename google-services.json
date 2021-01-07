@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "460766003164",
+    "project_id": "favr-2678e",
+    "storage_bucket": "favr-2678e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460766003164:android:a316b0fe1d54ed0b4b9919",
+        "android_client_info": {
+          "package_name": "com.favr.favr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460766003164-rpa9omgkprpflk6aemri29jvv80g5p8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxblSZ5UrYeveuVS7zCzBQyMxP8H0oteA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460766003164-rpa9omgkprpflk6aemri29jvv80g5p8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

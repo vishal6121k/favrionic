@@ -11,6 +11,8 @@ import { ProfilePage } from './profile.page';
 
 import { LoccartComponent } from '../shopper/loccart/loccart.component';
 
+import { LoccarttComponent } from '../dropper/loccartt/loccartt.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +21,6 @@ import { LoccartComponent } from '../shopper/loccart/loccart.component';
     IconModule,
     ProfilePageRoutingModule
   ],
-  declarations: [ProfilePage, LoccartComponent]
+  declarations: [ProfilePage, LoccartComponent, LoccarttComponent]
 })
 export class ProfilePageModule {}
