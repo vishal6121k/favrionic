@@ -30,7 +30,7 @@
 											</div>
 										</div>
 										<div class="time">
-											<p>02:20 AM</p>
+											<p>{{ order.shipment_timeslot | date:'shortTime' }}</p>
 											<p>
 												<span *ngIf="order.payment_type == 1">Cash</span>
 												<span *ngIf="order.payment_type == 2">Google Pay</span>
@@ -58,7 +58,7 @@
 											</div>
 										</div>
 										<div class="time">
-											<p>02:20 AM</p>
+											<p>{{ order.shipment_timeslot | date:'shortTime' }}</p>
 											<p>
 												<span *ngIf="order.payment_type == 1">Cash</span>
 												<span *ngIf="order.payment_type == 2">Google Pay</span>

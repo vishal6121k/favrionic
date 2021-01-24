@@ -15,9 +15,12 @@ export class SeldropPage implements OnInit {
   orderDets:any;
   lat:any;
   lng:any;
+  maplat:any;
+  maplng:any;
   radius:RangeValue = 5000;
-  zoom:any = 15;
+  zoom:any = 12;
   loadMap:any = 0;
+  map:any;
   radChangEvent:any;
   droppers:any = [];
   showDroppers:any = 0;
@@ -61,7 +64,9 @@ export class SeldropPage implements OnInit {
        console.log(resp);
        this.orderDets = resp[0];
        this.lat = parseFloat(resp[0].delivery_lat);
+       this.maplat = parseFloat(resp[0].delivery_lat);
        this.lng = parseFloat(resp[0].delivery_lon);
+       this.maplng = parseFloat(resp[0].delivery_lon);
        this.radius = resp[0].radius * 1000;
        this.loadMap = 1;
     })
@@ -70,9 +75,17 @@ export class SeldropPage implements OnInit {
     });
   }
 
+  centerChanged(event){
+    this.maplat = event.lat;
+    this.maplng = event.lng;
+    console.log(event);
+  }
+
   centerMap(){
-    this.lat = parseFloat(this.orderDets.delivery_lat);
-   this.lng = parseFloat(this.orderDets.delivery_lon);
+    this.maplat = parseFloat(this.orderDets.delivery_lat);
+    this.maplng = parseFloat(this.orderDets.delivery_lon);
+    // this.map._setCenter()
+
   }
 
   changeDist(event){
@@ -88,8 +101,9 @@ export class SeldropPage implements OnInit {
 
   }
 
-  mapReady(){
+  mapReady(map){
     this.showCircle = 1;
+    this.map = map;
   }
 
   updateRadius(){

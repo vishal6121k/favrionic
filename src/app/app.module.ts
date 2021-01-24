@@ -50,10 +50,10 @@ export class HammerConfig extends HammerGestureConfig {
     Diagnostic,
     FirebaseX,
     BackgroundGeolocation,
-    // { 
-    //   provide: RouteReuseStrategy, 
-    //   useClass: IonicRouteStrategy
-    // },
+    { 
+      provide: RouteReuseStrategy, 
+      useClass: IonicRouteStrategy
+    },
     {provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig}
   ],
   bootstrap: [AppComponent]

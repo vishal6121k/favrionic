@@ -82,6 +82,7 @@
 	</div>
 </ion-content>
 <div class="prod-checklist-pop" *ngIf="showPage == 1" [class.active]="purchasedPopup == 1">
+	<span class="close-btn" (click)="purchasedPopup = 0">&times;</span>
 	<div class="page-title">
 		Purchased Items
 	</div>
@@ -144,7 +145,12 @@
 	<div class="content" *ngIf="!(messages==null)">
 		<div *ngFor="let message of messages | keyvalue">
 			<div class="chat-text" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">
-				<span class="bubble" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">{{ message.value.message }}</span>
+				<span class="bubble" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">
+					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="file-wrap">
+						<img src="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
+					</a>
+					<span *ngIf="message.value.message != 'undefined'">{{ message.value.message }}</span>
+				</span>
 			</div>
 		</div>
 		<!-- <div class="chat-text from">
@@ -155,12 +161,15 @@
 	<form (submit)="sendMessage()">
 		<div class="chat-inp">
 			<div class="field">
-				<textarea name="message" [(ngModel)]="chatModel.message"></textarea>
+				<textarea name="message" [(ngModel)]="chatModel.message" value=""></textarea>
 			</div>
 			<div class="att-btn">
-				<span class="icon">
-					<app-svg name="att"></app-svg>
-				</span>
+				<input class="hidden" type="file" #file id="fileInp" (change)="onChange(file.files)">
+				<label for="fileInp">
+					<span class="icon">
+						<app-svg name="att"></app-svg>
+					</span>
+				</label>
 			</div>
 			<div class="send-btn-wrap">
 				<button type="submit">Send</button>
@@ -169,7 +178,7 @@
 	</form>
 </div>
 <div class="overlay" [class.active]="cancPop == 1 || purchasedPopup == 1 || chatOpen == 1" (click)="cancPop = 0; cancPopCont = 0;chatOpen = 0; purchasedPopup = 0;"></div>
-<div class="cancel-popup" [class.active]="cancPop == 1">
+<div *ngIf="showPage == 1" class="cancel-popup" [class.active]="cancPop == 1">
 	<span class="close" (click)="cancPop = 0; cancPopCont = 0;">&times;</span>
 	<div *ngIf="cancPopCont == 0">
 		<form (submit)="cancelOrder()">
@@ -221,4 +230,38 @@
 			</div>
 		</form>
 	</div>
+</div>
+
+<div *ngIf="showPage == 1" class="call-screen" [class.hidden]="!(comm.status > 0)">
+	<div class="call-details">
+		<div class="dp">
+			<img src="assets/images/dp.jpg" />
+		</div>
+		<div class="caller-name">{{ orderDets.caller_name }}</div>
+		<div class="call-time">{{ callMinutes }}:{{ callSeconds }}</div>
+	</div>
+	<div class="call-btns-wrap">
+		<div class="disc-btn" *ngIf="comm.status == 1">
+			<button>
+				<i class="fas fa-phone"></i>
+			</button>
+		</div>
+		<div class="disc-btn" *ngIf="comm.status == 2" (click)="answerCall()">
+			<button>
+				<i class="fas fa-user"></i>
+			</button>
+		</div>
+		<div class="disc-btn" *ngIf="comm.status == 3" (click)="disconnectCall()">
+			<button>
+				<i class="fas fa-users"></i>
+			</button>
+		</div>
+	</div>
+	<!-- <div #videoContainer></div> -->
+	<div id="errorMsg"></div>
+	<div class=""></div>
+</div>
+<div class="temp-holder">
+	<video id="partnerVideo" #partnerVideo autoplay playsinline></video>
+	<video id="myVideo" #myVideo autoplay playsinline></video>
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { ApiService } from '../../services/api.service';
 import { WebrtcService } from '../../providers/webrtc.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,12 +26,13 @@ export class TrackPage implements OnInit {
   zoom:any = 16;
   origin:any;
   ordInt:any;
+  chatFile:any = "";
   public renderOptions = {
       suppressMarkers: true,
   }
   public markerOptions = {
       origin: {
-          icon: 'assets/icon/rec1.png',
+          icon: 'assets/icon/pin1.png',
           // draggable: true,
       },
       destination: {
@@ -50,10 +52,40 @@ export class TrackPage implements OnInit {
   myEl: HTMLMediaElement;
   partnerEl: HTMLMediaElement;
   webrtc_enb:any = 0;
-  chatModel:any = {};
+  chatModel:any = {
+    message:""
+  };
   messages:any = [];
-  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router, public webRTC: WebrtcService,
-    public elRef: ElementRef, private androidPermissions: AndroidPermissions, private firebase: FirebaseX, private _ngZone: NgZone) {}
+  comm:any;
+  constructor(private platform: Platform, private route: ActivatedRoute, private api: ApiService, private router: Router, public webRTC: WebrtcService,
+    public elRef: ElementRef, private androidPermissions: AndroidPermissions, private firebase: FirebaseX, private _ngZone: NgZone) {
+      this.comm = this.webRTC.comm;
+      // this.video = document.createElement('video');
+      // this.video.width = 640;
+      // this.video.height = 480;
+      // this.video.setAttribute('autoplay', '');
+
+      if (this.platform.is('cordova')) {
+          this.platform.ready().then(() => {
+          this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.CAMERA, this.androidPermissions.PERMISSION.RECORD_AUDIO]);
+      
+          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
+              result => console.log('Has permission?', result.hasPermission),
+              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
+          );
+
+          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+              result => console.log('Has permission?', result.hasPermission),
+              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO)
+          );
+
+          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.MODIFY_AUDIO_SETTINGS).then(
+              result => console.log('Has permission?', result.hasPermission),
+              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MODIFY_AUDIO_SETTINGS)
+          );
+          });
+      }
+    }
   
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -101,6 +133,8 @@ export class TrackPage implements OnInit {
         if(this.webrtc_enb == 0){
           this.userId = resp[0].user_id;
           this.partnerId = resp[0].dropper_id;
+          this.init();
+
           // this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA);
           // this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
           //   result => console.log('Has permission?',result.hasPermission),
@@ -130,17 +164,19 @@ export class TrackPage implements OnInit {
   }
 
   cancelOrder(rel=1){
-    var data = this.cancModel;
-    data['order_id'] = this.orderId;
-    console.log(data);
-    this.api.cancelOrder(data)
-    .then(resp => {
-      if(rel == 1)
-        this.router.navigate(['/shopper/home']);
-    })
-    .catch(err => {
+    if(this.cancModel.cancel_type){
+      var data = this.cancModel;
+      data['order_id'] = this.orderId;
+      console.log(data);
+      this.api.cancelOrder(data)
+      .then(resp => {
+        if(rel == 1)
+          this.router.navigate(['/shopper/home']);
+      })
+      .catch(err => {
 
-    });
+      });
+    }
   }
 
   blockUser(){
@@ -180,10 +216,10 @@ export class TrackPage implements OnInit {
 
 
   init() {
-    this.myEl = this.elRef.nativeElement.querySelector('#my-video');
-    this.partnerEl = this.elRef.nativeElement.querySelector('#partner-video');
+    this.myEl = this.elRef.nativeElement.querySelector('#myVideo');
+    this.partnerEl = this.elRef.nativeElement.querySelector('#partnerVideo');
 
-    // this.webRTC.init(this.userId, this.myEl, this.partnerEl);
+    this.webRTC.init(this.userId, this.myEl, this.partnerEl);
   }
 
   call() {
@@ -192,12 +228,45 @@ export class TrackPage implements OnInit {
     // this.swapVideo('my-video');
   }
 
+  answerCall(){
+    this.webRTC.answerCall();
+  }
+
+
+  disconnectCall(){
+    this.webRTC.close();
+  }
+
   sendMessage(){
-    var data = this.chatModel;
-    data['to'] = 'dropper';
-    data['order_id'] = this.orderId;
-    this.api.sendMessage(data)
+    // var data = this.chatModel;
+    // data['to'] = 'dropper';
+    // data['order_id'] = this.orderId;
+    if(this.chatModel.message == "" && this.chatFile == ""){
+      alert('Message cannot be empty');
+      return;
+    }
+    let fd= new FormData();
+    fd.append('to', 'dropper');
+    fd.append('order_id', this.orderId);
+    fd.append('message', this.chatModel.message);
+    if(!(this.chatFile == "")){
+      fd.append('file', this.chatFile);
+    }
+    else{
+      fd.append('file', '');
+    }
+    //   axios.post('/upload-image', fd)
+    //     .then(resp => {
+    //        this.imagePath = resp.data.path
+    //     })
+    // }
+    //   data['file'] = this.chatFile;
+    // }
+    console.log(fd);
+    this.api.sendMessage(fd)
     .then(resp =>{
+      this.chatModel.message = "";
+      this.chatFile = "";
       this.getMessages();
     })
     .catch(err => {
@@ -216,5 +285,10 @@ export class TrackPage implements OnInit {
 
     });
   }
+
+  onChange(files) {
+    this.chatFile = files[0];
+  }
+
 
 }

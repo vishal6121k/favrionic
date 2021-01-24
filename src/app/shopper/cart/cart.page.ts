@@ -3,6 +3,7 @@ import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { ApiService } from '../../services/api.service';
 import { Geolocation ,GeolocationOptions ,Geoposition ,PositionError } from '@ionic-native/geolocation/ngx';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-cart',
@@ -19,6 +20,7 @@ export class CartPage implements OnInit {
 	delAmnt:any = 0;
 	payType:any = 0;
 	payDrop:any = 0;
+  loading:any;
   order_date:any;
   showTime:any = "Today";
   showDate:any = "Select delivery slot";
@@ -47,7 +49,7 @@ export class CartPage implements OnInit {
     freeMode: true
   };
   ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
-  constructor(private datePicker: DatePicker, private geolocation : Geolocation, private api: ApiService, private router: Router) {
+  constructor(private datePicker: DatePicker, private geolocation : Geolocation, private api: ApiService, private router: Router, public loadingController: LoadingController) {
     if(this.router.getCurrentNavigation().extras.state){
       if(this.router.getCurrentNavigation().extras.state.formVal != undefined){
         this.formData = this.router.getCurrentNavigation().extras.state.formVal;
@@ -103,15 +105,18 @@ export class CartPage implements OnInit {
 	    if( this.cartProd.hasOwnProperty( el ) ) {
 	      this.cartLength += parseFloat( this.cartProd[el]['quantity'] );
 	      this.cartTotalAmount += parseFloat( this.cartProd[el]['total_amount'] );
+        this.cartTotalAmount = Math.round(this.cartTotalAmount * 100) / 100;
 	    }
   	}
   }
 
   showDatePicker(){
+    var today = new Date();
+    var minDate = today.setHours(today.getHours() + 4);
   	this.datePicker.show({
-	  	date: new Date(),
+	  	date: today,
 	  	mode: 'time',
-      minDate: new Date(),
+      minDate: minDate,
       maxDate: new Date(),
 	  	androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
 	}).then( date => {
@@ -189,6 +194,7 @@ export class CartPage implements OnInit {
 
 
   placeOrder(){
+    this.presentLoading();
     var data:any;
     if(this.formData!=""){
       data = JSON.parse(this.formData);
@@ -218,18 +224,14 @@ export class CartPage implements OnInit {
 
     this.api.placeOrder(data)
     .then( resp => {
-       // this.popProds = resp;
-       // this.getReccProds();
-       console.log(resp);
-       this.router.navigate(['/shopper/seldrop/'+resp.orderId]);
+        window.localStorage.removeItem('cart');
+        console.log(resp);
+        this.dismissLoading();
+        this.router.navigate(['/shopper/seldrop/'+resp.orderId]);
     })
     .catch( err => {
 
     });
-    // console.log(data);
-
-
-
   }
 
 
@@ -279,6 +281,24 @@ export class CartPage implements OnInit {
     this.landmark = address.landmark;
     this.selectedAddress = address.id;
     this.locPop = 0;
+  }
+
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await this.loading.present();
+
+    // const { role, data } = await this.loading.onDidDismiss();
+    // this.locpop =0;
+    // this.locClicked();
+    // console.log('Loading dismissed!');
+  }
+
+  dismissLoading(){
+    this.loading.dismiss();
   }
 
 

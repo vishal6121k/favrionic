@@ -19,11 +19,17 @@
 						<span class="title">{{ orderDets.caller_name }}</span>
 					</div>
 					<div class="rating">
+						<!-- <span class="rate-full"></span>
 						<span class="rate-full"></span>
 						<span class="rate-full"></span>
 						<span class="rate-full"></span>
-						<span class="rate-full"></span>
-						<span class="rate-empty"></span>
+						<span class="rate-empty"></span> -->
+
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 0" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 1" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 2" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 3" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 4" class="rate-full"></span>
 					</div>
 					<div class="call">
 						<span class="call-icon" (click)="call()">
@@ -39,7 +45,7 @@
 					<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
 					  	<!-- <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker> -->
 					  	<!-- <agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker> -->
-					  	<agm-direction [origin]="origin" [destination]="destination"></agm-direction>
+					  	<agm-direction [renderOptions]="renderOptions" [markerOptions]="markerOptions" [origin]="origin" [destination]="destination"></agm-direction>
 					  	<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
 					</agm-map>
 				</div>
@@ -47,16 +53,16 @@
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<h5 class="norm-title">Update your order</h5>
+				<h5 class="norm-title">Update your order (Click on text to update)</h5>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-12">
 				<ul class="drop-activity">
-					<li [class.completed]="orderDets.status > 2" [class.ongoing]="orderDets.status == 2">
+					<li [class.completed]="orderDets.status > 1" [class.ongoing]="orderDets.status == 2">
 						<span class="title">On my way to do you FavR</span>
 					</li>
-					<li [class.completed]="orderDets.status > 3" [class.ongoing]="orderDets.status == 3">
+					<li [class.completed]="orderDets.status > 2" [class.ongoing]="orderDets.status == 3">
 						<span class="title">
 							<span (click)="updateOrderStatus(3)">Purchasing your items</span>
 							<div class="check-items-list">
@@ -75,11 +81,11 @@
 							</div>
 						</span>
 					</li>
-					<li [class.completed]="orderDets.status > 4" [class.ongoing]="orderDets.status == 4">
-						<span (click)="updateOrderStatus(4)" class="title">On my way to deliver your items</span>
+					<li [class.completed]="orderDets.status > 3" [class.ongoing]="orderDets.status == 4">
+						<span (click)="updateOrderStatus(4)" class="title">Purchased your items</span>
 					</li>
-					<li [class.completed]="orderDets.status > 5" [class.ongoing]="orderDets.status == 5">
-						<span (click)="updateOrderStatus(5)" class="title">FavR Done</span>
+					<li [class.completed]="orderDets.status > 4" [class.ongoing]="orderDets.status == 5">
+						<span (click)="updateOrderStatus(5)" class="title">On my way to deliver your items</span>
 					</li>
 				</ul>
 			</div>
@@ -143,10 +149,15 @@
 		</span>
 		<span class="close" (click)="chatOpen = 0">&times;</span>
 	</div>
-	<div class="content">
+	<div class="content" id="scrollMe" #scrollMe>
 		<div *ngFor="let message of messages | keyvalue">
-			<div class="chat-text" [class.to]="message.value.to == userId" [class.from]="!(message.value.to == partnerId)">
-				<span class="bubble" [class.to]="message.value.to == userId" [class.from]="!(message.value.to == partnerId)">{{ message.value.message }}</span>
+			<div class="chat-text" [class.from]="message.value.to == 'dropper'" [class.to]="message.value.to == 'shopper'">
+				<span class="bubble" [class.from]="message.value.to == 'dropper'" [class.to]="message.value.to == 'shopper'">
+					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="file-wrap">
+						<img src="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
+					</a>
+					<span *ngIf="message.value.message != 'undefined'">{{ message.value.message }}</span>
+				</span>
 			</div>
 		</div>
 		<!-- <div class="chat-text from">
@@ -159,9 +170,12 @@
 				<textarea name="message" [(ngModel)]="chatModel.message"></textarea>
 			</div>
 			<div class="att-btn">
-				<span class="icon">
-					<app-svg name="att"></app-svg>
-				</span>
+				<input class="hidden" type="file" #file id="fileInp" (change)="onChange(file.files)">
+				<label for="fileInp">
+					<span class="icon">
+						<app-svg name="att"></app-svg>
+					</span>
+				</label>
 			</div>
 			<div class="send-btn-wrap">
 				<button type="submit">Send</button>
@@ -230,12 +244,17 @@
 			<img src="assets/images/dp.jpg" />
 		</div>
 		<div class="caller-name">{{ orderDets.caller_name }}</div>
-		<div class="call-time">{{ callSeconds }}:{{ callMinutes }}</div>
+		<div class="call-time">{{ callMinutes }}:{{ callSeconds }}</div>
 	</div>
 	<div class="call-btns-wrap">
-		<div class="disc-btn">
+		<div class="disc-btn" *ngIf="comm.status == 0">
 			<button>
 				<i class="fas fa-phone"></i>
+			</button>
+		</div>
+		<div class="disc-btn" *ngIf="comm.status == 1" (click)="answerCall()">
+			<button>
+				<i class="fas fa-user"></i>
 			</button>
 		</div>
 	</div>

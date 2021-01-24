@@ -382,6 +382,17 @@ svg{
 		}
 	}
 }
+.search-back{
+	display: inline-block;
+	height: 50px;
+	width: 30px;
+	img{
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		margin-top: 15px;
+	}
+}
 .search-box{
 	display: block;
 	position: relative;
@@ -1410,8 +1421,9 @@ hr{
 			display: inline-block;
 			height: 20px;
 			width: 20px;
-			line-height: 18px;
+			line-height: 16px;
 			font-size: 12px;
+			vertical-align: top;
 			text-align: center;
 			border: 2px solid #000;
 			border-radius: 4px;
@@ -1420,12 +1432,15 @@ hr{
 				content: "\2714";
 			}
 			&.active{
+				border-color: #6D7278;
 				background-color: #6D7278;
+				color: #FFF;
 				&:before{
 				}
 			}
 		}
 		.check-text{
+			vertical-align: top;
 			margin-left: 5px;
 			font-size: 15px;
 			line-height: 20px;
@@ -1433,9 +1448,25 @@ hr{
 		}
 	}
 }
-app-shopper, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track, app-start, app-login, app-home, app-dropper, app-choose{
-	height: 100%;
-	width: 100%;
+// app-shopper, app-faqs, app-pages, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track, app-start, app-login, app-home, app-dropper, app-choose{
+// 	height: 100%;
+// 	width: 100%;
+// }
+.collapse-item-wrap{
+	display: block;
+	.title{
+		padding: 10px;
+		border-radius: 10px;
+		border: 1px solid #EEE;
+		background-color: #FAFAFA;
+	}
+	.value{
+		display: none;
+		padding: 10px;
+		&.active{
+			display: block;
+		}
+	}
 }
 .notify-popup{
 	position: fixed;
@@ -1448,6 +1479,7 @@ app-shopper, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track
 	box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
 	z-index: 1234;
 	text-align: center;
+	overflow: auto;
 	margin-top: 50px;
 	border-radius: 40px;
 	opacity: 0;
@@ -1557,14 +1589,15 @@ app-shopper, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track
 
 .reviewPopup{
 	position: fixed;
-	top: 20px;
+	top: 50%;
 	left: 20px;
 	right: 20px;
-	bottom: 20px;
 	z-index: 12345;
 	background-color: #FFF;
 	border-radius: 15px;
 	padding: 40px 15px;
+	transform: translateY(-50%);
+	max-height: calc(100vh - 40px);
 	.review-item{
 		display: flex;
 		width: 100%;
@@ -1624,6 +1657,8 @@ app-shopper, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track
 	position: fixed;
 	bottom: 0;
 	left: 0;
+	opacity: 0;
+	visibility: hidden;
 	right: 0;
 	height: 50%;z-index: 123456;
 }
@@ -1660,6 +1695,13 @@ app-shopper, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track
 			font-size: 26px;
 			font-weight: 700;
 			color: #FFF;
+			text-align: center;
+		}
+		.call-time{
+			color: #FFF;
+			font-size: 15px;
+			font-weight: 700;
+			line-height: 34px;
 			text-align: center;
 		}
 	}

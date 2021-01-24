@@ -10,7 +10,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div *ngFor="let order of orders">
-									<div *ngIf="order.status> 1" class="order-thumb">
+									<div *ngIf="order.status > 1 && order.status < 6" class="order-thumb">
 										<span class="icon"></span>
 										<div class="dets">
 											<span class="title">{{ order.caller_name }} has asked for a FavR</span>
@@ -30,7 +30,7 @@
 											</div>
 										</div>
 										<div class="time">
-											<p>02:20 AM</p>
+											<p>{{ order.created_at | date:'shortTime' }}</p>
 											<p>
 												<span *ngIf="order.payment_type == 1">Cash</span>
 												<span *ngIf="order.payment_type == 2">Google Pay</span>
@@ -39,30 +39,6 @@
 										</div>
 									</div>
 								</div>
-								<!-- <div class="order-thumb">
-									<span class="icon"></span>
-									<div class="dets">
-										<span class="title">XYZ has asked for a FavR</span>
-										<div class="stats">
-											<span class="item"><span class="x2">20</span> Items</span>
-											<span class="item">Estimated: <span class="x2">&#8364; 20</span></span>
-										</div>
-										<div class="btn-wrap">
-											<button routerLink="/dropper/track/{{ order.id }}" class="btn brdr btn-sm mb-0">
-												 <span class="icon"><app-svg name="gps"></app-svg></span> 
-												Order Window
-											</button>
-											 <button class="btn with-icon brdr btn-sm mb-0">
-												<span class="icon"><app-svg name="share"></app-svg></span>
-												Share
-											</button>
-										</div>
-									</div>
-									<div class="time">
-										<p>02:20 AM</p>
-										<p>Cash</p>
-									</div>
-								</div> -->
 							</div>
 						</div>
 					</div>
@@ -78,7 +54,7 @@
 									<div *ngIf="order.status> 5" class="order-thumb">
 										<span class="icon"></span>
 										<div class="dets">
-											<span class="title">{{ order.caller_name }} has asked for a FavR</span>
+											<span class="title">{{ order.caller_name }} had asked for a FavR</span>
 											<div class="stats">
 												<span class="item"><span class="x2">{{ order.total_items }}</span> Items</span>
 												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
@@ -97,7 +73,8 @@
 										<div class="time">
 											<!-- <p>02:20 AM</p>
 											<p>Cash</p> -->
-											<p class="delv">Delivered</p>
+											<p class="delv" *ngIf="order.status == 6">Delivered</p>
+											<p class="delv" *ngIf="order.status == 7">Cancelled</p>
 										</div>
 									</div>
 								</div>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -39,10 +41,19 @@ export class HomePage implements OnInit {
     subcats:any;
     userDets:any;
     showSearch:any = 0;
+    search_query:any = "";
+    searchRes:any = [];
+    loading:any;
+    cartPop:any = 1;
     ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
-  constructor(private api: ApiService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, public loadingController: LoadingController) { }
 
   ngOnInit(){
+    this.route.params.subscribe(params => {
+        if(params['comm'] == 'search'){
+          this.showSearch = 1;
+        }
+    });
     console.log('HomePage: ngOnInit')
     this.getAllCategories();
     this.getPopularProds();
@@ -52,6 +63,26 @@ export class HomePage implements OnInit {
       this.cartTotal();
     }
   }
+
+
+  search(){
+    if(this.search_query.length > 2){
+      var data = {
+        'productName': this.search_query,
+        'limit': 1000,
+        'offset':0
+      };
+      this.api.search(data)
+      .then(resp => {
+        this.searchRes = resp;
+      })
+      .catch(err => {
+
+      });
+    }
+  }
+
+  
 
 
 
@@ -263,9 +294,35 @@ export class HomePage implements OnInit {
     this.showSearch = 1;
   }
 
+  showLocBlock(event){
+    if(event == 1){
+      this.cartPop = 0;
+    }
+    else{
+      this.cartPop = 1;
+    }
+  }
+
 
   getFavStat(product_id){
     
   }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await this.loading.present();
+
+    // const { role, data } = await this.loading.onDidDismiss();
+    // console.log('Loading dismissed!');
+  }
+
+  dismissLoading(){
+    this.loading.dismiss();
+  }
+
+
 
 }

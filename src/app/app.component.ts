@@ -14,7 +14,7 @@ import { FirebaseX } from "@ionic-native/firebase-x/ngx";
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  splashEnd:any = 0;
+  splashEnd:any = -1;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -39,16 +39,18 @@ export class AppComponent {
       if(this.mobileAccessibility){
           this.mobileAccessibility.usePreferredTextZoom(false);
       }
+      this.splashScreen.hide();
       setTimeout(() => {
         this.splashEnd = 1;
       }, 6000);
-      this.splashScreen.hide();
-      // this.firebase.onMessageReceived()
-      // .subscribe(data => console.log(data) );
+      console.log('yesss');
+    // this.firebase.onMessageReceived()
+    //   .subscribe(data => console.log(data) );
 
       // var getUserMedia = navigator.mediaDevices.getUserMedia;
       // console.log(getUserMedia);
     });
+    
   }
   getConfig(){
     this.api.getAppConfig()

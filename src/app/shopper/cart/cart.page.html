@@ -19,7 +19,7 @@
 		<div class="row item align-end" *ngFor="let item of cartProd | keyvalue">
 			<div class="col-3">
 				<div class="img">
-					<img *ngIf="item.value.image_url" [src]="ProdImgUrl+'products/'+item.value.image_url" />
+					<img *ngIf="item.value.image_url" [src]="ProdImgUrl+'products/300_300/'+item.value.image_url" />
 					<img *ngIf="!item.value.image_url" src="assets/images/none.jpg" />
 				</div>
 			</div>

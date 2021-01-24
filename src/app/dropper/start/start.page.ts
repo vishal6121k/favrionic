@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { google } from '@google/maps';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ApiService } from '../../services/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 @Component({
   selector: 'app-start',
@@ -14,7 +19,39 @@ export class StartPage implements OnInit {
 	showPage:any = 0;
 	ordDetsInt:any;
   ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
-  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router, private firebase: FirebaseX) { }
+  countDownTime:number = 60;
+  min:any;
+  sec:any;
+  countTime:any;
+  zoom:any = 14;
+  deflat:any;
+  deflng:any;
+  options:any;
+  lat:any;
+  subscription:any;
+  origin:any;
+  destination:any;
+  lng:any;
+  shopperAnimation:any;
+  showMap:any;
+  public renderOptions = {
+      suppressMarkers: true,
+  }
+  public markerOptions = {
+      origin: {
+          icon: 'assets/icon/pin1.png',
+          // draggable: true,
+      },
+      destination: {
+          icon: 'assets/icon/pin.png',
+          // label: 'MARKER LABEL',
+          // opacity: 0.8,
+      },
+  };
+  constructor(private androidPermissions: AndroidPermissions, private geolocation: Geolocation,
+  private locationAccuracy: LocationAccuracy, private api: ApiService, 
+  private router: Router, private backgroundGeolocation: BackgroundGeolocation, 
+  private firebase: FirebaseX, private route: ActivatedRoute) { }
   ngOnInit() {
   	this.route.params.subscribe(params => {
         this.orderId = params['id'];
@@ -29,47 +66,249 @@ export class StartPage implements OnInit {
   }
 
 
-  getOrderDetails(){
-  	var data = {
-      order_id: this.orderId
-    };
-    this.api.getOrderById(data)
-    .then(resp => {
-      console.log(resp);
-      this.orderDets = resp[0];
-      this.showPage = 1;
-      // this.shopperReq = resp.shopperlist;
-    })
-    .catch(err => {
+    getOrderDetails(){
+    	var data = {
+        order_id: this.orderId
+      };
+      this.api.getOrderById(data)
+      .then(resp => {
+        console.log(resp);
+        this.orderDets = resp[0];
+        this.orderDets.total_amount = Math.round(this.orderDets.total_amount * 100) / 100;
+        if(this.orderDets.status > 1){
+          if(this.orderDets.dropper_me == 1){
+            // alert('Me Dropper');
+            clearTimeout(this.countTime);
+            this.router.navigate(['/dropper/track/'+this.orderDets.id]);
+          }
+          else{
+            alert('Order assigned to Other Dropper');
+          }
+        }
+        this.checkGPSPermission();
+        this.showPage = 1;
+      })
+      .catch(err => {
 
+      });
+    }
+  	waitForAccept(){
+      var data = {
+        order_id: this.orderId
+      };
+
+      this.api.acceptShopperOffer(data)
+      .then(resp => {
+        this.reqPop = 1;
+        this.startCountdown();
+        this.firebase.onMessageReceived()
+        .subscribe(data => {
+            var messagebody = JSON.parse(data.message);
+            console.log(messagebody);
+            if(messagebody.type == 'order_update'){
+              this.getOrderDetails();
+            }
+        });
+        // this.ordDetsInt = setInterval(()=>{
+        //   if(this.orderDets.dropper_id != null){
+        //     clearInterval(this.ordDetsInt);
+        //     
+        //   }
+        //       // this.getOrderDetails();
+        //   }, 2000);
+      })
+      .catch(err => {
+
+      });
+  	}
+
+
+    startCountdown(){
+      // var count = this.countDownTime;
+      this.min = Math.floor((this.countDownTime/60));
+      this.sec = this.countDownTime % 60;
+      if(this.min < 10){
+        this.min = "0"+this.min;
+      }
+      if(this.sec < 10){
+        this.sec = "0"+this.sec;
+      }
+
+      if(this.countDownTime == 0){
+        var data = {
+          'order_id' : this.orderId
+        };
+        this.api.removeDropperRequest(data)
+        .then(resp => {
+          if(resp.status == 1){
+            alert('Sorry. The shoppper did not accept your request in the given time');
+            this.router.navigate(['/dropper/home']);
+          }
+        })
+        .catch(err => {
+
+        });
+        clearTimeout(this.countTime);
+        return;
+      }
+      this.countTime = setTimeout(()=>{
+        this.countDownTime = this.countDownTime - 1;
+        this.startCountdown();
+      }, 1000)
+    }
+
+    acceptShopperOffer(order_id){
+      
+    }
+
+    checkGPSPermission() {
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+      result => {
+        if (result.hasPermission) {
+
+          //If having permission show 'Turn On GPS' dialogue
+          this.askToTurnOnGPS();
+        } else {
+
+          //If not having permission ask for permission
+          this.requestGPSPermission();
+        }
+      },
+      err => {
+        alert(err);
+      }
+    );
+  }
+  requestGPSPermission() {
+    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+      if (canRequest) {
+        // console.log("4");
+      } else {
+        //Show 'GPS Permission Request' dialogue
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+          .then(
+            () => {
+              // call method to turn on GPS
+              this.askToTurnOnGPS();
+            },
+            error => {
+              //Show alert if user click on 'No Thanks'
+              alert('requestPermission Error requesting location permissions ' + error)
+            }
+          );
+      }
     });
   }
-  	waitForAccept(){
-  		this.reqPop = 1;
+  askToTurnOnGPS() {
+    this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+      () => {
+        // When GPS Turned ON call method to get Accurate location coordinates
+        this.getLocation()
+      },
+      error => alert('Error requesting location permissions ' + JSON.stringify(error))
+    );
+  }
+  centerChanged(event){
+    console.log('center change');
+    this.deflat = event.lat;
+    this.deflng = event.lng;
+  }
 
-      this.firebase.onMessageReceived()
-      .subscribe(data => {
-          var messagebody = JSON.parse(data.message);
-          console.log(messagebody);
-          if(messagebody.type == 'order_update'){
-            this.getOrderDetails();
-          }
-          // if(messagebody.type == )
-          // this.getShopperRequests();
-      });
-  		this.ordDetsInt = setInterval(()=>{
-  			if(this.orderDets.dropper_id != null){
-  				clearInterval(this.ordDetsInt);
-	  			if(this.orderDets.dropper_me == 1){
-	  				// alert('Me Dropper');
-	  				this.router.navigate(['/dropper/track/'+this.orderDets.id]);
-	  			}
-	  			else{
-	  				alert('Order assigned to Other Dropper');
-	  			}
-  			}
-          	// this.getOrderDetails();
-        }, 2000);
-  	}
+
+  setCenter(){
+    console.log('center');
+    // this.geolocation.getCurrentPosition(this.options).then((resp) => {
+      this.deflat = parseFloat(this.orderDets.delivery_lat);
+      this.deflng = parseFloat(this.orderDets.delivery_lon);
+    // })
+    // .catch((error) => {
+      // console.log('Error getting location', error);
+    // });;
+  }
+  // setCenter(){
+  //   this.geolocation.getCurrentPosition(this.options).then((resp) => {
+  //     this.deflat = resp.coords.latitude;
+  //     this.deflng = resp.coords.longitude;
+  //   })
+  //   .catch((error) => {
+  //     // console.log('Error getting location', error);
+  //   });;
+  // }
+  getLocation(){
+    // console.log("getting location");
+    this.options = {
+        enableHighAccuracy : true
+    };
+
+    var lastUpdateTime, minFrequency = 20*1000;
+
+    this.geolocation.getCurrentPosition(this.options).then((resp) => {
+      this.lat = resp.coords.latitude;
+      this.lng = resp.coords.longitude;
+      this.deflat = resp.coords.latitude;
+      this.deflng = resp.coords.longitude;
+      this.shopperAnimation = "BOUNCE";
+      this.origin = { lat: this.lat, lng: this.lng };
+      this.destination = { lat: parseFloat(this.orderDets.delivery_lat), lng: parseFloat(this.orderDets.delivery_lon) };
+      // console.log('abc');
+      this.showMap = 1;
+      setTimeout(()=>{
+        this.shopperAnimation = null;
+      }, 2000);
+      // console.log(resp.coords.latitude);
+    }).catch((error) => {
+      // console.log('Error getting location', error);
+    });
+
+
+    var now;
+
+    let watch = this.geolocation.watchPosition(this.options);
+    this.subscription = watch.subscribe((data) => {
+      
+
+      // console.log('getting location');
+      if ("coords" in data) {
+        // console.log(data.coords);
+        this.lat = data.coords.latitude
+        this.lng = data.coords.longitude
+        var apidata = {
+          'lat': this.lat,
+          'lon': this.lng
+        };
+
+        now = new Date();
+        if(lastUpdateTime && now.getTime() - lastUpdateTime.getTime() < minFrequency){
+          // console.log("Ignoring position update");
+          return;
+        }
+        lastUpdateTime = now;
+        this.api.addUserPolling(apidata)
+        .then(resp => {
+          // console.log('abc');
+          // this.firebase.onMessageReceived()
+          // .subscribe(data => {
+          //   console.log(data)
+          //   var messagebody = data.body;
+          //   if(messagebody.type == )
+          //   this.getShopperRequests();
+          // });
+          // this.shopInt = setInterval(()=>{
+          //   this.getShopperRequests();
+          // }, 60000);
+        })
+        .catch(err => {
+
+        });
+
+      } else {
+
+      }
+    });
+  }
+
+  mapReady(){
+
+  }
 
 }

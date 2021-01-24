@@ -16,6 +16,7 @@ export class ProfilePage implements OnInit {
   chatOpen:any = 0;
   messages:any;
   chatModel:any = {};
+  chatFile:any = "";
   	constructor(private router: Router, private api: ApiService, private firebase: FirebaseX, private _ngZone: NgZone) { }
 
   	ngOnInit() {
@@ -55,7 +56,7 @@ export class ProfilePage implements OnInit {
 
   	logoutUser(){
   		window.localStorage.removeItem('user_type');
-  		window.localStorage.removeItem('token');
+      window.localStorage.removeItem('token');
   		this.router.navigate(['/']);
   	}
 
@@ -77,15 +78,34 @@ export class ProfilePage implements OnInit {
       });
     }
   sendMessage(){
-    var data = this.chatModel;
-    data['to'] = 'admin';
-    this.api.sendMessageToAdmin(data)
+    // var data = this.chatModel;
+    // data['to'] = 'admin';
+    if(this.chatModel.message == "" && this.chatFile == ""){
+      alert('Message cannot be empty');
+      return;
+    }
+    let fd= new FormData();
+    fd.append('to', 'admin');
+    fd.append('message', this.chatModel.message);
+    if(!(this.chatFile == "")){
+      fd.append('file', this.chatFile);
+    }
+    else{
+      fd.append('file', '');
+    }
+    console.log(fd);
+    this.api.sendMessageToAdmin(fd)
     .then(resp =>{
+      this.chatModel.message = "";
+      this.chatFile = "";
       this.getMessages();
     })
     .catch(err => {
 
     });
+  }
+  onChange(files) {
+    this.chatFile = files[0];
   }
 
   getMessages(){

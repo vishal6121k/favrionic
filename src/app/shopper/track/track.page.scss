@@ -169,6 +169,15 @@
 				color: #000;
 				max-width: 60%;
 			}
+			.file-wrap{
+				display: block;
+				background-color: #FAFAFA;
+				font-weight: 700;
+				text-align: left;
+				padding: 10px;
+				border-radius: 20px;
+				margin-bottom: 5px;
+			}
 			&.to{
 				text-align: right;
 			}

@@ -1,10 +1,10 @@
 <ion-content>
-	<app-loccartt show="0"></app-loccartt>
+	<app-loccartt show="0" [address]="address2"></app-loccartt>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12">
 				<div class="map-wrap neg-mar">
-					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady()" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom">
+					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady()" (centerChange)="centerChanged($event)" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true">
 					  	
 					  	<agm-marker [animation]="shopperAnimation" [latitude]="lat" [longitude]="lng"></agm-marker>
 					  	
@@ -39,8 +39,22 @@
 		 <!-- *ngIf="!shopperReq.length -->
 		<div class="row" *ngIf="!(shopperReq.length)">
 			<div class="col-12">
-				<img src="assets/loaders/searching.png" class="block center" />
-				No shopper requests
+				<h5 class="norm-title">
+					Shopper Requests
+					<span class="norm-title-btn" (click)="notePop=1">
+						<span class="icon"></span>
+						Notify user
+					</span>
+				</h5>
+				<!-- <p class="norm-sub">Choose one from below</p> -->
+			</div>
+			<div class="col-12">
+				<div class="dot-loader">
+				  	<div class='dot'></div>
+				  	<div class='dot'></div>
+				  	<div class='dot'></div>
+				  	<div class='dot'></div>
+				</div>
 			</div>
 		</div>
 		<div class="row" *ngIf="shopperReq.length">
@@ -64,124 +78,44 @@
 								</div>
 							</div>
 							<div class="dets">
-								<span class="title">{{ req.first_name+' '+req.last_name }}</span>
+								<span class="title">{{ req.caller_name }}</span>
 								<span class="sub">
-									Offer price -
+									Offer price - &#8364; {{ req.total_amount + req.delivery_charge }}
 								</span>
 							</div>
 							<div class="rating">
+								<!-- <span [class.rate-full]="req.ratings[0].avg_rating >= 1" [class.rate-empty]="req.ratings[0].avg_rating < 1"></span>
+								<span [class.rate-full]="req.ratings[0].avg_rating >= 2" [class.rate-empty]="req.ratings[0].avg_rating < 2"></span>
+								<span [class.rate-full]="req.ratings[0].avg_rating >= 3" [class.rate-empty]="req.ratings[0].avg_rating < 3"></span>
+								<span [class.rate-full]="req.ratings[0].avg_rating >= 4" [class.rate-empty]="req.ratings[0].avg_rating < 4"></span>
+								<span [class.rate-full]="req.ratings[0].avg_rating >= 5" [class.rate-empty]="req.ratings[0].avg_rating < 5"></span>
+								<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 0" class="rate-full"></span> -->
+								
+								<span *ngIf="req.ratings[0].avg_rating > 0" class="rate-full"></span>
+								<span *ngIf="req.ratings[0].avg_rating > 1" class="rate-full"></span>
+								<span *ngIf="req.ratings[0].avg_rating > 2" class="rate-full"></span>
+								<span *ngIf="req.ratings[0].avg_rating > 3" class="rate-full"></span>
+								<span *ngIf="req.ratings[0].avg_rating > 4" class="rate-full"></span>
+								<!-- <span class="rate-full"></span>
 								<span class="rate-full"></span>
 								<span class="rate-full"></span>
 								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
+								<span class="rate-empty"></span> -->
 							</div>
 						</div>
-						<!-- <div class="dropper-thumb" (click)="dropPop=1">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Shopper 1</span>
-								<span class="sub">
-									Offer price - 
-									
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
-							</div>
-						</div>
-						<div class="dropper-thumb" (click)="dropPop=1">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Shopper 1</span>
-								<span class="sub">
-									Offer price - 
-									
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
-							</div>
-						</div> -->
 					</div>
-					<!-- <div class="col-12">
-						<div class="row mb-20">
-							<div class="col-10 offset-1">
-								<div class="form-row">
-									<button routerLink="/shopper/track" class="btn btn-primary btn-full">Accept Dropper</button>
-								</div>
-							</div>
-						</div>
-					</div> -->
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="dot-loader">
+				  	<div class='dot'></div>
+				  	<div class='dot'></div>
+				  	<div class='dot'></div>
+				  	<div class='dot'></div>
 				</div>
 			</div>
 			<!-- <div class="col-12">
 				<p class="norm-sub">Outside your radius</p>
-			</div> -->
-
-			<!-- <div class="col-12">
-				<div class="row">
-					<div class="col-12">
-						<div class="dropper-thumb" (click)="dropPop=1">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Shopper 1</span>
-								<span class="sub">
-									Offer price - 
-									
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
-							</div>
-						</div>
-						<div class="dropper-thumb" (click)="dropPop=1">
-							<div class="img">
-								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
-								</div>
-							</div>
-							<div class="dets">
-								<span class="title">Shopper 1</span>
-								<span class="sub">
-									Offer price - 
-									
-								</span>
-							</div>
-							<div class="rating">
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div> -->
 		</div>
 	</div>
@@ -210,11 +144,18 @@
 			</span> -->
 		</div>
 		<div class="rating">
+
+			<span *ngIf="orderDets.shop_reviews[0].avg_rating > 0" class="rate-full"></span>
+			<span *ngIf="orderDets.shop_reviews[0].avg_rating > 1" class="rate-full"></span>
+			<span *ngIf="orderDets.shop_reviews[0].avg_rating > 2" class="rate-full"></span>
+			<span *ngIf="orderDets.shop_reviews[0].avg_rating > 3" class="rate-full"></span>
+			<span *ngIf="orderDets.shop_reviews[0].avg_rating > 4" class="rate-full"></span>
+			
+			<!-- <span class="rate-full"></span>
 			<span class="rate-full"></span>
 			<span class="rate-full"></span>
 			<span class="rate-full"></span>
-			<span class="rate-full"></span>
-			<span class="rate-empty"></span>
+			<span class="rate-empty"></span> -->
 		</div>
 	</div>
 	<div class="drop-list-items">
@@ -231,12 +172,12 @@
 		<div class="drop-list-item bold">
 			<span class="title">Shopper's total offer</span>
 			<span class="dots"></span>
-			<span class="value">&#8364; 15</span>
+			<span class="value">&#8364; {{ orderDets.total_amount + orderDets.delivery_charge }}</span>
 		</div>
 		<div class="drop-list-item">
 			<span class="title">You Earn</span>
 			<span class="dots"></span>
-			<span class="value">&#8364; 5</span>
+			<span class="value">&#8364; {{ orderDets.delivery_charge }}</span>
 		</div>
 		<div class="drop-list-item bold">
 			<span class="title">Mode of payment</span>
@@ -250,6 +191,6 @@
 	</div>
 	<div class="form-row">
 		<!-- <button (click)="reqPop = 1; dropPop = 0;" class="btn btn-primary btn-full">Accept Offer</button> -->
-		<button (click)="acceptShopperOffer(orderDets.id)" class="btn btn-primary btn-full">Accept Offer</button>
+		<button routerLink="/dropper/start/{{ orderDets.id }}" class="btn btn-primary btn-full">Accept Offer</button>
 	</div>
 </div>

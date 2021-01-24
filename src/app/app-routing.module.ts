@@ -34,6 +34,14 @@ const routes: Routes = [
     path: 'dropper',
     loadChildren: () => import('./dropper/dropper.module').then( m => m.DropperPageModule)
   },
+  {
+    path: 'pages/:page_type',
+    loadChildren: () => import('./pages/pages.module').then( m => m.PagesPageModule)
+  },
+  {
+    path: 'faqs',
+    loadChildren: () => import('./faqs/faqs.module').then( m => m.FaqsPageModule)
+  },
 ];
 
 @NgModule({

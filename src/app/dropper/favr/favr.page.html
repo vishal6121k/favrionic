@@ -47,12 +47,15 @@
 				<p>{{ month.key | date:'MMMM y' }}</p>
 				<div class="favr-history-item" *ngFor="let trans of month.value">
 		        	<span class="icon">
+		        		<app-svg *ngIf="trans.transaction_type == 'Got'" name="check"></app-svg>
+		        		<app-svg *ngIf="trans.transaction_type == 'Spent'" name="wallet"></app-svg>
 		        		<app-svg *ngIf="trans.transaction_type == 'Purchased'" name="check"></app-svg>
-		        		<app-svg *ngIf="trans.transaction_type == 'Debit'" name="wallet"></app-svg>
 		        	</span>
 					<div class="dets">
-						<p *ngIf="trans.transaction_type == 'Purchased'" class="title">Got {{ trans.credit_qty }} FavRs</p>
-						<p *ngIf="trans.transaction_type == 'Debit'" class="title">Used {{ trans.credit_qty }} FavRs</p>
+						<p *ngIf="trans.transaction_type == 'Purchased'" class="title">Purchased {{ trans.credit_qty }} FavRs</p>
+						<p *ngIf="trans.transaction_type == 'Got'" class="title">Got {{ trans.credit_qty }} FavRs</p>
+						<p *ngIf="trans.transaction_type == 'Spent'" class="title">Used {{ trans.credit_qty }} FavRs</p>
+
 						<span class="date">{{ trans.created_at | date:'d/M/yy' }}</span>
 					</div>
 					<div class="time">{{ trans.created_at | date:'h:mm a' }}</div>

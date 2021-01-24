@@ -1,10 +1,11 @@
 .profile-head{
-	display: flex;
+	display: block;
 	align-items: center;
 	padding: 20px 15px;
 	border-bottom: 10px solid #EEE;
 	.dets{
-		flex: 7;
+		display: block;
+		// flex: 7;
 		h1{
 			margin-bottom: 5px;
 		}
@@ -13,7 +14,8 @@
 		}
 	}
 	.img{
-		flex: 3;
+		display: block;
+		// flex: 3;
 		.img-in{
 			display: block;
 			padding-top: 100%;

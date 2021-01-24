@@ -29,6 +29,7 @@ export class TrackPage implements AfterViewInit {
   	lng:any;
   	delLat:any;
   	delLng:any;
+  	chatFile:any = "";
   	origin:any;
   	options:any;
   	destination:any;
@@ -47,11 +48,28 @@ export class TrackPage implements AfterViewInit {
   	chatModel:any = {};
   	subscription:any;
   	shopperAnimation:any;
+  	countTime:any;
   	callMinutes:any = '00';
 	callSeconds:any = '00';
 	showCallScreen:any = 0;
 	totalSeconds:any = 0;
+	comm:any;
+	public renderOptions = {
+    	suppressMarkers: true,
+	}
+	public markerOptions = {
+	  origin: {
+	      icon: 'assets/icon/pin1.png',
+	      // draggable: true,
+	  },
+	  destination: {
+	      icon: 'assets/icon/pin.png',
+	      // label: 'MARKER LABEL',
+	      // opacity: 0.8,
+	  },
+	};
   	@ViewChild('videoContainer') videoContainer;
+  	@ViewChild('scrollMe') private myScrollContainer: ElementRef;
   	private video: HTMLVideoElement;
 
   	constructor(private platform: Platform, private route: ActivatedRoute, public webRTC: WebrtcService,
@@ -60,6 +78,7 @@ export class TrackPage implements AfterViewInit {
 				private locationAccuracy: LocationAccuracy, private api: ApiService,
 				private router: Router, private firebase: FirebaseX) {
 
+  		this.comm = this.webRTC.comm;
 		this.video = document.createElement('video');
 		this.video.width = 640;
 		this.video.height = 480;
@@ -77,6 +96,11 @@ export class TrackPage implements AfterViewInit {
 				this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
 		  			result => console.log('Has permission?', result.hasPermission),
 		  			err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO)
+				);
+
+				this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.MODIFY_AUDIO_SETTINGS).then(
+		  			result => console.log('Has permission?', result.hasPermission),
+		  			err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.MODIFY_AUDIO_SETTINGS)
 				);
 	  		});
 		}
@@ -206,18 +230,20 @@ export class TrackPage implements AfterViewInit {
   	}
   
   	cancelOrder(rel=1){
-		var data = this.cancModel;
-		data['order_id'] = this.orderId;
-		console.log(data);
-		this.api.cancelOrder(data)
-		.then(resp => {
-	  		if(rel == 1){
-				this.router.navigate(['/dropper/home']);
-	  		}
-		})
-		.catch(err => {
+  		if(this.cancModel.cancel_type){
+			var data = this.cancModel;
+			data['order_id'] = this.orderId;
+			console.log(data);
+			this.api.cancelOrder(data)
+			.then(resp => {
+		  		if(rel == 1){
+					this.router.navigate(['/dropper/home']);
+		  		}
+			})
+			.catch(err => {
 
-		});
+			});
+		}
   	}
 
   	blockUser(){
@@ -264,36 +290,73 @@ export class TrackPage implements AfterViewInit {
   	call() {
   		this.showCallScreen = 1;
 		this.webRTC.call(this.partnerId);
-		this.setTime();
 		console.log('callTo'+this.partnerId);
   	}
 
-  	setTime() {
-	  ++this.totalSeconds;
-	  this.callSeconds = this.pad(this.totalSeconds % 60);
-	  this.callMinutes = this.pad(this.totalSeconds / 60);
-	}
+  	answerCall(){
+  		this.webRTC.answerCall();
+  	}
 
-	pad(val) {
-	  	var valString = val + "";
-	  	if (valString.length < 2) {
-	    	return "0" + valString;
-	  	} else {
-	    	return valString;
-	  	}
-	}
+ //  	setTime() {
+	//   ++this.totalSeconds;
+	//   this.callSeconds = this.pad(this.totalSeconds % 60);
+	//   this.callMinutes = this.pad(this.totalSeconds / 60);
+	// }
 
+	setTime(){
+      // var count = this.countDownTime;
+      this.callMinutes = Math.floor((this.totalSeconds/60));
+      
+      this.callSeconds = this.totalSeconds % 60;
+
+      if(this.callMinutes < 10){
+        this.callMinutes = "0"+this.callMinutes;
+      }
+      if(this.callSeconds < 10){
+        this.callSeconds = "0"+this.callSeconds;
+      }
+      this.countTime = setTimeout(()=>{
+        this.totalSeconds = this.totalSeconds + 1;
+        this.setTime();
+      }, 1000);
+    }
+
+	
   	sendMessage(){
-		var data = this.chatModel;
-		data['to'] = this.partnerId;
-		data['order_id'] = this.orderId;
-		this.api.sendMessage(data)
+  		if(this.chatModel.message == "" && this.chatFile == ""){
+	      alert('Message cannot be empty');
+	      return;
+	    }
+	    let fd= new FormData();
+	    fd.append('to', 'shopper');
+	    fd.append('order_id', this.orderId);
+	    fd.append('message', this.chatModel.message);
+	    if(!(this.chatFile == "")){
+	      fd.append('file', this.chatFile);
+	    }
+	    else{
+	      fd.append('file', '');
+	    }
+		// var data = this.chatModel;
+		// data['to'] = this.partnerId;
+		// data['order_id'] = this.orderId;
+		this.api.sendMessage(fd)
 		.then(resp =>{
-
+			this.chatModel.message = "";
+			this.chatFile = "";
+			// this.messages.push({
+			// 	'to': 'shopper',
+			// 	'message': this.chatModel.message
+			// });
+			this.getMessages();
 		})
 		.catch(err => {
 
 		});
+  	}
+
+  	onChange(files) {
+	    this.chatFile = files[0];
   	}
 
   	getMessages(){
@@ -302,11 +365,18 @@ export class TrackPage implements AfterViewInit {
 		this.api.getMessages(data)
 		.then(resp =>{
 	  		this.messages = resp.messages;
+	  		this.scrollToBottom();
 		})
 		.catch(err => {
 
 		});
   	}
+
+  	scrollToBottom(): void {
+        try {
+            this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+        } catch(err) { }                 
+    }
 
 
   	checkGPSPermission() {

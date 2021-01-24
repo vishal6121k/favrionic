@@ -22,6 +22,7 @@ export class LoginPage implements OnInit {
   loginModel:any = {
     countryCode: "+353"
   };
+  forgModel:any = {};
   conf_password:any = "";
   signOtp:any = 0;
   otp:any = [];
@@ -130,8 +131,23 @@ export class LoginPage implements OnInit {
   }
 
   firebaseTokenSet(){
+    this.firebase.setAutoInitEnabled(false)
+    .then( resp => {
+        console.log("Auto init has been disabled ");
+        this.firebase.unregister();
+    });
+    // var fbs_token;
+    // if(fbs_token = window.localStorage.getItem('fbs_token')){
+    //   this.firebase.deleteToken(fbs_token)
+    //   .then()
+    //   .catch(err => {
+
+    //   })
+    // }
     this.firebase.getToken()
     .then(token => {
+        window.localStorage.setItem('fbs_token', token);
+        console.log(token);
         var data = {
           'fbs_token': token
         }
@@ -194,6 +210,28 @@ export class LoginPage implements OnInit {
     window.localStorage.setItem('user_role', '2');
     this.router.navigate(['shopper']);
   
+  }
+
+
+  forgPw(){
+    if(!(this.forgModel.email == "")){
+      var data = this.forgModel;
+      this.api.forgPw(data)
+      .then( resp => {
+        if(resp.status == 1){
+          alert('Password sent to email');
+        }
+        if(resp.status == 2){
+          alert('Email id does not exist');
+        }
+      })
+      .catch( err => {
+
+      });
+    }
+    else{
+      alert('Enter email');
+    }
   }
 
 

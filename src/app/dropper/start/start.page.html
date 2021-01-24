@@ -4,7 +4,7 @@
 			<img src="assets/images/back.png" />
 		</span>
 		Your shopper for today is
-		<span class="page-title-btn">Cancel</span>
+		<span routerLink="/dropper/home" class="page-title-btn">Cancel</span>
 	</div>
 	<div *ngIf="showPage == 1" class="container-fluid">
 		<div class="row">
@@ -19,24 +19,45 @@
 						<span class="title">{{ orderDets.caller_name }}</span>
 					</div>
 					<div class="rating">
+						<!-- <span class="rate-full"></span>
 						<span class="rate-full"></span>
 						<span class="rate-full"></span>
 						<span class="rate-full"></span>
-						<span class="rate-full"></span>
-						<span class="rate-empty"></span>
+						<span class="rate-empty"></span> -->
+
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 0" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 1" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 2" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 3" class="rate-full"></span>
+						<span *ngIf="orderDets.shop_reviews[0].avg_rating > 4" class="rate-full"></span>
 					</div>
-					<div class="call">
+					<!-- <div class="call">
 						<span class="call-icon">
 							<app-svg name="call"></app-svg>
 						</span>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<div class="neg-mar">
-					<img src="assets/images/map1.png" />
+				<div class="map-wrap neg-mar">
+					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady()" (centerChange)="centerChanged($event)" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom">
+					  	
+					  	<!-- <agm-marker [animation]="shopperAnimation" [latitude]="lat" [longitude]="lng"></agm-marker> -->
+					  	<agm-direction [renderOptions]="renderOptions" [markerOptions]="markerOptions" [origin]="origin" [destination]="destination"></agm-direction>
+					  	<!-- <agm-marker *ngFor="let shopper of shopperReq" [latitude]="shopper.order_lat" [longitude]="shopper.order_lon" [iconUrl]="'assets/icon/pin.png'"></agm-marker> -->
+
+					  	<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
+					  	
+					</agm-map>
+					<span class="map-btn-wrap" (click)="setCenter()">
+						<button class="map-btn">
+							<span class="icon">
+								<app-svg name="gps"></app-svg>
+							</span>
+						</button>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -58,8 +79,8 @@
 					<div *ngFor="let item of orderDets.orderDetails" class="row item align-center">
 						<div class="col-3">
 							<div class="img">
-								<img src="assets/images/rice.png" />
-								<img *ngIf="item.image_url" [src]="ProdImgUrl+'products/'+item.image_url" />
+								<!-- <img src="assets/images/rice.png" /> -->
+								<img *ngIf="item.image_url" [src]="ProdImgUrl+'products/300_300/'+item.image_url" />
 								<img *ngIf="!item.image_url" src="assets/images/none.jpg" />
 							</div>
 						</div>
@@ -177,7 +198,7 @@
 		</div>
 	</div>
 </ion-content>
-<div class="chat-window" [class.active]="chatOpen == 1">
+<!-- <div class="chat-window" [class.active]="chatOpen == 1">
 	<div class="title">
 		<span class="img">
 			<span class="img-in">
@@ -215,12 +236,13 @@
 			<button>Send</button>
 		</div>
 	</div>
-</div>
+</div> -->
 <div class="overlay" [class.active]="reqPop == 1"></div>
-<div class="notify-popup" [class.active]="reqPop==1">
-	<span class="icon" routerLink="/dropper/track">
+
+<div class="notify-popup" *ngIf="showPage == 1" [class.active]="reqPop==1">
+	<span class="icon">
 		<img src="assets/images/check.png" />
 	</span>
-	<p class="flow-text">Request Send <span class="blck small">to</span><span class="blck small bold">Xyz Abc</span></p>
-	<p class="flow-text"><span class="blck small">Please wait while the shopper accepts your request in</span> 05:59 </p>
+	<p class="flow-text">Request Send <span class="blck small">to</span><span class="blck small bold">{{ orderDets.caller_name }}</span></p>
+	<p class="flow-text"><span class="blck small">Please wait while the shopper accepts your request in</span> {{ min }}:{{ sec }} </p>
 </div>

@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LoccarttComponent implements OnInit {
 @Input() show:any;
+@Input() address:any;
   constructor() { }
 
   ngOnInit() {}

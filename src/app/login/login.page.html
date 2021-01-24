@@ -63,7 +63,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <a class="form-row-head text-left fn">Forgot password?</a>
+                            <a class="form-row-head text-left fn" (click)="forgPop = 1">Forgot password?</a>
                         </div>
                         <div class="col-6">
                             <a class="form-row-head text-right fn" *ngIf="signOtp == 0" (click)="signOtp = 1">Sign In with otp</a>
@@ -95,7 +95,25 @@
         	</div>
         </form>
     </div>
-    <div class="overlay" [class.active]="signupPop == 1" (click)="signupPop = 0"></div>
+    <div class="overlay" [class.active]="signupPop == 1 || forgPop == 1" (click)="signupPop = 0; forgPop = 0;"></div>
+    <div class="signup-popup" [class.active]="forgPop == 1">
+        <form (submit)="forgPw()">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-row">
+                        <input type="email" placeholder=" " class="form-control" [(ngModel)]="forgModel.email" name="email" value="" />
+                        <label>Email</label>
+                        <span class="line"></span>
+                    </div>
+                </div>
+                <div class="col-10 offset-1">
+                    <div class="form-row">
+                        <button type="submit" class="btn btn-full btn-primary">Send Password</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="signup-popup" [class.active]="signupPop == 1">
         <form (submit)="signupUser()">
             <div class="row">

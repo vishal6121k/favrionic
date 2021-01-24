@@ -2,17 +2,27 @@
 	<app-loccart *ngIf="user_type == 2" show="2"></app-loccart>
 	<app-loccartt *ngIf="user_type == 3" show="2"></app-loccartt>
 	<div *ngIf="showPage == 1" class="profile-head align-center">
-		<div class="dets">
-			<h1>{{ userDets.first_name }} {{ userDets.last_name }}</h1>
-			<p>{{ userDets.email }}</p>
-			<p>{{ userDets.phone_no }}</p>
-		</div>
-		<div class="img">
-			<span class="img-in">
-				<img src="assets/images/dp.jpg" />
-				<div *ngIf="user_type == 2" class="type">Shopper</div>
-				<div *ngIf="user_type == 3" class="type">Dropper</div>
-			</span>
+		<div class="row">
+			<div class="col-12 text-center">
+				<div class="row">
+					<div class="col-6 offset-3">
+						<div class="img">
+							<span class="img-in">
+								<img src="assets/images/dp.jpg" />
+								<div *ngIf="user_type == 2" class="type">Shopper</div>
+								<div *ngIf="user_type == 3" class="type">Dropper</div>
+							</span>
+						</div>	
+					</div>
+				</div>
+			</div>
+			<div class="col-12 text-center">
+				<div class="dets">
+					<h1>{{ userDets.first_name }} {{ userDets.last_name }}</h1>
+					<p>{{ userDets.email }}</p>
+					<p>{{ userDets.phone_no }}</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<ul *ngIf="showPage == 1" class="profile-menu">
@@ -24,7 +34,7 @@
 					</span>
 					<span class="text">Saved Items</span>
 				</div>
-				<div class="extra">10 Products</div>
+				<!-- <div class="extra">10 Products</div> -->
 			</a>
 		</li>
 		<li *ngIf="user_type == 2">
@@ -35,7 +45,7 @@
 					</span>
 					<span class="text">Order History</span>
 				</div>
-				<div class="extra">10 orders</div>
+				<!-- <div class="extra">10 orders</div> -->
 			</a>
 		</li>
 		<li *ngIf="user_type == 3">
@@ -46,16 +56,16 @@
 					</span>
 					<span class="text">Order History</span>
 				</div>
-				<div class="extra">10 orders</div>
+				<!-- <div class="extra">10 orders</div> -->
 			</a>
 		</li>
 		<li>
-			<a href="#">
+			<a routerLink="/pages/about">
 				<div class="head">
 					<span class="icon">
 						<app-svg name="info"></app-svg>
 					</span>
-					<span class="text">About</span>
+					<span class="text">About Us</span>
 				</div>
 			</a>
 		</li>
@@ -70,7 +80,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="#">
+			<a routerLink="/faqs">
 				<div class="head">
 					<span class="icon">
 						<app-svg name="faq"></app-svg>
@@ -113,11 +123,11 @@
 	<div class="title">
 		<span class="img">
 			<span class="img-in">
-				<img src="assets/images/dp.jpg" />
+				<img src="assets/images/logo.png" />
 			</span>
 		</span>
 		<span class="name">
-			Admin
+			Favr
 			<!-- <span class="call">
 				<span class="call-icon">
 					<app-svg name="call"></app-svg>
@@ -129,7 +139,12 @@
 	<div class="content" *ngIf="messages">
 		<div *ngFor="let message of messages | keyvalue">
 			<div class="chat-text" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">
-				<span class="bubble" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">{{ message.value.message }}</span>
+				<span class="bubble" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">
+					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="file-wrap">
+						<img src="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
+					</a>
+					<span *ngIf="message.value.message != 'undefined'">{{ message.value.message }}</span>
+				</span>
 			</div>
 		</div>
 		<!-- <div class="chat-text from">
@@ -145,9 +160,12 @@
 				<textarea name="message" [(ngModel)]="chatModel.message"></textarea>
 			</div>
 			<div class="att-btn">
-				<span class="icon">
-					<app-svg name="att"></app-svg>
-				</span>
+				<input class="hidden" type="file" #file id="fileInp" (change)="onChange(file.files)">
+				<label for="fileInp">
+					<span class="icon">
+						<app-svg name="att"></app-svg>
+					</span>
+				</label>
 			</div>
 			<div class="send-btn-wrap">
 				<button type="submit">Send</button>

@@ -1,0 +1,16 @@
+<ion-content>
+	<div *ngIf="showPage == 1" class="page-title with-back col-pm">
+		<span routerLink="/profile" class="back">
+			<img src="assets/images/back.png" />
+		</span>
+		{{ pageContent.title }}
+		<!-- <span class="page-title-btn">+ Add More</span> -->
+	</div>
+	<div *ngIf="showPage == 1" class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div [innerHTML]="pageContent.html_content"></div>
+			</div>
+		</div>
+	</div>
+</ion-content>

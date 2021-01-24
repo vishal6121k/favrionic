@@ -29,6 +29,38 @@ export class ApiService {
         });
     }
 
+    search(data){
+      return axios.post(apiUrl+'product/search', data)
+        .then(function(response){
+          return response.data;
+        })
+        .catch(function(err){
+          console.log(err);
+          return "Err";
+        });
+    }
+
+    getPages(data){
+      return axios.post(apiUrl+'pages/get', data)
+        .then(function(response){
+          return response.data;
+        })
+        .catch(function(err){
+          console.log(err);
+          return "Err";
+        });
+    }
+    getFaqs(){
+      return axios.get(apiUrl+'faqs/get')
+        .then(function(response){
+          return response.data;
+        })
+        .catch(function(err){
+          console.log(err);
+          return "Err";
+        });
+    }
+
   	signupUser(data){
   		return axios.post(apiUrl+'user/register', data)
       	.then(function(response){
@@ -39,6 +71,17 @@ export class ApiService {
 	        return "Err";
       	});
   	}
+
+    forgPw(data){
+      return axios.post(apiUrl+'password/change', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
 
 
 
@@ -487,6 +530,17 @@ export class ApiService {
 
     setUserFbToken(data){
       return axios.post(apiUrl+'user/set/fb/token', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        console.log(err);
+        return "Err";
+      });
+    }
+
+    removeDropperRequest(data){
+      return axios.post(apiUrl+'dropper/request/remove', data)
       .then(function(response){
         return response.data;
       })

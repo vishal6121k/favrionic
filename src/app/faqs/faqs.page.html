@@ -1,0 +1,19 @@
+<ion-content>
+	<div *ngIf="showPage == 1" class="page-title with-back col-pm">
+		<span routerLink="/profile" class="back">
+			<img src="assets/images/back.png" />
+		</span>
+		FAQs
+		<!-- <span class="page-title-btn">+ Add More</span> -->
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="collapse-item-wrap" *ngFor="let faq of faqs | keyvalue">
+					<div class="title" (click)="showCar[faq.key]=(showCar[faq.key] == 0)?1:0"><b>{{ faq.value.number + 1 }}.</b> {{ faq.value.question }}</div>
+					<div class="value" [class.active]="showCar[faq.key] == 1">{{ faq.value.answer }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ion-content>

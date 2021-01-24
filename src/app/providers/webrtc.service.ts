@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import Peer from 'peerjs';
 
+export interface Comm {
+   status:any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +20,9 @@ export class WebrtcService {
   stunServer: RTCIceServer = {
     urls: 'stun:' + this.stun,
   };
+  incomingCall:any;
+
+  comm:Comm = { status : 0 };
 
   constructor() {
 
@@ -35,7 +42,8 @@ export class WebrtcService {
   }
 
   async init(userId:any, myEl: HTMLMediaElement, partnerEl: HTMLMediaElement) {
-    console.log(userId);
+    console.log('init user '+userId);
+
     this.myEl = myEl;
     this.partnerEl = partnerEl;
     await this.createPeer(userId);
@@ -50,26 +58,17 @@ export class WebrtcService {
 
   call(partnerId: string) {
     console.log(partnerId);
-    // try {
-    //   this.getMedia();
-    // } catch (e) {
-    //   this.handleError(e);
-    // }
-    navigator.getUserMedia({ audio: true, video: false }, (stream) => {
+    navigator.getUserMedia({ audio: true, video: true }, (stream) => {
       
       alert('got media');
       this.myStream = stream;
-      console.log(this.myStream);
-      this.myEl.srcObject = stream;
+      this.comm.status = 1;
       // Initiate call
       const call = this.peer.call(partnerId, this.myStream);
-      console.log(call);
       // When answered
       call.on('stream', (stream) => {
         this.partnerEl.srcObject = stream;
       });
-
-      // this.handleSuccess(stream);
     }, (error) => {
       this.handleError(error);
     });
@@ -77,22 +76,29 @@ export class WebrtcService {
 
   wait() {
     this.peer.on('call', (call) => {
-      try {
-        this.getMedia();
-      } catch (e) {
-        this.handleError(e);
-      }
-      call.answer(this.myStream);
-      call.on('stream', (stream) => {
-        this.partnerEl.srcObject = stream;
-      });
+      this.comm.status = 2;
+      console.log('got call');
+      this.incomingCall = call;
     });
+  }
+
+  answerCall(){
+    navigator.getUserMedia({ audio: true, video: true }, (stream) => {
+      this.myStream = stream;
+      this.incomingCall.answer(this.myStream);
+      this.comm.status = 3;
+    }, (error) => {
+      this.handleError(error);
+    });
+
+    this.incomingCall.on('stream', (stream) => {
+      this.partnerEl.srcObject = stream;
+    });
+
   }
 
   handleSuccess(stream: MediaStream) {
     this.myStream = stream;
-    console.log(this.myStream);
-    this.myEl.srcObject = stream;
   }
 
   handleError(error: any) {
@@ -114,5 +120,11 @@ export class WebrtcService {
     if (typeof error !== 'undefined') {
       console.error(error);
     }
+  }
+
+  close(){
+    this.myStream.getTracks()[0].stop();
+    this.peer.disconnect();
+    this.comm.status = 0;
   }
 }

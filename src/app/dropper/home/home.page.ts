@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { google } from '@google/maps';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation ,GeolocationOptions ,Geoposition ,PositionError } from '@ionic-native/geolocation/ngx';
 import { ApiService } from '../../services/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+declare var google:any;
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomePage implements OnInit {
   shopInt:any;
   zoom = 12;
   radius:any;
+  address2:any = "Getting location. Please wait..";
   shopperReq:any = [];
   orderDets:any;
   subscription:any;
@@ -61,7 +63,7 @@ export class HomePage implements OnInit {
     };
     this.api.getShopperRequests(data)
     .then(resp => {
-      console.log(resp);
+      // console.log(resp);
       this.shopperReq = resp.shopperlist;
     })
     .catch(err => {
@@ -78,8 +80,10 @@ export class HomePage implements OnInit {
     };
     this.api.getOrderById(data)
     .then(resp => {
-      console.log(resp);
+      // console.log(resp);
       this.orderDets = resp[0];
+      this.orderDets.delivery_charge = parseFloat(this.orderDets.delivery_charge);
+      this.orderDets.total_amount = parseFloat(this.orderDets.total_amount);
       this.dropPop = 1;
       // this.shopperReq = resp.shopperlist;
     })
@@ -108,7 +112,7 @@ export class HomePage implements OnInit {
   requestGPSPermission() {
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if (canRequest) {
-        console.log("4");
+        // console.log("4");
       } else {
         //Show 'GPS Permission Request' dialogue
         this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
@@ -134,17 +138,45 @@ export class HomePage implements OnInit {
       error => alert('Error requesting location permissions ' + JSON.stringify(error))
     );
   }
+
+
+  centerChanged(event){
+    this.deflat = event.lat;
+    this.deflng = event.lng;
+  }
+
+
   setCenter(){
     this.geolocation.getCurrentPosition(this.options).then((resp) => {
       this.deflat = resp.coords.latitude;
       this.deflng = resp.coords.longitude;
     })
     .catch((error) => {
-      console.log('Error getting location', error);
+      // console.log('Error getting location', error);
     });;
   }
+
+  getAddress( lat: number, lng: number ) {
+      
+    console.log('Finding Address');
+      if (navigator.geolocation) {
+        let geocoder = new google.maps.Geocoder();
+        let latlng = new google.maps.LatLng(lat, lng);
+        let request = { 'location': latlng };
+        geocoder.geocode(request, (results, status) => {
+          if (status === google.maps.GeocoderStatus.OK) {
+            if (results != null) {
+              this.address2 = results[1].formatted_address;
+            } else {
+              // alert('No address available!');
+            }
+          }
+        });
+    }
+  }
+
   getLocation(){
-    console.log("getting location");
+    // console.log("getting location");
     this.options = {
         enableHighAccuracy : true
     };
@@ -157,14 +189,16 @@ export class HomePage implements OnInit {
       this.deflat = resp.coords.latitude;
       this.deflng = resp.coords.longitude;
       this.shopperAnimation = "BOUNCE";
-      console.log('abc');
+      // console.log('abc');
       this.showMap = 1;
+
       setTimeout(()=>{
         this.shopperAnimation = null;
       }, 2000);
+      this.getAddress(this.lat, this.lng);
       // console.log(resp.coords.latitude);
     }).catch((error) => {
-      console.log('Error getting location', error);
+      // console.log('Error getting location', error);
     });
 
 
@@ -174,7 +208,7 @@ export class HomePage implements OnInit {
     this.subscription = watch.subscribe((data) => {
       
 
-      console.log('getting location');
+      // console.log('getting location');
       if ("coords" in data) {
         // console.log(data.coords);
         this.lat = data.coords.latitude
@@ -184,9 +218,11 @@ export class HomePage implements OnInit {
           'lon': this.lng
         };
 
+        this.getAddress(this.lat, this.lng);
+
         now = new Date();
         if(lastUpdateTime && now.getTime() - lastUpdateTime.getTime() < minFrequency){
-          console.log("Ignoring position update");
+          // console.log("Ignoring position update");
           return;
         }
         lastUpdateTime = now;
@@ -212,7 +248,7 @@ export class HomePage implements OnInit {
 
       } else {
         // ruh roh we have a PositionError
-        console.log('error');
+        // console.log('error');
       }
 
   //   this.backgroundGeolocation.configure(this.config)
@@ -249,7 +285,7 @@ export class HomePage implements OnInit {
 
     this.api.acceptShopperOffer(data)
     .then(resp => {
-      console.log(resp);
+      // console.log(resp);
       this.router.navigate(['/dropper/start/'+resp.order_id]);
       // routerLink="/dropper/start"
     })

@@ -11,9 +11,9 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="neg-mar map-wrap">
-					<agm-map *ngIf="loadMap == 1" (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true">
+					<agm-map *ngIf="loadMap == 1" (mapReady)="mapReady($event)" (centerChange)="centerChanged($event)" [latitude]="maplat" [longitude]="maplng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true">
 						<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-				  		<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
+				  		<agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle>
 						<span *ngIf="showDroppers == 1">
 							<agm-marker [latitude]="dropper.lat" [longitude]="dropper.lon" *ngFor="let dropper of droppers" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
 						</span>
@@ -68,7 +68,7 @@
 							</div>
 							<div class="dets">
 								<span class="title">{{ dropper.first_name+' '+dropper.last_name }}</span>
-								<span class="sub">
+								<span class="sub" *ngIf="dropper.all_reviews.original[0].avg_rating > 0">
 									Very professional and hard..
 									<span class="see-more">See More</span>
 								</span>
