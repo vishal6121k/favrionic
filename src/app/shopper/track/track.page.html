@@ -30,7 +30,7 @@
 						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 3" class="rate-full"></span>
 						<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 4" class="rate-full"></span>
 					</div>
-					<div class="call">
+					<div class="call" (click)="call()">
 						<span class="call-icon">
 							<app-svg name="call"></app-svg>
 						</span>
@@ -134,7 +134,7 @@
 		</span>
 		<span class="name">
 			{{ orderDets.dropper.first_name }} {{ orderDets.dropper.last_name }}
-			<span class="call">
+			<span class="call" (click)="call()">
 				<span class="call-icon">
 					<app-svg name="call"></app-svg>
 				</span>
@@ -242,17 +242,17 @@
 	</div>
 	<div class="call-btns-wrap">
 		<div class="disc-btn" *ngIf="comm.status == 1">
-			<button>
+			<button (click)="disconnectCall()">
 				<i class="fas fa-phone"></i>
 			</button>
 		</div>
-		<div class="disc-btn" *ngIf="comm.status == 2" (click)="answerCall()">
-			<button>
+		<div class="disc-btn" *ngIf="comm.status == 2">
+			<button (click)="answerCall()">
 				<i class="fas fa-user"></i>
 			</button>
 		</div>
-		<div class="disc-btn" *ngIf="comm.status == 3" (click)="disconnectCall()">
-			<button>
+		<div class="disc-btn" *ngIf="comm.status == 3">
+			<button (click)="disconnectCall()">
 				<i class="fas fa-users"></i>
 			</button>
 		</div>
@@ -261,7 +261,7 @@
 	<div id="errorMsg"></div>
 	<div class=""></div>
 </div>
-<div class="temp-holder">
-	<video id="partnerVideo" #partnerVideo autoplay playsinline></video>
-	<video id="myVideo" #myVideo autoplay playsinline></video>
+<div class="temp-holder" [class.hidden]="!(comm.status > 0)">
+	<video id="partnerVideo" #partnerVideo autoplay="true" playsinline controls style="width: 50%;"></video>
+	<video id="myVideo" #myVideo playsinline autoplay="true" controls style="width: 50%;"></video>
 </div>

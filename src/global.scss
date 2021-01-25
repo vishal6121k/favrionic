@@ -1448,10 +1448,10 @@ hr{
 		}
 	}
 }
-// app-shopper, app-faqs, app-pages, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track, app-start, app-login, app-home, app-dropper, app-choose{
-// 	height: 100%;
-// 	width: 100%;
-// }
+app-shopper, app-faqs, app-pages, app-favr, app-orders, app-cart, app-profile, app-seldrop, app-track, app-start, app-login, app-home, app-dropper, app-choose{
+	height: 100%;
+	width: 100%;
+}
 .collapse-item-wrap{
 	display: block;
 	.title{
@@ -1657,10 +1657,11 @@ hr{
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	opacity: 0;
-	visibility: hidden;
+	pointer-events: none;
+	// opacity: 0;
+	// visibility: hidden;
 	right: 0;
-	height: 50%;z-index: 123456;
+	height: 100%;z-index: 123456;
 }
 .call-screen{
 	position: fixed;

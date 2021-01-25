@@ -109,7 +109,7 @@ export class TrackPage implements AfterViewInit {
   	ngAfterViewInit() {
 		this.route.params.subscribe(params => {
 			this.orderId = params['id'];
-			console.log(this.orderId);
+			// console.log(this.orderId);
 			this.getOrderDetails();
 			this.getMessages();
 			this.myEl = this.elRef.nativeElement.querySelector('#my-video');
@@ -117,7 +117,7 @@ export class TrackPage implements AfterViewInit {
 			this.firebase.onMessageReceived()
 			.subscribe(data => {
 				var messagebody = JSON.parse(data.message);
-				console.log(messagebody);
+				// console.log(messagebody);
 				if(messagebody.type == 'order_update' || messagebody.type == 'location_update'){
 			  		this.getOrderDetails();
 				}
@@ -140,7 +140,7 @@ export class TrackPage implements AfterViewInit {
 				this.init();
    				this.webrtc_enb = 1;
 	  		}
-	  		console.log(resp);
+	  		// console.log(resp);
 	  		this.orderDets = resp[0];
 	  		this.showPage = 1;
 	  		this.lat = parseFloat(resp[0].dropper.current_loc[0].lat);
@@ -193,7 +193,7 @@ export class TrackPage implements AfterViewInit {
 		};
 		this.api.updateItemStatus(data)
 		.then(resp => {
-	  		console.log(resp);
+	  		// console.log(resp);
 	  		this.getOrderDetails();
 		})
 		.catch(err => {
@@ -208,7 +208,7 @@ export class TrackPage implements AfterViewInit {
 		this.api.updateOrderStatus(status, data)
 		.then(resp => {
 	  		this.getOrderDetails();
-	  		console.log(resp);
+	  		// console.log(resp);
 		})
 		.catch(err => {
 
@@ -222,7 +222,7 @@ export class TrackPage implements AfterViewInit {
 		this.api.updateOrderStatus(6, data)
 		.then(resp => {
 	  		this.getOrderDetails();
-	  		console.log(resp);
+	  		// console.log(resp);
 		})
 		.catch(err => {
 
@@ -233,7 +233,7 @@ export class TrackPage implements AfterViewInit {
   		if(this.cancModel.cancel_type){
 			var data = this.cancModel;
 			data['order_id'] = this.orderId;
-			console.log(data);
+			// console.log(data);
 			this.api.cancelOrder(data)
 			.then(resp => {
 		  		if(rel == 1){
@@ -271,7 +271,7 @@ export class TrackPage implements AfterViewInit {
   	saveRating(){
 		var data = this.rateModel;
 		data['order_id'] = this.orderId;
-		console.log(data);
+		// console.log(data);
 		this.api.saveShopperRating(data)
 		.then(resp => {
 	  		this.router.navigate(['/dropper/home']);
@@ -290,13 +290,17 @@ export class TrackPage implements AfterViewInit {
   	call() {
   		this.showCallScreen = 1;
 		this.webRTC.call(this.partnerId);
-		console.log('callTo'+this.partnerId);
+		// console.log('callTo'+this.partnerId);
   	}
 
-  	answerCall(){
-  		this.webRTC.answerCall();
-  	}
+  answerCall(){
+    this.webRTC.answerCall();
+  }
 
+
+  disconnectCall(){
+    this.webRTC.close();
+  }
  //  	setTime() {
 	//   ++this.totalSeconds;
 	//   this.callSeconds = this.pad(this.totalSeconds % 60);
@@ -399,7 +403,7 @@ export class TrackPage implements AfterViewInit {
   	requestGPSPermission() {
 		this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 	  		if (canRequest) {
-				console.log("4");
+				// console.log("4");
 	  		} else {
 				//Show 'GPS Permission Request' dialogue
 				this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
@@ -425,7 +429,7 @@ export class TrackPage implements AfterViewInit {
 		});
   	}
   	getLocation(){
-		console.log("getting location");
+		// console.log("getting location");
 		this.options = {
 			enableHighAccuracy : true
 		};
@@ -444,14 +448,14 @@ export class TrackPage implements AfterViewInit {
 	  		// console.log(resp.coords.latitude);
 		})
 		.catch((error) => {
-	  		console.log('Error getting location', error);
+	  		// console.log('Error getting location', error);
 		});
 	
 		var now;
 
 		let watch = this.geolocation.watchPosition(this.options);
 		this.subscription = watch.subscribe((data) => {
-	  		console.log('getting location');
+	  		// console.log('getting location');
 	  		if ("coords" in data) {
 				// console.log(data.coords);
 				this.lat = data.coords.latitude;
@@ -463,7 +467,7 @@ export class TrackPage implements AfterViewInit {
 
 				now = new Date();
 				if(lastUpdateTime && now.getTime() - lastUpdateTime.getTime() < minFrequency){
-		  			console.log("Ignoring position update");
+		  			// console.log("Ignoring position update");
 		  			return;
 				}
 				lastUpdateTime = now;

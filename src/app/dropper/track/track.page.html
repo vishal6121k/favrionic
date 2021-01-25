@@ -238,7 +238,7 @@
 	</div>
 </div>
 <div class="overlay" [class.active]="cancPop == 1" (click)="cancPop = 0; cancPopCont = 0;"></div>
-<div *ngIf="showPage == 1" class="call-screen" [class.hidden]="!(showCallScreen == 1)">
+<div *ngIf="showPage == 1" class="call-screen" [class.hidden]="!(comm.status > 0)">
 	<div class="call-details">
 		<div class="dp">
 			<img src="assets/images/dp.jpg" />
@@ -247,14 +247,19 @@
 		<div class="call-time">{{ callMinutes }}:{{ callSeconds }}</div>
 	</div>
 	<div class="call-btns-wrap">
-		<div class="disc-btn" *ngIf="comm.status == 0">
-			<button>
+		<div class="disc-btn" *ngIf="comm.status == 1">
+			<button (click)="disconnectCall()">
 				<i class="fas fa-phone"></i>
 			</button>
 		</div>
-		<div class="disc-btn" *ngIf="comm.status == 1" (click)="answerCall()">
-			<button>
+		<div class="disc-btn" *ngIf="comm.status == 2">
+			<button (click)="answerCall()">
 				<i class="fas fa-user"></i>
+			</button>
+		</div>
+		<div class="disc-btn" *ngIf="comm.status == 3">
+			<button (click)="disconnectCall()">
+				<i class="fas fa-users"></i>
 			</button>
 		</div>
 	</div>
@@ -262,7 +267,7 @@
 	<div id="errorMsg"></div>
 	<div class=""></div>
 </div>
-<div class="temp-holder">
-	<video id="partnerVideo" #partnerVideo autoplay playsinline></video>
-	<video id="myVideo" #myVideo autoplay playsinline></video>
+<div class="temp-holder" [class.hidden]="!(comm.status > 0)">
+	<video id="partnerVideo" #partnerVideo autoplay="true" playsinline controls style="width: 50%;"></video>
+	<video id="myVideo" #myVideo playsinline autoplay="true" controls style="width: 50%;"></video>
 </div>

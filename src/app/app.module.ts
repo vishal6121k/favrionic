@@ -19,6 +19,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { StreamingMedia } from '@ionic-native/streaming-media/ngx';
 
 @Injectable()
 export class HammerConfig extends HammerGestureConfig {
@@ -49,6 +50,7 @@ export class HammerConfig extends HammerGestureConfig {
     LocationAccuracy,
     Diagnostic,
     FirebaseX,
+    StreamingMedia,
     BackgroundGeolocation,
     { 
       provide: RouteReuseStrategy, 

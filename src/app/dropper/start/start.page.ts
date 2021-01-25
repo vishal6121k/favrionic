@@ -76,7 +76,7 @@ export class StartPage implements OnInit {
         this.orderDets = resp[0];
         this.orderDets.total_amount = Math.round(this.orderDets.total_amount * 100) / 100;
         if(this.orderDets.status > 1){
-          if(this.orderDets.dropper_me == 1){
+          if(this.orderDets.status == 2 && this.orderDets.dropper_me == 1){
             // alert('Me Dropper');
             clearTimeout(this.countTime);
             this.router.navigate(['/dropper/track/'+this.orderDets.id]);

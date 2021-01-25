@@ -83,6 +83,9 @@
     },
     "cordova-plugin-audiotoggle": {
       "PACKAGE_NAME": "com.favr.favr"
+    },
+    "cordova-plugin-streaming-media": {
+      "PACKAGE_NAME": "com.favr.favr"
     }
   },
   "dependent_plugins": {
