@@ -6,11 +6,15 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './orders.page.html',
   styleUrls: ['./orders.page.scss'],
 })
-export class OrdersPage implements OnInit {
+export class OrdersPage {
 	orders:any;
   constructor(private api:ApiService) { }
 
-  ngOnInit() {
+  ionViewWillEnter(){
+    this.orders = [];
+  }
+  
+  ionViewDidEnter() {
   	this.getAllOrder();
   }
 

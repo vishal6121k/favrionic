@@ -82,14 +82,16 @@
 	z-index: 1234;
 	padding: 30px;
 	background-color: #FFF;
-	transform: translateY(120%);
+	transform: translateY(101%);
 	opacity: 0;
-	visibility: hidden;
-	transition: all 0.3s linear;
+	pointer-events: none;
+	// visibility: hidden;
+	transition: all 0.1s linear;
 	&.active{
+		pointer-events: unset;
 		transform: translateY(0);
 		opacity: 1;
-		visibility: visible;
+		// visibility: visible;
 	}
 }
 

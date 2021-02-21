@@ -1,9 +1,19 @@
+
+<div class="splash" *ngIf="splashEnd > -1">
+	<img src="assets/images/splash.gif" />
+</div>
+
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
-<div class="splash" [class.splashHide]="splashEnd > -1">
-	<img src="assets/images/splash.gif" />
-	<!-- <video autoplay muted preload="metadata" webkit-playsinline="webkit-playsinline">
-		<source src="assets/videos/splash.mp4"/>
-	</video> -->
+
+<div class="internal-notify" id="intNotify">
+	<span class="internal-notify-in" id="intNotePrimLink">
+		<h4 id="innoteTitle"></h4>
+		<p id="innoteContent"></p>
+	</span>
+	<a id="intNoteEndLink" class="internal-notify-btn">&times;</a>
+	<!-- <div class="innote-btn-wrap">
+		<a id="intNotePrimLink" class="btn1">View</a>
+	</div> -->
 </div>

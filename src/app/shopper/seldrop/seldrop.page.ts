@@ -1,14 +1,16 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { RangeValue } from '@ionic/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { NotifyService } from '../../services/notify.service';
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+
 @Component({
   selector: 'app-seldrop',
   templateUrl: './seldrop.page.html',
   styleUrls: ['./seldrop.page.scss'],
 })
-export class SeldropPage implements OnInit {
+export class SeldropPage implements OnDestroy {
 
 	defDist:any = 5;
   orderId:any;
@@ -19,6 +21,7 @@ export class SeldropPage implements OnInit {
   maplng:any;
   radius:RangeValue = 5000;
   zoom:any = 12;
+  ordTim:any;
   loadMap:any = 0;
   map:any;
   radChangEvent:any;
@@ -28,10 +31,19 @@ export class SeldropPage implements OnInit {
   dropperPopInfo:any = {};
   infoPop:any = 0;
   showCircle:any = 0;
+  site_config:any;
+  ProdImgUrl:any = "http://admin.favr.ie/uploads/";
   constructor(private router: Router, private route: ActivatedRoute, 
-    private api: ApiService,private firebase: FirebaseX, private _ngZone: NgZone) {}
+    private api: ApiService, private notify: NotifyService,
+    private firebase: FirebaseX, 
+    private _ngZone: NgZone) {
+    
+  }
 
-  ngOnInit() {
+  ionViewDidEnter() {
+    this.site_config = JSON.parse(window.localStorage.getItem('config'));
+    this.radius = this.site_config.def_min_shop_radius;
+    this.infoPop = 0;
     this.route.params.subscribe(params => {
         this.orderId = params['id'];
         console.log(this.orderId);
@@ -41,6 +53,12 @@ export class SeldropPage implements OnInit {
           .subscribe(data => {
             var messagebody = JSON.parse(data.message);
             console.log(messagebody);
+            if(data.tap != undefined && !(window.location.pathname == '/'+messagebody.action_url)){
+              this.router.navigate(['/'+messagebody.action_url]);
+            }
+            else if(data.tap == undefined && !(window.location.pathname == '/'+messagebody.action_url)){
+              this.notify.notify(data);
+            }
             if(messagebody.type == 'offer_update'){
               console.log('dropperList update');
               this._ngZone.run(() => {
@@ -48,9 +66,9 @@ export class SeldropPage implements OnInit {
               })
             }
         });
-        // setInterval(()=>{
-        //   this.getDroppersList();
-        // }, 10000)
+        // this.ordTim = setInterval(()=>{
+        //   this.getOrderDets();
+        // }, 60000)
         // this.initialiseState(); // reset and set based on new parameter this time
     });
   }
@@ -63,6 +81,11 @@ export class SeldropPage implements OnInit {
     .then( resp => {
        console.log(resp);
        this.orderDets = resp[0];
+       if(resp[0].status == -1){
+          alert('No shopper accepted the order. Delivery time reached. Order has been cancelled.');
+          clearInterval(this.ordTim);
+          this.router.navigate(['/shopper/home']);
+       }
        this.lat = parseFloat(resp[0].delivery_lat);
        this.maplat = parseFloat(resp[0].delivery_lat);
        this.lng = parseFloat(resp[0].delivery_lon);
@@ -76,15 +99,15 @@ export class SeldropPage implements OnInit {
   }
 
   centerChanged(event){
-    this.maplat = event.lat;
-    this.maplng = event.lng;
-    console.log(event);
+    // this.maplat = event.lat;
+    // this.maplng = event.lng;
+    // console.log(event);
   }
 
   centerMap(){
     this.maplat = parseFloat(this.orderDets.delivery_lat);
     this.maplng = parseFloat(this.orderDets.delivery_lon);
-    // this.map._setCenter()
+    this.map.panTo({ 'lat': this.maplat, 'lng': this.maplng });
 
   }
 
@@ -130,13 +153,19 @@ export class SeldropPage implements OnInit {
 
     this.api.getAcceptedDroppers(data)
     .then( resp => {
-      this.droppers = resp;
-      if(resp.length ){
-        console.log(this.droppers);
-        this.showDroppers = 1;
+      if(resp.status == 0){
+        alert('No shopper accepted the order. Delivery time reached. Orderhas been cancelled.');
+        this.router.navigate(['/shopper/home']);
       }
       else{
-        this.showDroppers = 0
+        this.droppers = resp.response;
+        if(resp.length ){
+          console.log(this.droppers);
+          this.showDroppers = 1;
+        }
+        else{
+          this.showDroppers = 0
+        }
       }
     })
     .catch( err => {
@@ -165,9 +194,22 @@ export class SeldropPage implements OnInit {
       'avg_rating': dropper.all_reviews.original[0].avg_rating,
       'all_ratings': dropper.all_reviews.original[0].all_ratings,
       'first_name': dropper.first_name,
-      'last_name': dropper.last_name
+      'last_name': dropper.last_name,
+      'image_url': dropper.image_url,
     };
     this.infoPop = 1;
+  }
+
+  ionViewWillLeave(){
+    // alert('unsub');
+    // this.subscription.unsubscribe();
+    clearInterval(this.ordTim);
+  }
+
+  ngOnDestroy(){
+    // alert('unsub');
+    // this.subscription.unsubscribe();
+    clearInterval(this.ordTim);
   }
 
 

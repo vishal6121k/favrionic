@@ -8,11 +8,17 @@
 				</span>
 			</div>
 			<div [class.col-12]="!(showSearch == 1)" [class.col-11]="showSearch == 1">
-				<div class="search-box">
+				<div class="search-box" *ngIf="showSearch == 0" routerLink="/shopper/home/search">
 					<span class="icon">
 						<app-svg name="search"></app-svg>
 					</span>
-					<input type="text" name="search_query" (focus)="showSearch = 1" [(ngModel)]="search_query" (input)="search()" placeholder="Search for product or ask for something different" />
+					<div class="input">Search for product or ask for something different</div>
+				</div>
+				<div class="search-box" *ngIf="showSearch == 1">
+					<span class="icon">
+						<app-svg name="search"></app-svg>
+					</span>
+					<input type="text" autofocus name="search_query" [(ngModel)]="search_query" (input)="search()" placeholder="Search for product or ask for something different" />
 				</div>
 			</div>
 		</div>

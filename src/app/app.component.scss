@@ -5,18 +5,22 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	z-index: 123456434253;
 	opacity: 1;
-	visibility: visible;
-	transition: all 0.3s linear;
+	pointer-events: unset;
+	// visibility: visible;
+	// transition: all 0.3s linear;
 	&.splashHide{
 		opacity: 0;
-		visibility: hidden;
+		pointer-events: none;
+		// visibility: hidden;
 	}
 	img, video{
 		position: absolute;
 	    bottom: 0;
-	    /* transform: translateY(-50%); */
+	    // transform: translateY(-50%);
 	    left: 0;
+	    height: 100%;
 	    width: 100%;
 	}
 }

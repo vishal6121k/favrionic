@@ -9,9 +9,9 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
 
-import { LoccartComponent } from '../shopper/loccart/loccart.component';
+// import { LoccartComponent } from '../shopper/loccart/loccart.component';
 
-import { LoccarttComponent } from '../dropper/loccartt/loccartt.component';
+// import { LoccarttComponent } from '../dropper/loccartt/loccartt.component';
 
 @NgModule({
   imports: [
@@ -21,6 +21,6 @@ import { LoccarttComponent } from '../dropper/loccartt/loccartt.component';
     IconModule,
     ProfilePageRoutingModule
   ],
-  declarations: [ProfilePage, LoccartComponent, LoccarttComponent]
+  declarations: [ProfilePage]
 })
 export class ProfilePageModule {}

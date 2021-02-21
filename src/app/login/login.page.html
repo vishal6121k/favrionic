@@ -78,7 +78,7 @@
         			</div>
         			<!-- <div class="or-text">OR</div> -->
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6" [class.col-12]="!(redLogin == 0)">
                             <div class="form-row mb-20">
                                 <button type="button" class="btn btn-full brdr" (click)="signupPop = 1">Sign Up</button>
                             </div>
@@ -97,22 +97,52 @@
     </div>
     <div class="overlay" [class.active]="signupPop == 1 || forgPop == 1" (click)="signupPop = 0; forgPop = 0;"></div>
     <div class="signup-popup" [class.active]="forgPop == 1">
-        <form (submit)="forgPw()">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-row">
-                        <input type="email" placeholder=" " class="form-control" [(ngModel)]="forgModel.email" name="email" value="" />
-                        <label>Email</label>
-                        <span class="line"></span>
+        <div *ngIf="passResetBlock == 0">
+            <form (submit)="forgPw()">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-row">
+                            <input type="email" placeholder=" " class="form-control" [(ngModel)]="forgModel.email" name="email" value="" />
+                            <label>Email</label>
+                            <span class="line"></span>
+                        </div>
+                    </div>
+                    <div class="col-10 offset-1">
+                        <div class="form-row">
+                            <button type="submit" class="btn btn-full btn-primary">Send Password</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-10 offset-1">
-                    <div class="form-row">
-                        <button type="submit" class="btn btn-full btn-primary">Send Password</button>
+            </form>
+        </div>
+        <div *ngIf="passResetBlock == 1">
+            <form (submit)="resetPass()">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-row">
+                            <input type="password" placeholder=" " class="form-control" [(ngModel)]="resModel.password" name="password" value="" />
+                            <label>Password sent to mail</label>
+                            <span class="line"></span>
+                        </div>
+                        <div class="form-row">
+                            <input type="password" placeholder=" " class="form-control" [(ngModel)]="resModel.new_password" name="new_password" value="" />
+                            <label>New Password</label>
+                            <span class="line"></span>
+                        </div>
+                        <div class="form-row">
+                            <input type="password" placeholder=" " class="form-control" [(ngModel)]="resModel.re_password" name="re_password" value="" />
+                            <label>Re-enter new password</label>
+                            <span class="line"></span>
+                        </div>
+                    </div>
+                    <div class="col-10 offset-1">
+                        <div class="form-row">
+                            <button type="submit" class="btn btn-full btn-primary">Send Password</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
     <div class="signup-popup" [class.active]="signupPop == 1">
         <form (submit)="signupUser()">

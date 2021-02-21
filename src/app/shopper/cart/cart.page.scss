@@ -86,12 +86,14 @@
 	background-color: #FFF;
 	overflow: auto;
 	transform: translateY(120%);
-	visibility: hidden;
+	// visibility: hidden;
 	opacity: 0;
-	transition: all 0.3s linear;
+	pointer-events: none;
+	transition: all 0.1s ease-in-out;
 	&.active{
-		visibility: visible;
+		// visibility: visible;
 		opacity: 1;
+		pointer-events: unset;
 		transform: translateY(0);
 	}
 	.content{
@@ -125,14 +127,16 @@
 	padding-bottom: 20px;
 	overflow: auto;
 	transform: translateY(120%);
-	visibility: hidden;
+	// visibility: hidden;
+	pointer-events: none;
 	opacity: 0;
 	border-top-left-radius: 20px;
 	border-top-right-radius: 20px;
 	box-shadow: 0px -5px 10px rgba(0,0,0,0.15);
 	transition: all 0.3s linear;
 	&.active{
-		visibility: visible;
+		// visibility: visible;
+		pointer-events: unset;
 		opacity: 1;
 		transform: translateY(0);
 	}

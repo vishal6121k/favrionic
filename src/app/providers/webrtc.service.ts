@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import Peer from 'peerjs';
 import { StreamingMedia, StreamingVideoOptions } from '@ionic-native/streaming-media/ngx';
-
+// import { NativeRingtones } from '@ionic-native/native-ringtones/ngx';
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+declare var AudioToggle:any;
 export interface Comm {
    status:any;
 }
@@ -11,6 +14,7 @@ export interface Comm {
 })
 export class WebrtcService {
   peer: Peer;
+  userId:any;
   myStream: MediaStream;
   remoteStream: MediaStream;
   myEl: HTMLMediaElement;
@@ -22,12 +26,44 @@ export class WebrtcService {
   stunServer: RTCIceServer = {
     urls: 'stun:' + this.stun,
   };
-  incomingCall:any;
+  incomingCall:any = "";
+  outgoingCall:any = "";
+  ringtone:any;
+  dataConn:any;
+
+  inited:any = "";
 
   comm:Comm = { status : 0 };
 
-  constructor() {
+  constructor(private nativeAudio: NativeAudio,
+    private backgroundMode: BackgroundMode) {
+    this.nativeAudio.preloadComplex('231321321312', 'assets/sounds/ring.mp3', 1, 1, 0).then(resp => {
+    } , err => {console.log(err);});
+    this.nativeAudio.preloadComplex('231321321311', 'assets/sounds/call.mp3', 1, 1, 0).then(resp => {
+    } , err => {console.log(err);});
+    // this.nativeAudio.loop('uniqueId1').then(resp => {} , err => {console.log(err);});
+    // this.ringtones.getRingtone().then((ringtones) => { 
+    //   console.log(ringtones);
 
+    // this.ringtones.playRingtone('android_asset/www/assets/sounds/ring.mp3')
+    // .then(success => {
+    //   console.log(success);
+    // })
+    // .catch(err => {
+    //   console.log(err);
+    // });
+
+    // });
+
+    // this.ringtones.getRingtone( ringtones => {
+    //   this.ringtone = ringtones[1].Url; console.log(ringtones); 
+
+    // },
+    // err => { 
+
+    //   alert(err);
+
+    // }, "notification");
     this.options = {  // not used, by default it'll use peerjs server
       debug: 3,
       config: { 'iceServers': [
@@ -41,32 +77,27 @@ export class WebrtcService {
     };
   }
 
-  // getMedia() {
-  //   navigator.getUserMedia({ audio: true, video: true }, (stream) => {
-  //     alert('got media');
-  //     this.handleSuccess(stream);
-  //   }, (error) => {
-  //     this.handleError(error);
-  //   });
-  // }
-
   async init(userId:any, myEl: HTMLMediaElement, partnerEl: HTMLMediaElement) {
+    this.userId = userId;
     this.myEl = myEl;
     this.partnerEl = partnerEl;
     console.log(this.partnerEl);
+
+    AudioToggle.setAudioMode(AudioToggle.SPEAKER);
     await this.createPeer('Favr'+userId);
   }
 
   async createPeer(userId:any) {
-    console.log('init user '+userId);
-    this.peer = new Peer(userId, this.options);
-    this.peer.on('open', () => {
-      this.wait();
-    });
+      console.log('init user '+userId);
+      this.peer = new Peer(userId, this.options);
+      this.peer.on('open', () => {
+        this.wait();
+      });
   }
 
   call(partnerId: string) {
     console.log(partnerId);
+      this.comm.status = 1;
     navigator.getUserMedia({ audio: true, video: false }, (stream) => {
       
       // alert('got media');
@@ -74,15 +105,27 @@ export class WebrtcService {
       console.log(this.myStream);
       // this.myEl.srcObject = stream;
       // this.myEl.play();
-      this.comm.status = 1;
       // Initiate call
-      const call = this.peer.call('Favr'+partnerId, this.myStream);
+      var call = this.peer.call('Favr'+partnerId, this.myStream);
+      this.outgoingCall = call;
+      AudioToggle.setAudioMode(AudioToggle.EARPIECE);
+      this.nativeAudio.loop('231321321311');
       // When answered
+      // this.dataConn = this.peer.connect('Favr'+partnerId);
+      // this.dataConn.on('data', (data) => {
+      //   console.log('Received', data);
+      //   if(data == 0){
+      //     this.close(1);
+      //   }
+      // });
       call.on('stream', (instream) => {
+        this.nativeAudio.stop('231321321311');
         console.log('got caller remote stream');
         this.remoteStream = instream;
         this.partnerEl.srcObject = this.remoteStream;
+        this.comm.status = 3;
       });
+
     }, (error) => {
       this.handleError(error);
     });
@@ -90,63 +133,63 @@ export class WebrtcService {
 
   wait() {
     console.log('waiting for incoming');
+    // this.peer.on('connection', (conn) => {
+    //   this.dataConn = conn;
+    //   this.dataConn.on('data', (data) => {
+    //     console.log('Received some data', data);
+    //     console.log('Received', data);
+    //     if(data == 0){
+    //       this.close(1);
+    //     }
+    //   });
+    // });
     this.peer.on('call', (call) => {
+      AudioToggle.setAudioMode(AudioToggle.RINGTONE);
+      // Turn screen on and show app even locked
+      this.backgroundMode.isScreenOff((bool) => {
+        if(bool == true){
+          this.backgroundMode.unlock();
+          this.backgroundMode.wakeUp();
+        }
+        if(this.backgroundMode.isActive()){
+          this.backgroundMode.moveToForeground();
+        }
+      });
+      this.nativeAudio.loop('231321321312');
       console.log('got call');
-      // this.incomingCall = call;
-      if(confirm('Answer this Call?')){
-        navigator.getUserMedia({ audio: true, video: false }, (stream) => {
-          
-          this.comm.status = 3;
-          // alert('got media');
-          this.myStream = stream;
-          // this.myEl.srcObject = this.myStream;
-          //     this.myEl.play();
+      this.incomingCall = call;
+      this.comm.status = 2;
+    });
+    // this.peer.on('close', () => {
+    //   console.log('peer closed');
+    //   this.close();
+    // });
+  }
 
-          call.answer(this.myStream);
-          // call.peerConnection.addEventListener('addstream', (e: any) => {
-          //       this.partnerEl.srcObject = e.stream;
-          // });
+  answerCall(){
+    this.nativeAudio.stop('231321321312');
+        navigator.getUserMedia({ audio: true, video: false }, (stream) => {
+          this.comm.status = 3;
+          this.myStream = stream;
+          this.incomingCall.answer(this.myStream);
           let id;
-          call.on('error', (error) => {
+          this.incomingCall.on('error', (error) => {
             console.log(error);
-          })
-          call.on('stream', (stream) => {
+          });
+
+          this.incomingCall.on('stream', (stream) => {
+            AudioToggle.setAudioMode(AudioToggle.EARPIECE);
             if (id != stream.id) {
               console.log(this.partnerEl);
               id = stream.id;
               this.remoteStream = stream;
-              // console.log(stream);
               this.partnerEl.srcObject = this.remoteStream;
-              // this.partnerEl.play();
             }
-            // this.partnerEl.src = URL.createObjectURL(stream);
-            // this.partnerEl.play();
-            // setTimeout(()=>{
-            //   this.partnerEl.play();
-            // }, 1000);
             
           });
         }, (error) => {
           this.handleError(error);
         });
-      }
-      // this.comm.status = 2;
-    });
-  }
-
-  answerCall(){
-    navigator.getUserMedia({ audio: true, video: false }, (stream) => {
-      this.myStream = stream;
-      this.myEl.srcObject = stream;
-      this.incomingCall.answer(this.myStream);
-      this.incomingCall.on('stream', (stream) => {
-        console.log('remote stream');
-        this.partnerEl.srcObject = stream;
-      });
-      this.comm.status = 3;
-    }, (error) => {
-      this.handleError(error);
-    });
   }
 
   handleSuccess(stream: MediaStream) {
@@ -174,10 +217,28 @@ export class WebrtcService {
     }
   }
 
-  close(){
-    // this.myStream.getTracks()[0].stop();
-    this.myStream.getTracks().forEach(track => track.stop())
-    // this.peer.disconnect();
+  close(send = 0){
     this.comm.status = 0;
+    // if(send == 0){
+    //   console.log('closed');
+    //   // this.dataConn.send(0);
+    // }
+    // this.dataConn.close();
+    // this.myStream.getTracks()[0].stop();
+    this.peer.disconnect();
+    // if(!(this.outgoingCall == "")){
+      // this.outgoingCall.close();
+    // }
+    // if(!(this.incomingCall == "")){
+      // this.incomingCall.close();
+    // }
+
+    if(this.myStream)
+      this.myStream.getTracks().forEach(track => track.stop())
+    if(this.remoteStream && this.remoteStream.getTracks())
+      this.remoteStream.getTracks().forEach(track => track.stop())
+    this.init(this.userId, this.myEl, this.partnerEl);
+    this.nativeAudio.stop('231321321312');
+    this.nativeAudio.stop('231321321311');
   }
 }

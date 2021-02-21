@@ -7,7 +7,7 @@ import { Stripe } from '@ionic-native/stripe/ngx';
   templateUrl: './favr.page.html',
   styleUrls: ['./favr.page.scss'],
 })
-export class FavrPage implements OnInit {
+export class FavrPage {
 
 	priceSlideOpts:any = {
 		slidesPerView: 3,
@@ -27,11 +27,15 @@ export class FavrPage implements OnInit {
     cardModel:any = {};
     payMsg:any = "";
     payPopOpen:any = 0;
+    infoPopOpen:any=0;
     favTrans:any;
     date_disp:any;
   	constructor(private api:ApiService, private stripe: Stripe) { }
 
-  	ngOnInit() {
+    ionViewDidEnter() {
+      this.payPopOpen = 0;
+      this.buyFavrPop = 0;
+      this.favrHistPop = 0;
       this.config = JSON.parse(window.localStorage.getItem('config'));
       this.getUserDetails();
       this.getAllPlans();
@@ -83,6 +87,7 @@ export class FavrPage implements OnInit {
               // alert('Added Credit');
               this.payMsg = "Payment Successful. Updating Favr Balance.";
               this.getUserDetails();
+              this.getFavrTransacList();
               setTimeout(()=>{
                 this.payPopOpen = 0;
               }, 2000);

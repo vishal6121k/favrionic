@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './dropper.page.html',
   styleUrls: ['./dropper.page.scss'],
 })
-export class DropperPage implements OnInit {
+export class DropperPage {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

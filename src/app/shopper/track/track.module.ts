@@ -7,6 +7,8 @@ import { IconModule } from '../../icon/icon.module';
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 
+
+
 import { TrackPageRoutingModule } from './track-routing.module';
 
 import { TrackPage } from './track.page';
@@ -17,11 +19,11 @@ import { TrackPage } from './track.page';
     FormsModule,
     IonicModule,
     IconModule,
+    TrackPageRoutingModule,
     AgmCoreModule.forRoot({
         apiKey: "AIzaSyC7RAT2MhwmKUqs2kEWuQjmka65lv6dYxY" + '&libraries=visualization'
     }),
-    AgmDirectionModule,
-    TrackPageRoutingModule
+    AgmDirectionModule
   ],
   declarations: [TrackPage]
 })

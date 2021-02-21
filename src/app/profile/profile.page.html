@@ -1,6 +1,6 @@
 <ion-content>
-	<app-loccart *ngIf="user_type == 2" show="2"></app-loccart>
-	<app-loccartt *ngIf="user_type == 3" show="2"></app-loccartt>
+	<app-loccart #loccart *ngIf="showPage == 1 && user_type == 2" show="2"></app-loccart>
+	<app-loccartt #loccartt *ngIf="showPage == 1 && user_type == 3" show="2"></app-loccartt>
 	<div *ngIf="showPage == 1" class="profile-head align-center">
 		<div class="row">
 			<div class="col-12 text-center">
@@ -8,7 +8,10 @@
 					<div class="col-6 offset-3">
 						<div class="img">
 							<span class="img-in">
-								<img src="assets/images/dp.jpg" />
+								<input type="file" class="hidden" name="dp" #userfile id="userfileInp" (change)="onDpChange(userfile.files)" />
+						 		<label for="userfileInp" class="edit-icon"><i class="fas fa-edit"></i></label>
+								<img *ngIf="userDets.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+								<img *ngIf="!(userDets.image_url == null)" src="{{ ProdImgUrl }}/users/{{ userDets.image_url }}" id="userDp" />
 								<div *ngIf="user_type == 2" class="type">Shopper</div>
 								<div *ngIf="user_type == 3" class="type">Dropper</div>
 							</span>
@@ -18,16 +21,53 @@
 			</div>
 			<div class="col-12 text-center">
 				<div class="dets">
-					<h1>{{ userDets.first_name }} {{ userDets.last_name }}</h1>
-					<p>{{ userDets.email }}</p>
-					<p>{{ userDets.phone_no }}</p>
+					<h1>
+						<span *ngIf="editName == 1" contenteditable="true" [textContent]="userDets.first_name" (input)="userDets.first_name=$event.target.textContent"></span>
+						
+						<span *ngIf="editName == 1" contenteditable="true" [textContent]="userDets.last_name" (input)="userDets.last_name=$event.target.textContent"></span>
+
+						<span *ngIf="editName == 0">{{ userDets.first_name }} {{ userDets.last_name }}</span>
+						<span *ngIf="editName == 0" (click)="editName = 1" class="edit-icon"><i class="fas fa-edit"></i></span>
+						<span *ngIf="editName == 1" (click)="updateUser()" class="edit-icon"><i class="fas fa-arrow-right"></i></span>
+					</h1>
+					<p>
+						<span *ngIf="editEmail == 1" contenteditable="true" [textContent]="userDets.email" (input)="userDets.email=$event.target.textContent"></span>
+						<span *ngIf="editEmail == 0">{{ userDets.email }}</span>
+						<!-- <span *ngIf="editEmail == 0" (click)="editEmail = 1" class="edit-icon"><i class="fas fa-edit"></i></span> -->
+						<span *ngIf="editEmail == 1" (click)="editEmail = 0" class="edit-icon"><i class="fas fa-arrow-right"></i></span>
+					</p>
+					<p>
+						<span *ngIf="editPhone == 1" contenteditable="true" [textContent]="userDets.phone_no" (input)="userDets.phone_no=$event.target.textContent"></span>
+						<span *ngIf="editPhone == 0">{{ userDets.phone_no }}</span>
+						<!-- <span *ngIf="editPhone == 0" (click)="editPhone = 1" class="edit-icon"><i class="fas fa-edit"></i></span> -->
+						<span *ngIf="editPhone == 1" (click)="editPhone = 0" class="edit-icon"><i class="fas fa-arrow-right"></i></span>
+					</p>
+					<!-- <p>{{ userDets.phone_no }} <span class="edit-icon"><i class="fas fa-edit"></i></span></p> -->
 				</div>
 			</div>
 		</div>
 	</div>
 	<ul *ngIf="showPage == 1" class="profile-menu">
+		<li>
+			<span href="#">
+				<div class="head">
+					<span class="icon">
+						<app-svg name="profile"></app-svg>
+					</span>
+					<span class="text">
+						Switch profile
+						<span class="profile-switcher" (click)="changeUserRole()">
+							<span class="switch-btn" [class.drop]="user_type == 3">
+								<span *ngIf="user_type==2">Shopper</span>
+								<span *ngIf="user_type==3">Dropper</span>
+							</span>
+						</span>
+					</span>
+				</div>
+			</span>
+		</li>
 		<li *ngIf="user_type == 2">
-			<a href="#">
+			<a routerLink="/saved" href="#">
 				<div class="head">
 					<span class="icon">
 						<app-svg name="star"></app-svg>
@@ -90,24 +130,6 @@
 			</a>
 		</li>
 		<li>
-			<span href="#">
-				<div class="head">
-					<span class="icon">
-						<app-svg name="profile"></app-svg>
-					</span>
-					<span class="text">
-						Switch profile
-						<span class="profile-switcher" (click)="changeUserRole()">
-							<span class="switch-btn" [class.drop]="user_type == 3">
-								<span *ngIf="user_type==2">Shopper</span>
-								<span *ngIf="user_type==3">Dropper</span>
-							</span>
-						</span>
-					</span>
-				</div>
-			</span>
-		</li>
-		<li>
 			<a (click)="logoutUser()">
 				<div class="head">
 					<span class="icon">
@@ -140,8 +162,8 @@
 		<div *ngFor="let message of messages | keyvalue">
 			<div class="chat-text" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">
 				<span class="bubble" [class.to]="message.value.to == 'admin'" [class.from]="!(message.value.to == 'admin')">
-					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="file-wrap">
-						<img src="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
+					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="file-wrap">
+						<img src="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
 					</a>
 					<span *ngIf="message.value.message != 'undefined'">{{ message.value.message }}</span>
 				</span>

@@ -20,6 +20,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { StreamingMedia } from '@ionic-native/streaming-media/ngx';
+import { NativeRingtones } from '@ionic-native/native-ringtones/ngx';
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class HammerConfig extends HammerGestureConfig {
@@ -37,6 +43,8 @@ export class HammerConfig extends HammerGestureConfig {
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
     AppRoutingModule
   ],
   providers: [
@@ -51,7 +59,11 @@ export class HammerConfig extends HammerGestureConfig {
     Diagnostic,
     FirebaseX,
     StreamingMedia,
+    NativeRingtones,
+    NativeAudio,
+    AngularFireDatabase,
     BackgroundGeolocation,
+    BackgroundMode,
     { 
       provide: RouteReuseStrategy, 
       useClass: IonicRouteStrategy

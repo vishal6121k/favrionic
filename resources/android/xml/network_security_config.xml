@@ -2,6 +2,10 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">localhost:8000</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">127.0.0.1:8000</domain>
         <domain includeSubdomains="true">coderpanda.tk</domain>
+        <domain includeSubdomains="true">favr.ie</domain>
     </domain-config>
 </network-security-config>

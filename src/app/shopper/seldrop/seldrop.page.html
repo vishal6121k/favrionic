@@ -7,11 +7,11 @@
 		<!-- <span class="page-title-btn">+ Add More</span> -->
 	</div>
 	<p class="page-subtitle">Please wait while nearby Droppers accept your requests
-	<div class="container-fluid">
+	<div class="container-fluid" *ngIf="loadMap == 1">
 		<div class="row">
 			<div class="col-12">
 				<div class="neg-mar map-wrap">
-					<agm-map *ngIf="loadMap == 1" (mapReady)="mapReady($event)" (centerChange)="centerChanged($event)" [latitude]="maplat" [longitude]="maplng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true">
+					<agm-map (mapReady)="mapReady($event)" [latitude]="maplat" [longitude]="maplng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true">
 						<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
 				  		<agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle>
 						<span *ngIf="showDroppers == 1">
@@ -36,27 +36,26 @@
 						<span class="value">{{ defDist }} Km</span>
 					</div>
 					<div class="range-slider">
-						<ion-range min="5" max="30" [value]="defDist" (ionChange)="changeDist($event)"></ion-range>
+						<ion-range min="{{ site_config.def_min_shop_radius }}" max="{{ site_config.def_max_shop_radius }}" [value]="defDist" (ionChange)="changeDist($event)"></ion-range>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div *ngIf="!droppers.length" class="row">
+		<div class="row">
+			<div class="col-12">
+				<h5 class="norm-title">Available Droppers</h5>
+				<p class="norm-sub">Choose one from below</p>
+			</div>
+		</div>
+		<div class="row" *ngIf="!droppers.length">
 			<div class="dot-loader">
 			  	<div class='dot'></div>
 			  	<div class='dot'></div>
 			  	<div class='dot'></div>
 			  	<div class='dot'></div>
 			</div>
-			<div class="col-12 text-center">
-				Looking for droppers
-			</div>
 		</div>
 		<div class="row" *ngIf="droppers.length">
-			<div class="col-12">
-				<h5 class="norm-title">Available Droppers</h5>
-				<p class="norm-sub">Choose one from below</p>
-			</div>
 			<div class="col-12">
 				<div class="row">
 					<div class="col-12">
@@ -64,12 +63,14 @@
 							<div class="img">
 								<div class="img-in">
 									<img src="assets/images/dp.jpg" />
+									<img *ngIf="dropper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+									<img *ngIf="!(dropper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ dropper.image_url }}" id="userDp" />
 								</div>
 							</div>
 							<div class="dets">
 								<span class="title">{{ dropper.first_name+' '+dropper.last_name }}</span>
-								<span class="sub" *ngIf="dropper.all_reviews.original[0].avg_rating > 0">
-									Very professional and hard..
+								<span class="sub with-btn" *ngIf="dropper.all_reviews.original[0].avg_rating > 0">
+									{{ dropper.all_reviews.original[0].all_ratings[0].comment }}
 									<span class="see-more">See More</span>
 								</span>
 							</div>
@@ -106,7 +107,9 @@
 	<div class="dropper-thumb">
 		<div class="img">
 			<div class="img-in">
-				<img src="assets/images/dp.jpg" />
+				<!-- <img src="assets/images/dp.jpg" /> -->
+				<img *ngIf="dropperPopInfo.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+				<img *ngIf="!(dropperPopInfo.image_url == null)" src="{{ ProdImgUrl }}/users/{{ dropperPopInfo.image_url }}" id="userDp" />
 			</div>
 		</div>
 		<div class="dets">

@@ -6,7 +6,7 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './favr.page.html',
   styleUrls: ['./favr.page.scss'],
 })
-export class FavrPage implements OnInit {
+export class FavrPage {
 
 	priceSlideOpts:any = {
 		slidesPerView: 3,
@@ -20,12 +20,14 @@ export class FavrPage implements OnInit {
     favTrans:any;
     config:any;
   	constructor(private api:ApiService) { }
-
-  	ngOnInit() {
+    ionViewDidEnter() {
+      this.favrHistPop = 0;
+      this.favTrans=[];
       this.config = JSON.parse(window.localStorage.getItem('config'));
       this.getUserDetails();
       this.getFavrTransacList();
     }
+
 
     getUserDetails(){
       this.api.getUserDetails()

@@ -22,6 +22,12 @@ export class PagesPage implements OnInit {
         this.getPageContent();
     });
   }
+  IonViewWillEnter() {
+    this.route.params.subscribe(params => {
+        this.page_type = params['page_type'];
+        this.getPageContent();
+    });
+  }
 
 
   getPageContent(){

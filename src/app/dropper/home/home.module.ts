@@ -6,9 +6,11 @@ import { IonicModule } from '@ionic/angular';
 import { IconModule } from '../../icon/icon.module';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { LongPressModule } from 'ionic-long-press';
+import { MomentModule } from 'ngx-moment';
 
 import { HomePage } from './home.page';
-import { LoccarttComponent } from '../loccartt/loccartt.component';
+// import { LoccarttComponent } from '../loccartt/loccartt.component';
 import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
@@ -17,11 +19,13 @@ import { AgmCoreModule } from '@agm/core';
     FormsModule,
     IonicModule,
     IconModule,
+    LongPressModule,
+    MomentModule,
     AgmCoreModule.forRoot({
         apiKey: "AIzaSyC7RAT2MhwmKUqs2kEWuQjmka65lv6dYxY" + '&libraries=visualization'
     }),
     HomePageRoutingModule
   ],
-  declarations: [HomePage, LoccarttComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule {}

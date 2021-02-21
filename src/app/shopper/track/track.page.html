@@ -4,7 +4,7 @@
 			<img src="assets/images/back.png" />
 		</span>
 		Your dropper for today is
-		<span class="page-title-btn red" (click)="cancPop = 1;">Cancel</span>
+		<span class="page-title-btn red" *ngIf="orderDets.status < 4 && itemPurch == 0" (click)="cancPop = 1;">Cancel</span>
 	</div>
 	<div *ngIf="showPage == 1" class="container-fluid">
 		<div class="row">
@@ -12,7 +12,8 @@
 				<div class="dropper-thumb">
 					<div class="img">
 						<div class="img-in">
-							<img src="assets/images/dp.jpg" />
+							<img *ngIf="orderDets.dropper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+							<img *ngIf="!(orderDets.dropper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ orderDets.dropper.image_url }}" id="userDp" />
 						</div>
 					</div>
 					<div class="dets">
@@ -41,11 +42,8 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="neg-mar">
-					<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-					  	<!-- <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-					  	<agm-marker [latitude]="delLat" [longitude]="delLng"></agm-marker> -->
+					<agm-map (mapReady)="mapReady()" [latitude]="origin.lat" [longitude]="origin.lng" [zoom]="zoom" [disableDefaultUI]="true">
 					  	<agm-direction [renderOptions]="renderOptions" [markerOptions]="markerOptions" [origin]="origin" [destination]="destination"></agm-direction>
-					  	<!-- <agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle> -->
 					</agm-map>
 				</div>
 			</div>
@@ -94,7 +92,8 @@
 <div class="notify-popup rate-popup" *ngIf="showPage == 1" [class.active]="ratePop==1">
 	<p class="flow-text">Thank you for choosing me!</p>
 	<span class="icon">
-		<img src="assets/images/rice.png" />
+		<img *ngIf="orderDets.dropper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+		<img *ngIf="!(orderDets.dropper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ orderDets.dropper.image_url }}" id="userDp" />
 	</span>
 	<span class="person-name">
 		{{ orderDets.dropper.first_name }}
@@ -129,7 +128,8 @@
 	<div class="title">
 		<span class="img">
 			<span class="img-in">
-				<img src="assets/images/dp.jpg" />
+				<img *ngIf="orderDets.dropper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+				<img *ngIf="!(orderDets.dropper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ orderDets.dropper.image_url }}" id="userDp" />
 			</span>
 		</span>
 		<span class="name">
@@ -142,12 +142,12 @@
 		</span>
 		<span class="close" (click)="chatOpen = 0">&times;</span>
 	</div>
-	<div class="content" *ngIf="!(messages==null)">
-		<div *ngFor="let message of messages | keyvalue">
+	<div class="content" id="scrollMe" #scrollMe *ngIf="!(messages==null)">
+		<div *ngFor="let message of messages | keyvalue:0">
 			<div class="chat-text" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">
 				<span class="bubble" [class.from]="message.value.to == 'shopper'" [class.to]="message.value.to == 'dropper'">
-					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="file-wrap">
-						<img src="http://favrapi.coderpanda.tk/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
+					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="file-wrap">
+						<img src="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
 					</a>
 					<span *ngIf="message.value.message != 'undefined'">{{ message.value.message }}</span>
 				</span>
@@ -231,29 +231,34 @@
 		</form>
 	</div>
 </div>
-
 <div *ngIf="showPage == 1" class="call-screen" [class.hidden]="!(comm.status > 0)">
 	<div class="call-details">
 		<div class="dp">
-			<img src="assets/images/dp.jpg" />
+			<img *ngIf="orderDets.dropper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+							<img *ngIf="!(orderDets.dropper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ orderDets.dropper.image_url }}" id="userDp" />
 		</div>
-		<div class="caller-name">{{ orderDets.caller_name }}</div>
-		<div class="call-time">{{ callMinutes }}:{{ callSeconds }}</div>
+		<div class="caller-name">{{ orderDets.dropper.first_name }} {{ orderDets.dropper.last_name }}</div>
+		<div class="call-time" *ngIf="comm.status == 1">Calling..</div>
+		<div class="call-time" *ngIf="comm.status == 2">Incoming Call</div>
+		<div class="call-time" *ngIf="comm.status == 3">{{ callTime }}</div>
 	</div>
 	<div class="call-btns-wrap">
 		<div class="disc-btn" *ngIf="comm.status == 1">
-			<button (click)="disconnectCall()">
+			<button class="disconnect" (click)="disconnectCall()">
 				<i class="fas fa-phone"></i>
 			</button>
 		</div>
 		<div class="disc-btn" *ngIf="comm.status == 2">
-			<button (click)="answerCall()">
-				<i class="fas fa-user"></i>
+			<button class="answer" (click)="answerCall()">
+				<i class="fas fa-phone"></i>
+			</button>
+			<button class="disconnect" (click)="disconnectCall()">
+				<i class="fas fa-phone"></i>
 			</button>
 		</div>
 		<div class="disc-btn" *ngIf="comm.status == 3">
-			<button (click)="disconnectCall()">
-				<i class="fas fa-users"></i>
+			<button class="disconnect" (click)="disconnectCall()">
+				<i class="fas fa-phone"></i>
 			</button>
 		</div>
 	</div>
@@ -261,7 +266,7 @@
 	<div id="errorMsg"></div>
 	<div class=""></div>
 </div>
-<div class="temp-holder" [class.hidden]="!(comm.status > 0)">
+<div class="temp-holder hidden">
 	<video id="partnerVideo" #partnerVideo autoplay="true" playsinline controls style="width: 50%;"></video>
 	<video id="myVideo" #myVideo playsinline autoplay="true" controls style="width: 50%;"></video>
 </div>

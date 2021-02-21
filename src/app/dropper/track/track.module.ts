@@ -7,6 +7,11 @@ import { IconModule } from '../../icon/icon.module';
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 
+// import { AngularFireModule } from '@angular/fire';
+// import { AngularFireDatabaseModule } from '@angular/fire/database';
+
+// import { environment } from '../../../environments/environment';
+
 import { TrackPageRoutingModule } from './track-routing.module';
 
 import { TrackPage } from './track.page';
@@ -17,6 +22,7 @@ import { TrackPage } from './track.page';
     FormsModule,
     IonicModule,
     IconModule,
+    // AngularFireModule.initializeApp(environment.firebase),
     AgmCoreModule.forRoot({
         apiKey: "AIzaSyC7RAT2MhwmKUqs2kEWuQjmka65lv6dYxY" + '&libraries=visualization'
     }),

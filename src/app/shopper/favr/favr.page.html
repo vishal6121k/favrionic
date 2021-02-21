@@ -84,6 +84,7 @@
 	        		<div class="form-row">
                         <input type="number" class="form-control" [(ngModel)]="cardModel.number" name="number" value="" placeholder=" " data-maxlength="16" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" />
                         <label>Card Number</label>
+                        <span class="card-info-btn" (click)="infoPopOpen = 1"><i class="fas fa-info-circle"></i></span>
                         <span class="line"></span>
                     </div>
 	        	</div>
@@ -93,6 +94,7 @@
 			        		<div class="form-row mb-20">
 		                        <input type="number" class="form-control" [(ngModel)]="cardModel.expMonth" name="expMonth" value="" placeholder=" " data-maxlength="2" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" />
 		                        <label>MM</label>
+                        		<span class="card-info-btn" (click)="infoPopOpen = 1"><i class="fas fa-info-circle"></i></span>
 		                        <span class="line"></span>
 		                    </div>
 			        	</div>
@@ -100,6 +102,7 @@
 			        		<div class="form-row mb-20">
 		                        <input type="number" class="form-control" [(ngModel)]="cardModel.expYear" name="expYear" value="" placeholder=" " data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" />
 		                        <label>YYYY</label>
+                    			<span class="card-info-btn" (click)="infoPopOpen = 1"><i class="fas fa-info-circle"></i></span>
 		                        <span class="line"></span>
 		                    </div>
 			        	</div>
@@ -109,6 +112,7 @@
 	        		<div class="form-row mb-20">
                         <input type="number" class="form-control" [(ngModel)]="cardModel.cvc" name="cvc" value="" placeholder=" " data-maxlength="3" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" />
                         <label>CVC/CVV</label>
+                        <span class="card-info-btn" (click)="infoPopOpen = 1"><i class="fas fa-info-circle"></i></span>
                         <span class="line"></span>
                     </div>
 	        	</div>
@@ -128,7 +132,7 @@
 			</span>
 		</div>
 		<div class="content" *ngIf="favrHistPop == 1">
-			<div *ngFor="let month of favTrans | keyvalue">
+			<div *ngFor="let month of favTrans | keyvalue:0">
 				<p>{{ month.key | date:'MMMM y' }}</p>
 				<div class="favr-history-item" *ngFor="let trans of month.value">
 		        	<span class="icon">
@@ -146,40 +150,6 @@
 					<div class="time">{{ trans.created_at | date:'h:mm a' }}</div>
 				</div>
 			</div>
-	        <!-- <hr class="thin neg-mar mb-20" />
-	        <div class="favr-history-item">
-	        	<span class="icon">
-	        		<app-svg name="wallet"></app-svg>
-	        	</span>
-				<div class="dets">
-					<p class="title used">Used 10 FavRs</p>
-					<span class="date">10/10/2020</span>
-				</div>
-				<div class="time">02:20 AM</div>
-			</div>
-	        <hr class="thin neg-mar mb-20" />
-			<div class="favr-history-item">
-	        	<span class="icon">
-	        		<app-svg name="check"></app-svg>
-	        	</span>
-				<div class="dets">
-					<p class="title">Got 10 FavRs</p>
-					<span class="date">10/10/2020</span>
-				</div>
-				<div class="time">02:20 AM</div>
-			</div>
-	        <hr class="thin neg-mar mb-20" />
-	        <div class="favr-history-item">
-	        	<span class="icon">
-	        		<app-svg name="cross"></app-svg>
-	        	</span>
-				<div class="dets">
-					<p class="title failed">DIDN’T GET FavRs</p>
-					<span class="date">10/10/2020</span>
-				</div>
-				<div class="time">02:20 AM</div>
-			</div>
-	        <hr class="thin neg-mar mb-20" /> -->
 		</div>
 	</div>
 	<div class="section"></div>
@@ -193,3 +163,9 @@
 		<h4>{{ payMsg }}</h4>
 	</div>
 </div>
+<div class="overlay" [class.active]="infoPopOpen == 1" (click)="infoPopOpen = 0"></div>
+<div class="card-info-popup" *ngIf="infoPopOpen == 1">
+	<span class="close" (click)="infoPopOpen = 0">&times;</span>
+	<p>Information about this button.</p>
+</div>
+

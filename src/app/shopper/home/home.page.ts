@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
+import { MiscService } from '../../services/misc.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
 
 	slideOpts:any = {
 		slidesPerView: 4,
@@ -45,10 +46,17 @@ export class HomePage implements OnInit {
     searchRes:any = [];
     loading:any;
     cartPop:any = 1;
-    ProdImgUrl:any = "http://favr.coderpanda.tk/uploads/";
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, public loadingController: LoadingController) { }
+    backSub:any;
+    ProdImgUrl:any = "http://admin.favr.ie/uploads/";
+  constructor(private router: Router, private platform: Platform, private route: ActivatedRoute, private misc: MiscService, private api: ApiService, public loadingController: LoadingController) { }
+ 
+  ionViewDidEnter(){
+    console.log("ABC");
 
-  ngOnInit(){
+    this.platform.ready().then(() => {
+      this.registerBackAction();
+    });
+
     this.route.params.subscribe(params => {
         if(params['comm'] == 'search'){
           this.showSearch = 1;
@@ -59,9 +67,17 @@ export class HomePage implements OnInit {
     this.getPopularProds();
     this.getUserDetails();
     if(window.localStorage.getItem('cart')){
-      this.cartProd = JSON.parse(window.localStorage.getItem('cart'));
-      this.cartTotal();
+      if((window.localStorage.getItem('cart')) == null){
+        this.cartProd = {};
+      }
+      else{
+        this.cartProd = JSON.parse(window.localStorage.getItem('cart'));
+      }
     }
+    else{
+      this.cartProd = {};
+    }
+    this.cartTotal();
   }
 
 
@@ -281,13 +297,15 @@ export class HomePage implements OnInit {
   }
 
   getUserDetails() {
-      this.api.getUserDetails()
-          .then(resp => {
-          this.userDets = resp;
-          this.userSaved = resp.saved_items.split(',');
-      })
-          .catch(err => {
-      });
+    this.userDets = this.misc.getUserDets();
+    this.userSaved = this.userDets.saved_items.split(',');
+      // this.api.getUserDetails()
+      //     .then(resp => {
+      //     this.userDets = resp;
+      //     this.userSaved = resp.saved_items.split(',');
+      // })
+      //     .catch(err => {
+      // });
   }
 
   showSearchBlock(event){
@@ -321,6 +339,43 @@ export class HomePage implements OnInit {
 
   dismissLoading(){
     this.loading.dismiss();
+  }
+
+  registerBackAction(){
+    let a =0;
+    this.backSub = this.platform.backButton.subscribeWithPriority(9999, () => {
+      if(this.showSearch == 1){
+        this.showSearch = 0;
+        this.router.navigate(['shopper']);
+      }
+      
+        else{
+          this.router.navigate(['/choose']);
+        }
+      // else if(this.forgPop == 1){
+      //   this.forgPop = 0;
+      // }
+      // else{
+      //   a++;
+      //   if(a == 1){
+      //     //         this.toast.show('Press back again to exit..', '2000', 'bottom').subscribe(
+      //     //     toast => {
+      //     //       console.log(toast);
+      //     //     }
+      //     // );
+      //   }
+      //   if (a == 2) { // logic for double tap
+      //     navigator['app'].exitApp();
+      //   }
+      // }
+    });
+  }
+
+  ionViewWillLeave(){
+    this.backSub.unsubscribe();
+  }
+  ngOnDestroy(){
+    this.backSub.unsubscribe();
   }
 
 

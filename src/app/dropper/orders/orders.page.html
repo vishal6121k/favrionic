@@ -35,6 +35,8 @@
 												<span *ngIf="order.payment_type == 1">Cash</span>
 												<span *ngIf="order.payment_type == 2">Google Pay</span>
 												<span *ngIf="order.payment_type == 3">Apple Pay</span>
+												<span *ngIf="order.payment_type == 4">Revolut</span>
+												<span *ngIf="order.payment_type == 5">Pay with any</span>
 											</p>
 										</div>
 									</div>
@@ -60,6 +62,12 @@
 												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
 											</div>
 											<div class="btn-wrap">
+
+												<button *ngIf="order.status == 6 && order.shopper_rated == 0" routerLink="/dropper/track/{{ order.id }}" class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="star"></app-svg></span>
+													Rate
+												</button>
+
 												<!-- <button class="btn with-icon brdr btn-sm mb-0">
 													<span class="icon"><app-svg name="re"></app-svg></span>
 													Reorder

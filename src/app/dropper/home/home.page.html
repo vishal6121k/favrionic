@@ -1,14 +1,14 @@
 <ion-content>
 	<app-loccartt show="0" [address]="address2"></app-loccartt>
-	<div class="container-fluid">
+	<div *ngIf="showPage == 1" class="container-fluid">
 		<div class="row">
 			<div class="col-12">
 				<div class="map-wrap neg-mar">
-					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady()" (centerChange)="centerChanged($event)" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true">
+					<agm-map *ngIf="showMap == 1" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true" (mapReady)="mapReady($event)">
 					  	
 					  	<agm-marker [animation]="shopperAnimation" [latitude]="lat" [longitude]="lng"></agm-marker>
 					  	
-					  	<agm-marker *ngFor="let shopper of shopperReq" [latitude]="shopper.order_lat" [longitude]="shopper.order_lon" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+					  	<agm-marker *ngFor="let shopper of shopperReq" [latitude]="shopper.order_lat" [longitude]="shopper.order_lon" [iconUrl]="(shopper.order_id == selectedShopper)?'assets/icon/pin1.png':'assets/icon/pin.png'"></agm-marker>
 
 					  	<agm-circle [latitude]="lat" [longitude]="lng" [radius]="radius" [fillColor]="'blue'"></agm-circle>
 					  	
@@ -31,17 +31,17 @@
 						<span class="value">{{ defDist }} Km</span>
 					</div>
 					<div class="range-slider">
-						<ion-range min="5" max="30" [value]="defDist" (ionChange)="changeDist($event)"></ion-range>
+						<ion-range min="{{ site_config.def_min_drop_radius }}" max="{{ site_config.def_max_drop_radius }}" [value]="defDist" (ionChange)="changeDist($event)"></ion-range>
 					</div>
 				</div>
 			</div>
 		</div>
 		 <!-- *ngIf="!shopperReq.length -->
-		<div class="row" *ngIf="!(shopperReq.length)">
+		<div class="row" *ngIf="!(shopperReq.length) || (onOrder['status'] == 0)">
 			<div class="col-12">
 				<h5 class="norm-title">
 					Shopper Requests
-					<span class="norm-title-btn" (click)="notePop=1">
+					<span *ngIf="showNote == 1" class="norm-title-btn" (click)="notifyForOrder()">
 						<span class="icon"></span>
 						Notify user
 					</span>
@@ -56,6 +56,13 @@
 				  	<div class='dot'></div>
 				</div>
 			</div>
+			<div class="col-12" *ngIf="onOrder['status'] == 0">
+				<h4 class="text-center">Waiting for your ongoing order to end...</h4>
+			</div>
+			<div class="col-10 offset-1" *ngIf="onOrder['status'] == 0">
+				<button routerLink="/dropper/track/{{ onOrder['order_id'] }}" class="btn btn-primary btn-full">View</button>
+			</div>
+
 		</div>
 		<div class="row" *ngIf="shopperReq.length">
 			<div class="col-12">
@@ -71,36 +78,29 @@
 			<div class="col-12">
 				<div class="row">
 					<div class="col-12">
-						<div class="dropper-thumb" *ngFor="let req of shopperReq" (click)="viewOrderDetails(req.order_id)">
+						<div class="dropper-thumb" [class.active]="req.order_id == selectedShopper" *ngFor="let req of shopperReq" (click)="viewOrderDetails(req.order_id)" ion-long-press [interval]="400" (pressed)="showShopperInfo(req)">
 							<div class="img">
 								<div class="img-in">
-									<img src="assets/images/dp.jpg" />
+									<img *ngIf="req.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+									<img *ngIf="!(req.image_url == null)" src="{{ ProdImgUrl }}/users/{{ req.image_url }}" id="userDp" />
+									<!-- <img src="assets/images/dp.jpg" /> -->
 								</div>
 							</div>
 							<div class="dets">
 								<span class="title">{{ req.caller_name }}</span>
 								<span class="sub">
-									Offer price - &#8364; {{ req.total_amount + req.delivery_charge }}
+									Offer price - &#8364; {{ roundOff(req.final_total) }}
 								</span>
+								<div class="rating">
+									<span *ngIf="req.ratings[0].avg_rating > 0" class="rate-full"></span>
+									<span *ngIf="req.ratings[0].avg_rating > 1" class="rate-full"></span>
+									<span *ngIf="req.ratings[0].avg_rating > 2" class="rate-full"></span>
+									<span *ngIf="req.ratings[0].avg_rating > 3" class="rate-full"></span>
+									<span *ngIf="req.ratings[0].avg_rating > 4" class="rate-full"></span>
+								</div>
 							</div>
-							<div class="rating">
-								<!-- <span [class.rate-full]="req.ratings[0].avg_rating >= 1" [class.rate-empty]="req.ratings[0].avg_rating < 1"></span>
-								<span [class.rate-full]="req.ratings[0].avg_rating >= 2" [class.rate-empty]="req.ratings[0].avg_rating < 2"></span>
-								<span [class.rate-full]="req.ratings[0].avg_rating >= 3" [class.rate-empty]="req.ratings[0].avg_rating < 3"></span>
-								<span [class.rate-full]="req.ratings[0].avg_rating >= 4" [class.rate-empty]="req.ratings[0].avg_rating < 4"></span>
-								<span [class.rate-full]="req.ratings[0].avg_rating >= 5" [class.rate-empty]="req.ratings[0].avg_rating < 5"></span>
-								<span *ngIf="orderDets.drop_reviews.original[0].avg_rating > 0" class="rate-full"></span> -->
-								
-								<span *ngIf="req.ratings[0].avg_rating > 0" class="rate-full"></span>
-								<span *ngIf="req.ratings[0].avg_rating > 1" class="rate-full"></span>
-								<span *ngIf="req.ratings[0].avg_rating > 2" class="rate-full"></span>
-								<span *ngIf="req.ratings[0].avg_rating > 3" class="rate-full"></span>
-								<span *ngIf="req.ratings[0].avg_rating > 4" class="rate-full"></span>
-								<!-- <span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-full"></span>
-								<span class="rate-empty"></span> -->
+							<div class="dist">
+								{{ req.dist }} Km
 							</div>
 						</div>
 					</div>
@@ -126,14 +126,15 @@
 	<span class="icon">
 		<img src="assets/images/check.png" />
 	</span>
-	<p class="flow-text">We Notified <span class="blck small bold">10 User</span></p>
+	<p class="flow-text">We Notified <span class="blck small bold">{{ noteCount }} User</span></p>
 </div>
 <div class="drop-req-popup" *ngIf="dropPop==1" [class.active]="dropPop==1">
 	<span class="close" (click)="dropPop=0">&times;</span>
 	<div class="dropper-thumb">
 		<div class="img">
 			<div class="img-in">
-				<img src="assets/images/dp.jpg" />
+				<img *ngIf="orderDets.shopper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+				<img *ngIf="!(orderDets.shopper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ orderDets.shopper.image_url }}" id="userDp" />
 			</div>
 		</div>
 		<div class="dets">
@@ -167,17 +168,22 @@
 		<div class="drop-list-item">
 			<span class="title">Estimated cost of items</span>
 			<span class="dots"></span>
-			<span class="value">&#8364; {{ orderDets.total_amount }}</span>
+			<span class="value">&#8364; {{ roundOff(orderDets.total_amount) }}</span>
 		</div>
 		<div class="drop-list-item bold">
 			<span class="title">Shopper's total offer</span>
 			<span class="dots"></span>
-			<span class="value">&#8364; {{ orderDets.total_amount + orderDets.delivery_charge }}</span>
+			<span class="value">&#8364; {{ roundOff(orderDets.total_amount + orderDets.delivery_charge) }}</span>
 		</div>
 		<div class="drop-list-item">
 			<span class="title">You Earn</span>
 			<span class="dots"></span>
 			<span class="value">&#8364; {{ orderDets.delivery_charge }}</span>
+		</div>
+		<div class="drop-list-item bold">
+			<span class="title">Deliver by:</span>
+			<span class="dots"></span>
+			<span class="value">{{ orderDets.shipment_timeslot | date:'medium' }}</span>
 		</div>
 		<div class="drop-list-item bold">
 			<span class="title">Mode of payment</span>
@@ -186,11 +192,57 @@
 				<span *ngIf="orderDets.payment_type == 1">Cash</span>
 				<span *ngIf="orderDets.payment_type == 2">Google Pay</span>
 				<span *ngIf="orderDets.payment_type == 3">Apple Pay</span>
+				<span *ngIf="orderDets.payment_type == 4">Revolut</span>
+				<span *ngIf="orderDets.payment_type == 5">Any</span>
 			</span>
 		</div>
 	</div>
 	<div class="form-row">
 		<!-- <button (click)="reqPop = 1; dropPop = 0;" class="btn btn-primary btn-full">Accept Offer</button> -->
 		<button routerLink="/dropper/start/{{ orderDets.id }}" class="btn btn-primary btn-full">Accept Offer</button>
+	</div>
+</div>
+
+<div class="overlay" [class.active]="infoPop == 1" (click)="infoPop = 0"></div>
+<div class="reviewPopup" *ngIf="infoPop == 1">
+	<div>
+		<span class="close" (click)="infoPop = 0;">&times;</span>
+	</div>
+	<div class="dropper-thumb">
+		<div class="img">
+			<div class="img-in">
+				<!-- <img src="assets/images/dp.jpg" /> -->
+				<img *ngIf="shopperPopInfo.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+				<img *ngIf="!(shopperPopInfo.image_url == null)" src="{{ ProdImgUrl }}/users/{{ shopperPopInfo.image_url }}" id="userDp" />
+			</div>
+		</div>
+		<div class="dets">
+			<span class="title">{{ shopperPopInfo.first_name+' '+shopperPopInfo.last_name }}</span>
+			<!-- <span class="sub">
+				Very professional and hard..
+				<span class="see-more">See More</span>
+			</span> -->
+		</div>
+		<div class="rating">
+			<span [class.rate-full]="shopperPopInfo.avg_rating >= 1" [class.rate-empty]="shopperPopInfo.avg_rating < 1"></span>
+			<span [class.rate-full]="shopperPopInfo.avg_rating >= 2" [class.rate-empty]="shopperPopInfo.avg_rating < 2"></span>
+			<span [class.rate-full]="shopperPopInfo.avg_rating >= 3" [class.rate-empty]="shopperPopInfo.avg_rating < 3"></span>
+			<span [class.rate-full]="shopperPopInfo.avg_rating >= 4" [class.rate-empty]="shopperPopInfo.avg_rating < 4"></span>
+			<span [class.rate-full]="shopperPopInfo.avg_rating >= 5" [class.rate-empty]="shopperPopInfo.avg_rating < 5"></span>
+		</div>
+	</div>
+	<div class="review-wrap">
+		<div class="review-item" *ngFor="let rating of shopperPopInfo.all_ratings">
+			<div class="dets">
+				<span class="sub">{{ rating.comment }}</span>
+				<div class="name-wrap">
+					<span class="name">{{ rating.shopper_info.first_name }} {{ rating.shopper_info.last_name }}</span>
+					<span class="date">{{ rating.created_at | amTimeAgo }}</span>
+				</div>
+			</div>
+			<div class="rating">
+				<span class="rate-full"></span> <b>{{ rating.rating }}</b>
+			</div>
+		</div>
 	</div>
 </div>

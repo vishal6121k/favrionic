@@ -1,0 +1,135 @@
+<div *ngIf="show == 0 || show == 1" class="container-fluid location-cart-wrap">
+	<div class="location-wrap" (click)="locpop = 1; locClicked();">
+		<span class="icon">
+			<app-svg name="loc"></app-svg>
+		</span>
+		<span class="text">{{ address2 }}</span>
+	</div>
+	<span *ngIf="cart > 0" routerLink="/shopper/cart" class="cart-wrap">
+		<span class="icon">
+			<app-svg name="cart"></app-svg>
+		</span>
+		<span class="num">{{ cart }}</span>
+	</span>
+	<span *ngIf="cart == 0" class="cart-wrap">
+		<span class="icon">
+			<app-svg name="cart"></app-svg>
+		</span>
+		<!-- <span class="num">{{ cart }}</span> -->
+	</span>
+</div>
+
+<div class="overlay" [class.active]="locpop == 1" (click)="locpop=0; locClicked();"></div>
+<div *ngIf="show == 0 || show == 1" class="loc-popup" [class.active]="locpop == 1">
+	<div class="popup-title">
+		<span class="icon" (click)="locpop=0; locClicked();">
+			<app-svg name="down"></app-svg>
+		</span>
+		<span class="text">Search Location</span>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- <div class="col-12">
+				<div class="search-box">
+					<span class="icon">
+						<app-svg name="search"></app-svg>
+					</span>
+					<input type="text" name="" value="" placeholder="Search for your location" />
+				</div>
+			</div> -->
+			<div class="col-12">
+				<span class="btn with-icon auto-loc-btn" (click)="getUserPosition(1)">
+					<span class="icon">
+						<app-svg name="gps"></app-svg>
+					</span>
+					Use current location
+				</span>
+				<hr>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid section address-section">
+		<div class="row align-center">
+			<div class="col-8">
+				<h5 class="section-title">Saved Adddress</h5>
+			</div>
+		</div>
+		<div class="row address-item-wrap">
+			<div class="col-12">
+				<div class="row address-item" *ngFor="let address of addresses" (click)="address2 = address.address2; locpop = 0; locClicked();">
+					<div class="col-8">
+						<!-- <h5>Home</h5> -->
+						<h5 *ngIf="address.loc_type == 1">Home</h5>
+	        			<h5 *ngIf="address.loc_type == 2">Office</h5>
+	        			<h5 *ngIf="address.loc_type == 3">Others</h5>
+						<p>{{ address.address1 }}</p>
+						<p>{{ address.address2 }}</p>
+						<p>Landmark - {{ address.landmark }}</p>
+					</div>
+					<div class="col-4">
+						<!-- <span class="dist">
+							<span class="icon">
+								<app-svg name="loc"></app-svg>
+							</span>
+							<span class="text">11.2 km</span>
+						</span> -->
+					</div>
+					<div class="col-12">
+						<hr class="thin" />
+					</div>
+				</div>
+				<!-- <div class="row address-item">
+					<div class="col-8">
+						<h5>Office</h5>
+						<p>House Number , Street Name, City, Area, Pin code</p>
+					</div>
+					<div class="col-4">
+						<span class="dist">
+							<span class="icon">
+								<app-svg name="loc"></app-svg>
+							</span>
+							<span class="text">11.2 km</span>
+						</span>
+					</div>
+					<div class="col-12">
+						<hr class="thin" />
+					</div>
+				</div> -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="show == 0 || show == 2" class="app-footer">
+	<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/shopper/home" class="item">
+		<span class="icon">
+			<app-svg name="home"></app-svg>
+		</span>
+		<span class="text">Home</span>
+	</a>
+	<a routerLinkActive="active" routerLink="/shopper/favr" class="item">
+		<span class="icon">
+			<app-svg name="wallet"></app-svg>
+		</span>
+		<span class="text">FavR</span>
+	</a>
+	<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/shopper/home/search" class="item">
+		<span class="icon">
+			<app-svg name="search"></app-svg>
+		</span>
+		<span class="text">Search</span>
+	</a>
+	<a routerLinkActive="active" routerLink="/shopper/orders" class="item">
+		<span class="icon">
+			<app-svg name="orders"></app-svg>
+		</span>
+		<span class="text">Orders</span>
+	</a>
+	<a routerLinkActive="active" routerLink="/profile" class="item">
+		<span class="img">
+			<img *ngIf="(userDets == '') && (userDets.image_url == null)" src="assets/images/dp.jpg" />
+			<img *ngIf="!((userDets == '') && (userDets.image_url == null))" src="{{ ProdImgUrl }}/users/{{ userDets.image_url }}" />
+		</span>
+		<span class="text">Profile</span>
+	</a>
+</div>

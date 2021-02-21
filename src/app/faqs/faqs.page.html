@@ -10,7 +10,7 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="collapse-item-wrap" *ngFor="let faq of faqs | keyvalue">
-					<div class="title" (click)="showCar[faq.key]=(showCar[faq.key] == 0)?1:0"><b>{{ faq.value.number + 1 }}.</b> {{ faq.value.question }}</div>
+					<div class="title" (click)="showCar[faq.key]=(showCar[faq.key] == 0)?1:0" [class.active]="showCar[faq.key] == 1"><b>{{ faq.value.number + 1 }}.</b> {{ faq.value.question }}</div>
 					<div class="value" [class.active]="showCar[faq.key] == 1">{{ faq.value.answer }}</div>
 				</div>
 			</div>

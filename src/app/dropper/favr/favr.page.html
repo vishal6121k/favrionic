@@ -2,12 +2,6 @@
 	<app-loccartt show="2"></app-loccartt>
 	<div class="page-title">FavR</div>
 	<div class="container-fluid section" *ngIf="showPage == 1">
-		<!-- <div class="row align-center">
-			<div class="col-8">
-				<h5 class="section-title">Favr</h5>
-			</div>
-			<div class="col-4 text-right"></div>
-		</div> -->
 		<div class="row">
 			<div class="col-8 offset-2">
 				<div class="favr-total">
@@ -43,7 +37,7 @@
 			</span>
 		</div>
 		<div class="content" *ngIf="favrHistPop == 1">
-			<div *ngFor="let month of favTrans | keyvalue">
+			<div *ngFor="let month of favTrans | keyvalue:0">
 				<p>{{ month.key | date:'MMMM y' }}</p>
 				<div class="favr-history-item" *ngFor="let trans of month.value">
 		        	<span class="icon">

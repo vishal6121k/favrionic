@@ -23,6 +23,10 @@
 													<span class="icon"><app-svg name="gps"></app-svg></span>
 													Select dropper
 												</button>
+												<button *ngIf="order.status == 1" (click)="cancelOrder(order.id)" class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="cross"></app-svg></span>
+													Cancel
+												</button>
 												<!-- <button class="btn with-icon brdr btn-sm mb-0">
 													<span class="icon"><app-svg name="share"></app-svg></span>
 													Share
@@ -35,6 +39,8 @@
 												<span *ngIf="order.payment_type == 1">Cash</span>
 												<span *ngIf="order.payment_type == 2">Google Pay</span>
 												<span *ngIf="order.payment_type == 3">Apple Pay</span>
+												<span *ngIf="order.payment_type == 4">Revolut</span>
+												<span *ngIf="order.payment_type == 5">Any</span>
 											</p>
 										</div>
 									</div>
@@ -51,6 +57,10 @@
 													<span class="icon"><app-svg name="gps"></app-svg></span>
 													Track
 												</button>
+												<!-- <button *ngIf="order.status > 1" (click)="cancelOrder(order.id)" class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="cross"></app-svg></span>
+													Cancel
+												</button> -->
 												<!-- <button class="btn with-icon brdr btn-sm mb-0">
 													<span class="icon"><app-svg name="share"></app-svg></span>
 													Share
@@ -63,6 +73,8 @@
 												<span *ngIf="order.payment_type == 1">Cash</span>
 												<span *ngIf="order.payment_type == 2">Google Pay</span>
 												<span *ngIf="order.payment_type == 3">Apple Pay</span>
+												<span *ngIf="order.payment_type == 4">Revolut</span>
+												<span *ngIf="order.payment_type == 5">Any</span>
 											</p>
 										</div>
 									</div>
@@ -88,7 +100,33 @@
 												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
 											</div>
 											<div class="btn-wrap">
-												<button class="btn with-icon brdr btn-sm mb-0">
+												<button class="btn with-icon brdr btn-sm mb-0" (click)="reorder(order.dets)">
+													<span class="icon"><app-svg name="re"></app-svg></span>
+													Reorder
+												</button>
+												<button *ngIf="order.status == 6 && order.dropper_rated == 0" routerLink="/shopper/track/{{ order.id }}" class="btn with-icon brdr btn-sm mb-0">
+													<span class="icon"><app-svg name="star"></app-svg></span>
+													Rate
+												</button>
+											</div>
+										</div>
+										<div class="time">
+											<!-- <p>02:20 AM</p>
+											<p>Cash</p> -->
+											<p class="delv" *ngIf="order.status == 6">Delivered</p>
+											<p class="delv" *ngIf="order.status == 7">Cancelled</p>
+										</div>
+									</div>
+									<div *ngIf="order.status == -1" class="order-thumb">
+										<span class="icon"></span>
+										<div class="dets">
+											<span class="title">You asked for a favr</span>
+											<div class="stats">
+												<span class="item"><span class="x2">{{ order.total_items }}</span> Items</span>
+												<span class="item">Estimated: <span class="x2">&#8364; {{ order.total_amount }}</span></span>
+											</div>
+											<div class="btn-wrap">
+												<button class="btn with-icon brdr btn-sm mb-0" (click)="reorder(order.dets)">
 													<span class="icon"><app-svg name="re"></app-svg></span>
 													Reorder
 												</button>
@@ -101,7 +139,7 @@
 										<div class="time">
 											<!-- <p>02:20 AM</p>
 											<p>Cash</p> -->
-											<p class="delv">Delivered</p>
+											<p class="delv">No dropper found</p>
 										</div>
 									</div>
 								</div>
@@ -153,4 +191,5 @@
 			</div>
 		</div>
 	</div>
+	<div class="container-fluid section"></div>
 </ion-content>

@@ -139,7 +139,7 @@
 						<h5>Total Price</h5>
 					</div>
 					<div class="col-4">
-						<span class="price big">&#8364;  <span class="x2">{{ cartTotalAmount + delAmnt }}</span></span>
+						<span class="price big">&#8364;  <span class="x2">{{ addPrice(cartTotalAmount, delAmnt) }}</span></span>
 					</div>
 				</div>
 			</div>
@@ -165,6 +165,9 @@
 						</div>
 					</div>
 					<div class="col-4 text-right">
+						<!-- <span class="cart-label-btn">
+							<ion-datetime displayFormat="h:mm A" pickerFormat="MMM DD, YYYY h:mm A" [value]="minDate" [min]="minDate" [max]="maxDate"></ion-datetime>
+						</span> -->
 						<span class="cart-label-btn" (click)="showDatePicker()">
 							{{ showTime }}
 							<span class="down">
@@ -190,6 +193,8 @@
 								<span *ngIf="payType == 1">Cash</span>
 								<span *ngIf="payType == 2">Google Pay</span>
 								<span *ngIf="payType == 3">Apple Pay</span>
+								<span *ngIf="payType == 4">Revolut</span>
+								<span *ngIf="payType == 5">Pay with any</span>
 								<span class="down">
 									<app-svg name="down1"></app-svg>
 								</span>
@@ -208,6 +213,18 @@
 											<img src="assets/icon/apay.png" />
 										</span>
 										Apple Pay
+									</li>
+									<li (click)="payType=4; payDrop = 0;">
+										<!-- <span class="icon">
+											<img src="assets/icon/apay.png" />
+										</span> -->
+										Revolut
+									</li>
+									<li (click)="payType=5; payDrop = 0;">
+										<!-- <span class="icon">
+											<img src="assets/icon/apay.png" />
+										</span> -->
+										Any
 									</li>
 								</ul>
 							</span>
@@ -320,8 +337,8 @@
 				<div class="col-12">
 					<div class="map-wrap">
 						<div class="map">
-							<agm-map (mapReady)="mapReady()" [latitude]="lat" [longitude]="lng" [zoom]="zoom" (centerChange)="centerChange($event)" [disableDefaultUI]="true">
-							  	<agm-marker [latitude]="markLat" [longitude]="markLng" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
+							<agm-map (mapReady)="mapReady($event)" [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true">
+							  	<agm-marker [markerDraggable]="true" [latitude]="markLat" [longitude]="markLng" (dragEnd)="centerChange($event)" [iconUrl]="'assets/icon/pin.png'"></agm-marker>
 							</agm-map>
 						</div>
 						<span class="map-btn-wrap" (click)="getUserPosition()">

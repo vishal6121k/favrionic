@@ -9,7 +9,7 @@ import { OrdersPageRoutingModule } from './orders-routing.module';
 
 import { OrdersPage } from './orders.page';
 
-import { LoccarttComponent } from '../loccartt/loccartt.component';
+// import { LoccarttComponent } from '../loccartt/loccartt.component';
 
 @NgModule({
   imports: [
@@ -19,6 +19,6 @@ import { LoccarttComponent } from '../loccartt/loccartt.component';
     IconModule,
     OrdersPageRoutingModule
   ],
-  declarations: [OrdersPage, LoccarttComponent]
+  declarations: [OrdersPage]
 })
 export class OrdersPageModule {}

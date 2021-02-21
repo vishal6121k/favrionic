@@ -9,7 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 
-import { LoccartComponent } from '../loccart/loccart.component';
+// import { LoccartComponent } from '../loccart/loccart.component';
 
 @NgModule({
   imports: [
@@ -22,6 +22,6 @@ import { LoccartComponent } from '../loccart/loccart.component';
     }),
     HomePageRoutingModule
   ],
-  declarations: [HomePage, LoccartComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule {}

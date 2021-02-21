@@ -12,7 +12,8 @@
 				<div class="dropper-thumb">
 					<div class="img">
 						<div class="img-in">
-							<img src="assets/images/dp.jpg" />
+							<img *ngIf="orderDets.shopper.image_url == null" src="assets/images/dp.jpg" id="userDp" />
+							<img *ngIf="!(orderDets.shopper.image_url == null)" src="{{ ProdImgUrl }}/users/{{ orderDets.shopper.image_url }}" id="userDp" />
 						</div>
 					</div>
 					<div class="dets">
@@ -42,7 +43,7 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="map-wrap neg-mar">
-					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady()" (centerChange)="centerChanged($event)" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom">
+					<agm-map *ngIf="showMap == 1" (mapReady)="mapReady($event)" (centerChange)="centerChanged($event)" [latitude]="deflat" [longitude]="deflng" [zoom]="zoom">
 					  	
 					  	<!-- <agm-marker [animation]="shopperAnimation" [latitude]="lat" [longitude]="lng"></agm-marker> -->
 					  	<agm-direction [renderOptions]="renderOptions" [markerOptions]="markerOptions" [origin]="origin" [destination]="destination"></agm-direction>
@@ -93,7 +94,7 @@
 							</div>
 						</div>
 						<div class="col-4">
-							<span class="price">&#8364; <span class="x2">{{ item.total_amount }}</span></span>
+							<span class="price">&#8364; <span class="x2">{{ roundOff(item.total_amount) }}</span></span>
 						</div>
 						<div class="col-12">
 							<hr class="thin item-sep" />
@@ -167,7 +168,7 @@
 					<div class="drop-list-item">
 						<span class="title">Estimated cost of items</span>
 						<span class="dots" style="border-color: transparent;"></span>
-						<span class="value">&#8364; {{ orderDets.total_amount }}</span>
+						<span class="value">&#8364; {{ roundOff(orderDets.total_amount) }}</span>
 					</div>
 					<div class="drop-list-item bold">
 						<span class="title">Shopper's total offer</span>
@@ -177,7 +178,7 @@
 					<div class="drop-list-item">
 						<span class="title">You Earn</span>
 						<span class="dots" style="border-color: transparent;"></span>
-						<span class="value">&#8364; {{ orderDets.delivery_charge }}</span>
+						<span class="value">&#8364; {{ roundOff(orderDets.delivery_charge) }}</span>
 					</div>
 					<div class="drop-list-item bold">
 						<span class="title">Mode of payment</span>
@@ -186,6 +187,8 @@
 							<span *ngIf="orderDets.payment_type == 1">Cash</span>
 							<span *ngIf="orderDets.payment_type == 2">Google Pay</span>
 							<span *ngIf="orderDets.payment_type == 3">Apple Pay</span>
+							<span *ngIf="orderDets.payment_type == 4">Revolut</span>
+							<span *ngIf="orderDets.payment_type == 5">Any</span>
 						</span>
 					</div>
 				</div>

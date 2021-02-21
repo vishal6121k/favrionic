@@ -4,14 +4,15 @@ declare var require: any;
 const axios = require('axios').default;
 // import axios from 'axios';
 axios.defaults.headers.common['Content-Type'] = 'application/json'; // for POST requests
-const apiUrl = "http://favrapi.coderpanda.tk/api/";
+// const apiUrl = "http://favrapi.coderpanda.tk/api/";
+const apiUrl = "http://api.favr.ie/api/";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-	constructor() {
+	  constructor() {
   		var token = localStorage.getItem('token');
       if(token){
         axios.defaults.headers.common['Authorization'] = 'Bearer '+ token;
@@ -24,8 +25,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -35,8 +35,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -46,8 +45,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
     getFaqs(){
@@ -56,8 +54,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -67,8 +64,7 @@ export class ApiService {
 	        return response.data;
       	})
       	.catch(function(err){
-	        console.log(err);
-	        return "Err";
+          return Promise.reject(err);
       	});
   	}
 
@@ -78,10 +74,21 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
+
+    resetPw(data){
+      return axios.post(apiUrl+'password/reset', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
+      });
+    }
+
+
 
 
 
@@ -91,8 +98,7 @@ export class ApiService {
 	        return response.data;
       	})
       	.catch(function(err){
-	        console.log(err);
-	        return "Err";
+          return Promise.reject(err);
       	});
   	}
 
@@ -102,8 +108,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -113,8 +118,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -124,8 +128,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -136,8 +139,17 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
+        });
+    }
+
+    updateRole(data){
+      return axios.post(apiUrl+'user/update/role', data)
+        .then(function(response){
+          return response.data;
+        })
+        .catch(function(err){
+          return Promise.reject(err);
         });
     }
 
@@ -147,8 +159,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -160,8 +171,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -171,8 +181,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -182,8 +191,17 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
+        });
+    }
+
+    getSavedItems(data){
+      return axios.post(apiUrl+'user/save/get', data)
+        .then(function(response){
+          return response.data;
+        })
+        .catch(function(err){
+          return Promise.reject(err);
         });
     }
 
@@ -193,8 +211,7 @@ export class ApiService {
           return response.data;
         })
         .catch(function(err){
-          console.log(err);
-          return "Err";
+          return Promise.reject(err);
         });
     }
 
@@ -204,8 +221,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -215,8 +231,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -226,8 +241,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -237,8 +251,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -248,8 +261,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -259,8 +271,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -270,8 +281,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -283,8 +293,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -295,8 +304,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -307,8 +315,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
     updateItemStatus(data){
@@ -317,8 +324,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -342,8 +348,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
 
 
@@ -355,8 +360,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -366,8 +370,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -378,8 +381,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -390,8 +392,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -401,8 +402,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -412,8 +412,17 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
+      });
+    }
+
+    notifyForOrder(){
+      return axios.post(apiUrl+'notify/for/order')
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
       });
     }
 
@@ -424,8 +433,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -435,8 +443,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -446,8 +453,17 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
+      });
+    }
+
+    cancelOrderBefore(data){
+      return axios.post(apiUrl+'order/cancel/before', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
       });
     }
 
@@ -457,8 +473,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -468,8 +483,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -479,8 +493,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -490,8 +503,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -501,8 +513,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -512,8 +523,27 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
+      });
+    }
+
+    changeDp(data){
+      return axios.post(apiUrl+'change/dp', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
+      });
+    }
+
+    updateUser(data){
+      return axios.put(apiUrl+'user/update/profile', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
       });
     }
 
@@ -523,8 +553,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -534,8 +563,7 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
       });
     }
 
@@ -545,8 +573,26 @@ export class ApiService {
         return response.data;
       })
       .catch(function(err){
-        console.log(err);
-        return "Err";
+        return Promise.reject(err);
+      });
+    }
+    reorder(data){
+      return axios.post(apiUrl+'reorder', data)
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
+      });
+    }
+
+    logout(){
+      return axios.post(apiUrl+'user/logout')
+      .then(function(response){
+        return response.data;
+      })
+      .catch(function(err){
+        return Promise.reject(err);
       });
     }
 
