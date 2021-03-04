@@ -30,7 +30,6 @@ export class WebrtcService {
   outgoingCall:any = "";
   ringtone:any;
   dataConn:any;
-
   inited:any = "";
 
   comm:Comm = { status : 0 };
@@ -38,7 +37,7 @@ export class WebrtcService {
   constructor(private nativeAudio: NativeAudio,
     private backgroundMode: BackgroundMode) {
     this.nativeAudio.preloadComplex('231321321312', 'assets/sounds/ring.mp3', 1, 1, 0).then(resp => {
-    } , err => {console.log(err);});
+    } , err => { console.log(err); });
     this.nativeAudio.preloadComplex('231321321311', 'assets/sounds/call.mp3', 1, 1, 0).then(resp => {
     } , err => {console.log(err);});
     // this.nativeAudio.loop('uniqueId1').then(resp => {} , err => {console.log(err);});
@@ -82,17 +81,32 @@ export class WebrtcService {
     this.myEl = myEl;
     this.partnerEl = partnerEl;
     console.log(this.partnerEl);
+    // this.backgroundMode.on('activate', () => {
+    //    this.backgroundMode.disableWebViewOptimizations(); 
+    // });
 
     AudioToggle.setAudioMode(AudioToggle.SPEAKER);
     await this.createPeer('Favr'+userId);
   }
 
+  getPeer(){
+
+  }
+
   async createPeer(userId:any) {
       console.log('init user '+userId);
-      this.peer = new Peer(userId, this.options);
-      this.peer.on('open', () => {
-        this.wait();
-      });
+      console.log(this.peer);
+      // if(this.peer == undefined){
+        this.peer = new Peer(userId, this.options);
+        this.peer.on('open', () => {
+          this.wait();
+        });
+      // }
+      // else{
+      //   this.peer.on('open', () => {
+      //     this.wait();
+      //   });
+      // }
   }
 
   call(partnerId: string) {
@@ -219,13 +233,14 @@ export class WebrtcService {
 
   close(send = 0){
     this.comm.status = 0;
+    AudioToggle.setAudioMode(AudioToggle.NORMAL);
     // if(send == 0){
     //   console.log('closed');
     //   // this.dataConn.send(0);
     // }
     // this.dataConn.close();
     // this.myStream.getTracks()[0].stop();
-    this.peer.disconnect();
+    this.peer.destroy();
     // if(!(this.outgoingCall == "")){
       // this.outgoingCall.close();
     // }

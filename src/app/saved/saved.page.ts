@@ -25,6 +25,11 @@ export class SavedPage {
     }
   }
 
+  clearCart(){
+    this.cartProd = {};
+    this.cartTotal();
+  }
+
   getUserDetails() {
     console.log('hey');
       this.userDets = this.misc.getUserDets();

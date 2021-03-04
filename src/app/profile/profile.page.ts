@@ -64,17 +64,6 @@ export class ProfilePage implements OnInit {
 			this.messages = JSON.parse(this.userDets.admin_msgs);
 			this.showPage = 1;
 			this.dismissLoading();
-			// this.api.getUserDetails()
-			// .then(resp => {
-			//   this.userDets = resp;
-			//   this.user_type = resp.role_id;
-			//   this.showPage = 1;
-			//   this.messages = JSON.parse(resp.admin_msgs);
-			//   this.dismissLoading();
-			// })
-			// .catch(err => {
-
-			// });
 		}
 
 		segmentChanged(event){
@@ -86,13 +75,38 @@ export class ProfilePage implements OnInit {
 			var data = this.userDets;
 			this.api.updateUser(data)
 			.then(resp => {
-				this.getUserDetails();
+				this.updateUserDetails();
+				// if(this.user_type == 2){
+				// 	this.loccart.getUserDetails();
+				// }
+				// else{
+				// 	this.loccartt.getUserDetails();
+				// }
+				// this.getUserDetails();
 				// this.dismissLoading();
 			})
 			.catch(err => {
 
 			});
 			this.editName = 0
+		}
+
+		updateUserDetails(){
+			this.api.getUserDetails()
+			.then(resp => {
+			  	// this.userDets = resp;
+			  	this.misc.setUserDets(JSON.stringify(resp));
+			  	if(this.user_type == 2){
+					this.loccart.getUserDetails();
+				}
+				else{
+					this.loccartt.getUserDetails();
+				}
+			  	this.getUserDetails();
+			})
+			.catch(err => {
+
+			});
 		}
 
 		logoutUser(){
@@ -118,6 +132,12 @@ export class ProfilePage implements OnInit {
 				this.user_type = resp.result.role_id;
 				window.localStorage.setItem('user_type', resp.result.role_id);
 				this.dismissLoading();
+				if(this.user_type == 2){
+					this.loccart.getUserDetails();
+				}
+				else{
+					this.loccartt.getUserDetails();
+				}
 				// if(resp.result.role_id == 2){
 					// this.router.navigate(['/shopper']);
 				// }
@@ -173,13 +193,7 @@ export class ProfilePage implements OnInit {
 			this.presentLoading();
 			this.api.changeDp(fd)
 			.then( resp => {
-				this.getUserDetails();
-				if(this.user_type == 2){
-					this.loccart.getUserDetails();
-				}
-				else{
-					this.loccartt.getUserDetails();
-				}
+				this.updateUserDetails();
 			})
 			.catch( err => {
 

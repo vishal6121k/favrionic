@@ -14,14 +14,16 @@ userDets:any = "";
   constructor(private api:ApiService, private misc:MiscService) { }
 
   ionViewDidEnter() {
-    console.log('loccartt');
+    console.log('loccartt updated on enter');
     this.userDets = this.misc.getUserDets();
   }
   ngOnInit() {
-    console.log('loccartt');
+    console.log('loccartt updated');
     this.userDets = this.misc.getUserDets();
   }
-  // getUserDetails(){
+  getUserDetails(){
+    console.log('getDets');
+    this.userDets = this.misc.getUserDets();
   // 	this.api.getUserDetails()
   //     .then(resp => {
   //       this.userDets = resp;
@@ -29,5 +31,5 @@ userDets:any = "";
   //     .catch(err => {
 
   //     });
-  // }
+  }
 }

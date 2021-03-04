@@ -49,14 +49,19 @@ export class LoccartComponent implements OnInit {
 	}
 
 
-	getUserDetails(){
-		this.api.getUserDetails()
-		.then(resp => {
-			this.userDets = resp;
-		})
-		.catch(err => {
+	// getUserDetails(){
+	// 	this.api.getUserDetails()
+	// 	.then(resp => {
+	// 		this.userDets = resp;
+	// 	})
+	// 	.catch(err => {
 
-		});
+	// 	});
+	// }
+
+	getUserDetails(){
+		console.log('getDets');
+    	this.userDets = this.misc.getUserDets();
 	}
 
 	searchClicked(){

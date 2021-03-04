@@ -101,7 +101,7 @@ export class TrackPage implements OnDestroy {
       } , err => {console.log(err);});
 		this.route.params.subscribe(params => {
 			this.orderId = params['id'];
-			
+			console.log('inited');
 			this.getOrderDetails();
 			this.getMessages();
 			this.myEl = this.elRef.nativeElement.querySelector('#my-video');
@@ -390,16 +390,20 @@ export class TrackPage implements OnDestroy {
 	    fd.append('message', this.chatModel.message);
 	    if(!(this.chatFile == "")){
 	      fd.append('file', this.chatFile);
+	      var filename = "";
+	      // var filename = URL.createObjectURL(this.chatFile);
 	    }
 	    else{
 	      fd.append('file', '');
+	      var filename = "";
 	    }
 	    if(this.messages ==null){
 	      this.messages = [];
 	    }
 	    this.messages.push({
 			'to': 'shopper',
-			'file': "",
+			'type': 1,
+			'file': filename,
 			'message': this.chatModel.message
 		});
 		// var data = this.chatModel;
@@ -418,6 +422,7 @@ export class TrackPage implements OnDestroy {
 
   	onChange(files) {
 	    this.chatFile = files[0];
+	    this.sendMessage();
   	}
 
   	getMessages(){
@@ -427,7 +432,6 @@ export class TrackPage implements OnDestroy {
 		.then(resp =>{
 	  		this.messages = resp.messages;
 	  		console.log(this.messages);
-	  		this.scrollToBottom();
 		})
 		.catch(err => {
 

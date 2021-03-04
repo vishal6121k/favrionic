@@ -161,7 +161,14 @@
 			<div class="chat-text" [class.from]="message.value.to == 'dropper'" [class.to]="message.value.to == 'shopper'">
 				<span class="bubble" [class.from]="message.value.to == 'dropper'" [class.to]="message.value.to == 'shopper'">
 					<a *ngIf="!(message.value.file == '' || message.value.file == 'na')" href="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="file-wrap">
-						<img src="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
+						<div *ngIf="!(message.value.type == undefined)" class="dot-loader">
+						  	<div class='dot'></div>
+						  	<div class='dot'></div>
+						  	<div class='dot'></div>
+						  	<div class='dot'></div>
+						</div>
+						<!-- <img src="{{ message.value.file }}" class="img-fluid" /> -->
+						<img *ngIf="message.value.type == undefined" src="http://admin.favr.ie/uploads/attachments/{{ message.value.file }}" class="img-fluid" />
 					</a>
 					<span *ngIf="message.value.message != 'undefined'">{{ message.value.message }}</span>
 				</span>

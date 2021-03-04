@@ -183,25 +183,24 @@ export class LoginPage implements OnDestroy {
 				});
 
 				this.firebase.onTokenRefresh().subscribe(fbs_token => {
-				  // Register your new token in your back-end if you want
-				  // backend.registerToken(token);
-				  window.localStorage.setItem('fbs_token', fbs_token);
+				  	// Register your new token in your back-end if you want
+				  	// backend.registerToken(token);
+				  	window.localStorage.setItem('fbs_token', fbs_token);
 				    console.log(fbs_token);
 				    var data = {
-				      'fbs_token': fbs_token,
-				      'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
+				      	'fbs_token': fbs_token,
+				      	'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
 				    };
-						
-				   this.api.setUserFbToken(data)
-				   .then( resp => {
-				     console.log(resp);
-				     // this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
-				   })
-				   .catch( err =>{
 
-				   });
+				   	this.api.setUserFbToken(data)
+				   	.then( resp => {
+				     	console.log(resp);
+				     	// this.router.navigate([this.redUrl], { state: { formVal: this.redData } });
+				   	})
+				   	.catch( err =>{
+
+				   	});
 				});
-		
 		});
 	}
 

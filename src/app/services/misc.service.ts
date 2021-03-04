@@ -75,9 +75,10 @@ export class MiscService {
 	}
 
 	enableBGMode(){
-		this.backgroundMode.setDefaults({ silent: true })
+		this.backgroundMode.setDefaults({ silent: true });
 		this.backgroundMode.enable();
 		this.backgroundMode.setEnabled(true);
+		this.backgroundMode.excludeFromTaskList();
 	}
 
 }

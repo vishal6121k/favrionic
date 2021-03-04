@@ -183,13 +183,6 @@ export class TrackPage {
 				this.userId = resp[0].user_id;
 				this.partnerId = resp[0].dropper_id;
 				this.init();
-
-				// this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA);
-				// this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
-				//   result => console.log('Has permission?',result.hasPermission),
-				//   err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
-				// );
-				// this.webRTC.init(this.userId, this.myEl, this.partnerEl);
 				this.webrtc_enb = 1;
 			}
 			this.showPage = 1;
@@ -448,6 +441,7 @@ export class TrackPage {
 
 	onChange(files) {
 		this.chatFile = files[0];
+	    this.sendMessage();
 	}
 
 
