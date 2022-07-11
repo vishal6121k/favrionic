@@ -9,6 +9,19 @@ export interface IChannelOptions {
     importance?: 0 | 1 | 2 | 3 | 4
     badge?: boolean
     visibility?: -1 | 0 | 1
+    usage?: number
+    streamType?: number
+}
+
+interface User {
+    name: string;
+    email: string;
+    emailIsVerified: boolean;
+    phoneNumber: string;
+    photoUrl: string;
+    uid: string;
+    providerId: string;
+    idToken: string;
 }
 
 export interface FirebasePlugin {
@@ -35,11 +48,24 @@ export interface FirebasePlugin {
         success: (value: object) => void,
         error: (err: string) => void
     ): void
+    onOpenSettings(
+        success: () => void,
+        error: (err: string) => void
+    ): void
     grantPermission(
+        success: (value: boolean) => void,
+        error: (err: string) => void,
+        requestWithProvidesAppNotificationSettings?: boolean
+    ): void
+    hasPermission(
         success: (value: boolean) => void,
         error: (err: string) => void
     ): void
-    hasPermission(
+    grantCriticalPermission(
+        success: (value: boolean) => void,
+        error: (err: string) => void
+    ): void
+    hasCriticalPermission(
         success: (value: boolean) => void,
         error: (err: string) => void
     ): void
@@ -111,7 +137,7 @@ export interface FirebasePlugin {
     didCrashOnPreviousExecution(
         success?: (didCrashOnPreviousExecution: boolean) => void,
         error?: (err: string) => void
-    )
+    ): void
     setCrashlyticsUserId(
         userId: string
     ): void
@@ -150,6 +176,12 @@ export interface FirebasePlugin {
         error?: (err: string) => void
     ): void
     signInUserWithEmailAndPassword(
+        email: string,
+        password: string,
+        success?: () => void,
+        error?: (err: string) => void
+    ): void
+    authenticateUserWithEmailAndPassword(
         email: string,
         password: string,
         success?: () => void,
@@ -198,7 +230,11 @@ export interface FirebasePlugin {
         error?: (err: string) => void
     ): void
     getCurrentUser(
-        success: (user: object) => void,
+        success: (user: User) => void,
+        error?: (err: string) => void
+    ): void
+    reloadCurrentUser(
+        success: (user: User) => void,
         error?: (err: string) => void
     ): void
     updateUserProfile(
@@ -215,6 +251,15 @@ export interface FirebasePlugin {
         error?: (err: string) => void
     ): void
     sendUserEmailVerification(
+        actionCodeSettings?: {
+            handleCodeInApp?: boolean,
+            url: string,
+            dynamicLinkDomain?: string,
+            iosBundleId?: string,
+            androidPackageName?: string,
+            installIfNotAvailable?: boolean,
+            minimumVersion?: string,
+        },
         success?: () => void,
         error?: (err: string) => void
     ): void
@@ -234,6 +279,12 @@ export interface FirebasePlugin {
     ): void
     registerAuthStateChangeListener(
         fn: (userSignedIn: boolean) => void,
+    ): void
+    useAuthEmulator(
+        host: string,
+        port: number,
+        success?: () => void,
+        error?: (err: string) => void
     ): void
     fetch(
         cacheExpirationSeconds: number,
@@ -354,4 +405,7 @@ export interface FirebasePlugin {
         listenerId: string
     ): void
 }
-declare var FirebasePlugin: FirebasePlugin;
+
+declare global {
+    const FirebasePlugin: FirebasePlugin;
+}

@@ -1,42 +1,16 @@
 {
-  "_args": [
-    [
-      "cordova-plugin-audiotoggle@1.0.3",
-      "/private/var/www/html/favrionic"
-    ]
-  ],
-  "_development": true,
-  "_from": "cordova-plugin-audiotoggle@1.0.3",
-  "_id": "cordova-plugin-audiotoggle@1.0.3",
-  "_inBundle": false,
-  "_integrity": "sha1-pDn3ExPN6J7qyd/Br98qLOHnU0k=",
-  "_location": "/cordova-plugin-audiotoggle",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "cordova-plugin-audiotoggle@1.0.3",
-    "name": "cordova-plugin-audiotoggle",
-    "escapedName": "cordova-plugin-audiotoggle",
-    "rawSpec": "1.0.3",
-    "saveSpec": null,
-    "fetchSpec": "1.0.3"
-  },
-  "_requiredBy": [
-    "#DEV:/"
-  ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-audiotoggle/-/cordova-plugin-audiotoggle-1.0.3.tgz",
-  "_spec": "1.0.3",
-  "_where": "/private/var/www/html/favrionic",
-  "author": {
-    "name": "alongubkin"
-  },
-  "bugs": {
-    "url": "https://github.com/danielflippance/audiotoggle/issues"
-  },
+  "name": "cordova-plugin-audiotoggle",
+  "version": "1.0.3",
   "description": "Cordova plugin for switching between speaker and earpiece when playing audio",
-  "homepage": "https://github.com/danielflippance/audiotoggle#readme",
-  "keywords": [
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielflippance/audiotoggle.git"
+  },
+"keywords": [
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios",
@@ -44,15 +18,10 @@
     "audio",
     "toggle"
   ],
+  "author": "alongubkin",
   "license": "Apache-2.0",
-  "main": "index.js",
-  "name": "cordova-plugin-audiotoggle",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/danielflippance/audiotoggle.git"
+  "bugs": {
+    "url": "https://github.com/danielflippance/audiotoggle/issues"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "version": "1.0.3"
+  "homepage": "https://github.com/danielflippance/audiotoggle#readme"
 }

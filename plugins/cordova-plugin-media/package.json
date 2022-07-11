@@ -1,39 +1,8 @@
 {
-  "_args": [
-    [
-      "cordova-plugin-media@5.0.3",
-      "/private/var/www/html/favrionic"
-    ]
-  ],
-  "_development": true,
-  "_from": "cordova-plugin-media@5.0.3",
-  "_id": "cordova-plugin-media@5.0.3",
-  "_inBundle": false,
-  "_integrity": "sha512-UQPFlpk1zL4BY44zGi8RVmYCvcKBCN4Dyf8ovxqGYCC8zR1yhbTRWYDdO9vJdERwbfgWV7+z7FMWiSUfqWm9bQ==",
-  "_location": "/cordova-plugin-media",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "cordova-plugin-media@5.0.3",
-    "name": "cordova-plugin-media",
-    "escapedName": "cordova-plugin-media",
-    "rawSpec": "5.0.3",
-    "saveSpec": null,
-    "fetchSpec": "5.0.3"
-  },
-  "_requiredBy": [
-    "/cordova-plugin-native-ringtones"
-  ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-media/-/cordova-plugin-media-5.0.3.tgz",
-  "_spec": "5.0.3",
-  "_where": "/private/var/www/html/favrionic",
-  "author": {
-    "name": "Apache Software Foundation"
-  },
-  "bugs": {
-    "url": "https://github.com/apache/cordova-plugin-media/issues"
-  },
+  "name": "cordova-plugin-media",
+  "version": "6.0.0",
+  "description": "Cordova Media Plugin",
+  "types": "./types/index.d.ts",
   "cordova": {
     "id": "cordova-plugin-media",
     "platforms": [
@@ -43,24 +12,8 @@
       "windows"
     ]
   },
-  "description": "Cordova Media Plugin",
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  },
-  "engines": {
-    "cordovaDependencies": {
-      "3.0.0": {
-        "cordova-android": ">=6.1.0"
-      },
-      "4.0.0": {
-        "cordova-android": ">=6.3.0"
-      },
-      "6.0.0": {
-        "cordova": ">100"
-      }
-    }
-  },
-  "homepage": "https://github.com/apache/cordova-plugin-media#readme",
+  "repository": "github:apache/cordova-plugin-media",
+  "bugs": "https://github.com/apache/cordova-plugin-media/issues",
   "keywords": [
     "cordova",
     "media",
@@ -70,16 +23,29 @@
     "cordova-ios",
     "cordova-windows"
   ],
-  "license": "Apache-2.0",
-  "name": "cordova-plugin-media",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/apache/cordova-plugin-media.git"
-  },
   "scripts": {
-    "jshint": "jshint www && jshint src && jshint tests",
-    "test": "npm run jshint"
+    "test": "npm run lint",
+    "lint": "eslint ."
   },
-  "types": "./types/index.d.ts",
-  "version": "5.0.3"
+  "author": "Apache Software Foundation",
+  "license": "Apache-2.0",
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova-android": ">=6.1.0"
+      },
+      "4.0.0": {
+        "cordova-android": ">=6.3.0"
+      },
+      "6.0.0": {
+        "cordova-android": ">=10.0.0"
+      },
+      "7.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "devDependencies": {
+    "@cordova/eslint-config": "^4.0.0"
+  }
 }

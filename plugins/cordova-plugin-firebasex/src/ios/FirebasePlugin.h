@@ -31,6 +31,8 @@
 - (void)updateUserPassword:(CDVInvokedUrlCommand*)command;
 - (void)sendUserPasswordResetEmail:(CDVInvokedUrlCommand*)command;
 - (void)deleteUser:(CDVInvokedUrlCommand*)command;
+- (void)useAuthEmulator:(CDVInvokedUrlCommand*)command;
+- (void)getClaims:(CDVInvokedUrlCommand*)command;
 
 // Remote notifications
 - (void)getId:(CDVInvokedUrlCommand*)command;
@@ -39,14 +41,18 @@
 - (NSString *)hexadecimalStringFromData:(NSData *)data;
 - (void)grantPermission:(CDVInvokedUrlCommand*)command;
 - (void)hasPermission:(CDVInvokedUrlCommand*)command;
+- (void)grantCriticalPermission:(CDVInvokedUrlCommand*)command;
+- (void)hasCriticalPermission:(CDVInvokedUrlCommand*)command;
 - (void)setBadgeNumber:(CDVInvokedUrlCommand*)command;
 - (void)getBadgeNumber:(CDVInvokedUrlCommand*)command;
 - (void)subscribe:(CDVInvokedUrlCommand*)command;
 - (void)unsubscribe:(CDVInvokedUrlCommand*)command;
 - (void)unregister:(CDVInvokedUrlCommand*)command;
+- (void)onOpenSettings:(CDVInvokedUrlCommand*)command;
 - (void)onMessageReceived:(CDVInvokedUrlCommand*)command;
 - (void)onTokenRefresh:(CDVInvokedUrlCommand*)command;
 - (void)onApnsTokenReceived:(CDVInvokedUrlCommand *)command;
+- (void)sendOpenNotificationSettings;
 - (void)sendNotification:(NSDictionary*)userInfo;
 - (void)sendToken:(NSString*)token;
 - (void)sendApnsToken:(NSString*)token;
@@ -101,6 +107,13 @@
 - (void)listenToFirestoreCollection:(CDVInvokedUrlCommand*)command;
 - (void)removeFirestoreListener:(CDVInvokedUrlCommand*)command;
 
+// Functions
+- (void)functionsHttpsCallable:(CDVInvokedUrlCommand*)command;
+
+// Installations
+- (void) getInstallationId:(CDVInvokedUrlCommand*)command;
+- (void) getInstallationToken:(CDVInvokedUrlCommand*)command;
+- (void) deleteInstallationId:(CDVInvokedUrlCommand*)command;
 
 // Internals
 + (FirebasePlugin *) firebasePlugin;
@@ -121,12 +134,12 @@
 - (void)listChannels:(CDVInvokedUrlCommand *)command;
 
 @property (nonatomic, copy) NSString *notificationCallbackId;
+@property (nonatomic, copy) NSString *openSettingsCallbackId;
 @property (nonatomic, copy) NSString *tokenRefreshCallbackId;
 @property (nonatomic, copy) NSString *apnsTokenRefreshCallbackId;
-@property (nonatomic, copy) NSString *googleSignInCallbackId;
 @property (nonatomic, copy) NSString *appleSignInCallbackId;
 
 @property (nonatomic, retain) NSMutableArray *notificationStack;
-@property (nonatomic, readwrite) NSMutableDictionary* traces;
+@property(nonatomic, nullable) id<NSObject> installationIDObserver;
 
 @end

@@ -1,37 +1,16 @@
 {
-  "_from": "cordova-plugin-firebasex",
-  "_id": "cordova-plugin-firebasex@11.0.3",
-  "_inBundle": false,
-  "_integrity": "sha512-UZUAvzaYSOw5egBThigaB9kxN6B7dwOu/N8Ue8KYbjBpQDn34oos6fGMILhrN3jpCyN9VpGWAjz3fl5X7qUImQ==",
-  "_location": "/cordova-plugin-firebasex",
-  "_phantomChildren": {
-    "yallist": "4.0.0"
-  },
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "cordova-plugin-firebasex",
-    "name": "cordova-plugin-firebasex",
-    "escapedName": "cordova-plugin-firebasex",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#DEV:/",
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-firebasex/-/cordova-plugin-firebasex-11.0.3.tgz",
-  "_shasum": "01bc96d1e84e69159d7e8728ca7583d9197316d0",
-  "_spec": "cordova-plugin-firebasex",
-  "_where": "/private/var/www/html/favrionic",
+  "name": "cordova-plugin-firebasex",
+  "version": "14.1.0",
+  "description": "Cordova plugin for Google Firebase",
+  "types": "./types/index.d.ts",
   "author": {
     "name": "Dave Alden"
   },
-  "bugs": {
-    "url": "https://github.com/dpa99c/cordova-plugin-firebase/issues"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dpa99c/cordova-plugin-firebase"
   },
-  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-firebase",
     "platforms": [
@@ -39,15 +18,6 @@
       "ios"
     ]
   },
-  "dependencies": {
-    "plist": "^3.0.1",
-    "semver": "^7.3.2",
-    "xcode": "^3.0.1",
-    "xml-js": "^1.6.11"
-  },
-  "deprecated": false,
-  "description": "Cordova plugin for Google Firebase",
-  "homepage": "https://github.com/dpa99c/cordova-plugin-firebase#readme",
   "keywords": [
     "ecosystem:cordova",
     "cordova-android",
@@ -57,19 +27,17 @@
     "notifications",
     "phone auth"
   ],
-  "license": "MIT",
-  "name": "cordova-plugin-firebasex",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dpa99c/cordova-plugin-firebase.git"
-  },
   "scripts": {
+    "version": "node ./bump-version.js && git add -A plugin.xml",
     "postversion": "git push && git push --tags && npm publish --verbose",
     "test": "npm run test:ios && npm run test:android",
-    "test:android": "bash ./test/test-default.sh 9.0.0 android 8.1.0 && bash ./test/test-with-3-plugins.sh 9.0.0 android 8.1.0 cordova-plugin-request-location-accuracy cordova-android-play-services-gradle-release cordova-android-firebase-gradle-release",
     "test:ios": "bash ./test/test-default.sh 9.0.0 ios 5.0.1",
-    "version": "node ./bump-version.js && git add -A plugin.xml"
+    "test:android": "bash ./test/test-default.sh 9.0.0 android 8.1.0 && bash ./test/test-with-3-plugins.sh 9.0.0 android 8.1.0 cordova-plugin-request-location-accuracy cordova-android-play-services-gradle-release cordova-android-firebase-gradle-release"
   },
-  "types": "./types/index.d.ts",
-  "version": "11.0.3"
+  "dependencies": {
+    "plist": "^3.0.1",
+    "xcode": "^3.0.1",
+    "xml-js": "^1.6.11",
+    "semver": "^7.3.2"
+  }
 }

@@ -1,49 +1,15 @@
 {
-  "_args": [
-    [
-      "cordova-plugin-streaming-media@2.3.0",
-      "/private/var/www/html/favrionic"
-    ]
-  ],
-  "_development": true,
-  "_from": "cordova-plugin-streaming-media@2.3.0",
-  "_id": "cordova-plugin-streaming-media@2.3.0",
-  "_inBundle": false,
-  "_integrity": "sha512-og7UmXbaWoSrOmo/mZu/c7vKDdUMu2eVrdRMvIJY6qqZ6Fv2BrJvOXm8prVt0xjWqWOMJpQs3DAajX8+N39Cqw==",
-  "_location": "/cordova-plugin-streaming-media",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "cordova-plugin-streaming-media@2.3.0",
-    "name": "cordova-plugin-streaming-media",
-    "escapedName": "cordova-plugin-streaming-media",
-    "rawSpec": "2.3.0",
-    "saveSpec": null,
-    "fetchSpec": "2.3.0"
-  },
-  "_requiredBy": [
-    "#DEV:/"
-  ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-streaming-media/-/cordova-plugin-streaming-media-2.3.0.tgz",
-  "_spec": "2.3.0",
-  "_where": "/private/var/www/html/favrionic",
-  "author": {
-    "name": "Nicholas Hutchind"
-  },
-  "bugs": {
-    "url": "https://github.com/nchutchind/Streaming-Media-Cordova-Plugin/issues"
-  },
-  "contributors": [
-    {
-      "name": "Timothy Shamilov"
-    },
-    {
-      "name": "Michael Robinson"
-    }
-  ],
+  "name": "cordova-plugin-streaming-media",
+  "version": "2.3.0",
   "description": "This plugin allows you to stream audio and video in a fullscreen, native player on iOS and Android.",
-  "homepage": "https://github.com/nchutchind/Streaming-Media-Cordova-Plugin#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nchutchind/Streaming-Media-Cordova-Plugin.git"
+  },
   "keywords": [
     "media",
     "streaming",
@@ -52,15 +18,14 @@
     "cordova-android",
     "cordova-fireos"
   ],
+  "author": "Nicholas Hutchind",
+  "contributors": [
+      "Timothy Shamilov",
+      "Michael Robinson"
+  ],
   "license": "MIT",
-  "main": "index.js",
-  "name": "cordova-plugin-streaming-media",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nchutchind/Streaming-Media-Cordova-Plugin.git"
+  "bugs": {
+    "url": "https://github.com/nchutchind/Streaming-Media-Cordova-Plugin/issues"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "version": "2.3.0"
+  "homepage": "https://github.com/nchutchind/Streaming-Media-Cordova-Plugin#readme"
 }

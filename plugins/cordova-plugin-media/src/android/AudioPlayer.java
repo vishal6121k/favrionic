@@ -18,6 +18,7 @@
 */
 package org.apache.cordova.media;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -25,6 +26,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.os.Build;
 
 import org.apache.cordova.LOG;
 
@@ -78,6 +80,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 //    private static int MEDIA_ERR_NONE_SUPPORTED = 4;
 
     private AudioHandler handler;           // The AudioHandler object
+    private Context context;                // The Application Context object
     private String id;                      // The id of this player (used to identify Media object in JavaScript)
     private MODE mode = MODE.NONE;          // Playback or Recording mode
     private STATE state = STATE.MEDIA_NONE; // State of recording or playback
@@ -92,6 +95,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
     private MediaPlayer player = null;      // Audio player object
     private boolean prepareOnly = true;     // playback after file prepare flag
     private int seekOnPrepared = 0;     // seek to this location once media is prepared
+    private float setRateOnPrepared = -1;
 
     /**
      * Constructor.
@@ -101,19 +105,29 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
      */
     public AudioPlayer(AudioHandler handler, String id, String file) {
         this.handler = handler;
+        context = handler.getApplicationContext();
         this.id = id;
         this.audioFile = file;
         this.tempFiles = new LinkedList<String>();
+
     }
 
-    private String generateTempFile() {
-      String tempFileName = null;
-      if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-          tempFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmprecording-" + System.currentTimeMillis() + ".3gp";
-      } else {
-          tempFileName = "/data/data/" + handler.cordova.getActivity().getPackageName() + "/cache/tmprecording-" + System.currentTimeMillis() + ".3gp";
-      }
-      return tempFileName;
+    /**
+     * Creates an audio file path from the provided fileName or creates a new temporary file path.
+     *
+     * @param fileName the audio file name, if null a temporary 3gp file name is provided
+     * @return String
+     */
+    private String createAudioFilePath(String fileName) {
+        File dir = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
+            ? context.getExternalFilesDir(null)
+            : context.getCacheDir();
+
+        fileName = (fileName == null || fileName.isEmpty())
+            ? String.format("tmprecording-%d.3gp", System.currentTimeMillis())
+            : fileName;
+
+        return dir.getAbsolutePath() + File.separator + fileName;
     }
 
     /**
@@ -155,7 +169,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             this.recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             this.recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS); // RAW_AMR);
             this.recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC); //AMR_NB);
-            this.tempFile = generateTempFile();
+            this.tempFile = createAudioFilePath(null);
             this.recorder.setOutputFile(this.tempFile);
             try {
                 this.recorder.prepare();
@@ -185,11 +199,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         /* this is a hack to save the file as the specified name */
 
         if (!file.startsWith("/")) {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                file = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + file;
-            } else {
-                file = "/data/data/" + handler.cordova.getActivity().getPackageName() + "/cache/" + file;
-            }
+            file = createAudioFilePath(file);
         }
 
         int size = this.tempFiles.size();
@@ -484,6 +494,9 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         this.player.setOnCompletionListener(this);
         // seek to any location received while not prepared
         this.seekToPlaying(this.seekOnPrepared);
+        // apply any playback rate received while not prepared
+        if (setRateOnPrepared >= 0)
+            this.player.setPlaybackParams (this.player.getPlaybackParams().setSpeed(setRateOnPrepared));
         // If start playing after prepared
         if (!this.prepareOnly) {
             this.player.start();
@@ -698,7 +711,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
                     fileInputStream.close();
                 }
                 else {
-                    this.player.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/" + file);
+                    this.player.setDataSource(createAudioFilePath(file));
                 }
             }
                 this.setState(STATE.MEDIA_STARTING);
@@ -756,5 +769,33 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             }
         }
         return 0;
+    }
+
+    /**
+     * Set the playback rate for the player (ignored on API < 23)
+     *
+     * @param volume
+     */
+    public void setRate(float rate) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            LOG.d(LOG_TAG, "AudioPlayer Warning: Request to set playback rate not supported on current OS version");
+            return;
+        }
+
+        if (this.player != null) {
+            try {
+                boolean wasPlaying = this.player.isPlaying();
+
+                this.player.setPlaybackParams(this.player.getPlaybackParams().setSpeed(rate));
+
+                if (!wasPlaying && this.player.isPlaying()) {
+                    this.player.pause();
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            setRateOnPrepared = rate;
+        }
     }
 }
