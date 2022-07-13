@@ -26,19 +26,20 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
 import { environment } from '../environments/environment';
+import { LongPressDirective } from './long-press.directive';
 
-@Injectable()
-export class HammerConfig extends HammerGestureConfig {
-  overrides = <any> {
-      // I will only use the swap gesture so 
-      // I will deactivate the others to avoid overlaps
-      'pinch': { enable: false },
-      'rotate': { enable: false }
-  }
-}
+// @Injectable()
+// export class HammerConfig extends HammerGestureConfig {
+//   overrides = <any> {
+//       // I will only use the swap gesture so 
+//       // I will deactivate the others to avoid overlaps
+//       'pinch': { enable: false },
+//       'rotate': { enable: false }
+//   }
+// }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LongPressDirective],
   entryComponents: [],
   imports: [
     BrowserModule,

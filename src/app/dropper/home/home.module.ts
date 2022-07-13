@@ -6,7 +6,8 @@ import { IonicModule } from '@ionic/angular';
 import { IconModule } from '../../icon/icon.module';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { LongPressModule } from 'ionic-long-press';
+
+import { LongPressDirective } from '../../long-press.directive';
 import { MomentModule } from 'ngx-moment';
 
 import { HomePage } from './home.page';
@@ -19,13 +20,12 @@ import { AgmCoreModule } from '@agm/core';
     FormsModule,
     IonicModule,
     IconModule,
-    LongPressModule,
     MomentModule,
     AgmCoreModule.forRoot({
         apiKey: "AIzaSyC7RAT2MhwmKUqs2kEWuQjmka65lv6dYxY" + '&libraries=visualization'
     }),
     HomePageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, LongPressDirective]
 })
 export class HomePageModule {}
