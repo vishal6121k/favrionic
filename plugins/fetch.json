@@ -1,0 +1,282 @@
+{
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@^1.3.4"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-device": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-device@^2.0.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-x-toast": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-x-toast@^2.7.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-android-permissions": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-android-permissions@^1.1.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-androidx": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-androidx@^3.0.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-doze-optimize": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-doze-optimize@^0.5.4"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-x-socialsharing": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-x-socialsharing@^6.0.3"
+    },
+    "is_top_level": true,
+    "variables": {
+      "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+      "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
+    }
+  },
+  "es6-promise-plugin": {
+    "source": {
+      "type": "registry",
+      "id": "es6-promise-plugin@^4.1.0"
+    },
+    "is_top_level": false,
+    "variables": {}
+  },
+  "cordova-plugin-ionic-webview": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-ionic-webview@^4.2.1"
+    },
+    "is_top_level": true,
+    "variables": {
+      "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+    }
+  },
+  "cordova-plugin-audioroute": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-audioroute@0.1.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-camera@^5.0.2"
+    },
+    "is_top_level": true,
+    "variables": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+"
+    }
+  },
+  "cordova-plugin-audiotoggle": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-audiotoggle@1.0.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-nativeaudio": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-nativeaudio@^3.0.9"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-local-notification": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-local-notification@^0.9.0-beta.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen@^6.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-statusbar": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-statusbar@^2.4.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-ionic-keyboard": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-ionic-keyboard@^2.2.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-datepicker": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-datepicker@^0.9.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-androidx-adapter": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-androidx-adapter@^1.1.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-autostart": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-autostart@^2.3.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-stripe": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-stripe@^1.5.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "ionic-plugin-deeplinks": {
+    "source": {
+      "type": "registry",
+      "id": "ionic-plugin-deeplinks@^1.0.22"
+    },
+    "is_top_level": true,
+    "variables": {
+      "URL_SCHEME": "samanta",
+      "DEEPLINK_SCHEME": "https",
+      "DEEPLINK_HOST": "samanta.coderpanda.tk",
+      "ANDROID_PATH_PREFIX": "/",
+      "ANDROID_2_PATH_PREFIX": "/",
+      "ANDROID_3_PATH_PREFIX": "/",
+      "ANDROID_4_PATH_PREFIX": "/",
+      "ANDROID_5_PATH_PREFIX": "/",
+      "DEEPLINK_2_SCHEME": " ",
+      "DEEPLINK_2_HOST": " ",
+      "DEEPLINK_3_SCHEME": " ",
+      "DEEPLINK_3_HOST": " ",
+      "DEEPLINK_4_SCHEME": " ",
+      "DEEPLINK_4_HOST": " ",
+      "DEEPLINK_5_SCHEME": " ",
+      "DEEPLINK_5_HOST": " "
+    }
+  },
+  "cordova-plugin-iosrtc": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-iosrtc@^6.0.21"
+    },
+    "is_top_level": true,
+    "variables": {
+      "MANUAL_INIT_AUDIO_DEVICE": "FALSE"
+    }
+  },
+  "cordova-plugin-insomnia": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-insomnia@^4.3.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-inappbrowser@^5.0.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "clovelced-plugin-audiomanagement": {
+    "source": {
+      "type": "registry",
+      "id": "clovelced-plugin-audiomanagement@^1.0.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-firebasex": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-firebasex@^13.0.1"
+    },
+    "is_top_level": true,
+    "variables": {
+      "FIREBASE_ANALYTICS_COLLECTION_ENABLED": "true",
+      "FIREBASE_PERFORMANCE_COLLECTION_ENABLED": "true",
+      "FIREBASE_CRASHLYTICS_COLLECTION_ENABLED": "true",
+      "ANDROID_ICON_ACCENT": "#FF00FFFF",
+      "ANDROID_FIREBASE_PERFORMANCE_MONITORING": "false",
+      "ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION": "17.0.0",
+      "ANDROID_PLAY_SERVICES_AUTH_VERSION": "19.0.0",
+      "ANDROID_FIREBASE_ANALYTICS_VERSION": "19.0.0",
+      "ANDROID_FIREBASE_MESSAGING_VERSION": "22.0.0",
+      "ANDROID_FIREBASE_CONFIG_VERSION": "21.0.0",
+      "ANDROID_FIREBASE_PERF_VERSION": "20.0.2",
+      "ANDROID_FIREBASE_AUTH_VERSION": "21.0.1",
+      "ANDROID_FIREBASE_INAPPMESSAGING_VERSION": "20.0.0",
+      "ANDROID_FIREBASE_FIRESTORE_VERSION": "23.0.2",
+      "ANDROID_FIREBASE_FUNCTIONS_VERSION": "20.0.0",
+      "ANDROID_FIREBASE_IID_VERSION": "21.1.0",
+      "ANDROID_FIREBASE_INSTALLATIONS_VERSION": "17.0.0",
+      "ANDROID_FIREBASE_CRASHLYTICS_VERSION": "18.1.0",
+      "ANDROID_FIREBASE_CRASHLYTICS_NDK_VERSION": "18.1.0",
+      "ANDROID_GSON_VERSION": "2.8.7",
+      "ANDROID_FIREBASE_PERF_GRADLE_PLUGIN_VERSION": "1.4.0"
+    }
+  },
+  "cordova-plugin-native-ringtones": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-native-ringtones@^0.2.5"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-media": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-media"
+    },
+    "is_top_level": false,
+    "variables": {}
+  }
+}

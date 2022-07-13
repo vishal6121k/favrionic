@@ -11,7 +11,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { google } from '@google/maps';
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
 import { Observable } from 'rxjs';
 
 import Peer from 'peerjs';

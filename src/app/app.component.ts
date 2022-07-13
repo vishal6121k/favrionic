@@ -12,7 +12,7 @@ import { Router, ActivatedRoute, Event } from '@angular/router';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { NavigationStart, NavigationError, NavigationEnd } from '@angular/router';
 
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Observable } from 'rxjs';
 
 

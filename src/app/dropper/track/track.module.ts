@@ -8,7 +8,7 @@ import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 
 // import { AngularFireModule } from '@angular/fire';
-// import { AngularFireDatabaseModule } from '@angular/fire/database';
+// import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 
 // import { environment } from '../../../environments/environment';
 

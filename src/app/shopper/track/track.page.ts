@@ -4,7 +4,7 @@ import { ApiService } from '../../services/api.service';
 import { NotifyService } from '../../services/notify.service';
 import { WebrtcService } from '../../providers/webrtc.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
 import { Observable } from 'rxjs';
 
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';

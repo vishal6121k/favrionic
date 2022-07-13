@@ -1,0 +1,29 @@
+<span class="info-tooltip-popup">
+  <span class="icon" (click)="showInfo=(showInfo == 1)?0:1">
+    <svg viewBox="0 0 26 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+        <title>Foundation/Colors/Icons</title>
+        <desc>Created with Sketch.</desc>
+        <defs>
+            <path d="M12.25,1.484375 C6.24965631,1.484375 1.38541667,6.69606033 1.38541667,13.125 C1.38541667,19.5539397 6.24965631,24.765625 12.25,24.765625 C18.2503437,24.765625 23.1145833,19.5539397 23.1145833,13.125 C23.1145833,6.69606033 18.2503437,1.484375 12.25,1.484375 Z M12.25,0 C19.0154882,0 24.5,5.87626266 24.5,13.125 C24.5,20.3737373 19.0154882,26.25 12.25,26.25 C5.48451181,26.25 0,20.3737373 0,13.125 C0,5.87626266 5.48451181,0 12.25,0 Z M12.2499997,8.625 C11.4947365,8.625 10.8499997,7.9539474 10.8499997,7.125 C10.8499997,6.29605264 11.4947365,5.625 12.2499997,5.625 C13.0236839,5.625 13.6499997,6.29605264 13.6499997,7.125 C13.6499997,7.9539474 13.0236839,8.625 12.2499997,8.625 Z M10.8499997,18.876241 L10.8499997,12.1262414 C10.8499997,11.2978143 11.476801,10.6262414 12.2499997,10.6262414 C13.0231983,10.6262414 13.6499997,11.2978143 13.6499997,12.1262414 L13.6499997,18.876241 C13.6499997,19.7046682 13.0231983,20.3762411 12.2499997,20.3762411 C11.476801,20.3762411 10.8499997,19.7046682 10.8499997,18.876241 Z" id="path-b1"></path>
+        </defs>
+        <g id="screens" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="17" transform="translate(-20.000000, -380.000000)">
+                <g id="Group" transform="translate(20.000000, 380.000000)">
+                    <g id="Info" transform="translate(0.750000, 0.875000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-b1"></use>
+                        </mask>
+                        <use id="Shape" fill="#1F2532" xlink:href="#path-b1"></use>
+                        <g id="Foundation/Colors/Secondary/Null_for_Icons" mask="url(#mask-2)"></g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+  </span>
+  <div class="info-tooltip-desc" [class.active]="showInfo == 1">
+    <p>{{ title }}</p>
+    <p>{{ content }}</p>
+  </div>
+</span>

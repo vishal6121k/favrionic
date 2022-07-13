@@ -24,7 +24,7 @@ import { NativeRingtones } from '@ionic-native/native-ringtones/ngx';
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 import { LongPressDirective } from './long-press.directive';
 
@@ -39,38 +39,37 @@ import { LongPressDirective } from './long-press.directive';
 // }
 
 @NgModule({
-  declarations: [AppComponent, LongPressDirective],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule,
-    AppRoutingModule
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    MobileAccessibility,
-    DatePicker,
-    Geolocation,
-    Stripe,
-    AndroidPermissions,
-    LocationAccuracy,
-    Diagnostic,
-    FirebaseX,
-    StreamingMedia,
-    NativeRingtones,
-    NativeAudio,
-    AngularFireDatabase,
-    BackgroundGeolocation,
-    BackgroundMode,
-    { 
-      provide: RouteReuseStrategy, 
-      useClass: IonicRouteStrategy
-    },
-    {provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig}
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent, LongPressDirective],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireDatabaseModule,
+        AppRoutingModule
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        MobileAccessibility,
+        DatePicker,
+        Geolocation,
+        Stripe,
+        AndroidPermissions,
+        LocationAccuracy,
+        Diagnostic,
+        FirebaseX,
+        StreamingMedia,
+        NativeRingtones,
+        NativeAudio,
+        AngularFireDatabase,
+        BackgroundGeolocation,
+        BackgroundMode,
+        {
+            provide: RouteReuseStrategy,
+            useClass: IonicRouteStrategy
+        },
+        { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

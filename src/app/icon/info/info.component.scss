@@ -1,0 +1,32 @@
+.info-tooltip-popup{
+	display: inline-block;
+	width: 14px;
+	vertical-align: middle;
+	position: relative;
+	.icon{
+		width: 100%;
+		height: auto;
+	}
+	.info-tooltip-desc{
+		position: absolute;
+	    top: 100%;
+	    right: 0px;
+	    width: 200px;
+	    margin-top: 10px;
+	    background-color: rgba(0, 0, 0, 0.8);
+	    padding: 10px;
+	    border-radius: 20px;
+	    z-index: 1232;
+	    color: #FFF;
+	    opacity: 0;
+	    visibility: hidden;
+	    transition: all 0.2s linear;
+	    &.active{
+	    	opacity: 1;
+		    visibility: visible;
+	    }
+	    p{
+	    	color: #FFF;
+	    }
+	}
+}
